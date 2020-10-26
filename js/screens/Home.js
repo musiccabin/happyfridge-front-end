@@ -1,51 +1,59 @@
 import React from 'react'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Card, Recipe } from '../components'
+import { COLORS } from '../styles'
 
 const Home = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Ionicons name='md-menu' size={32} color='black' />
-      </View>
-      <View style={styles.recommended}></View>
-      <View>
-        <Text style={styles.title}>Recommendation for you</Text>
-        <ScrollView style={styles.list} horizontal>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-        </ScrollView>
-      </View>
-      <View style={styles.recipes}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <Ionicons name='md-menu' size={32} color={COLORS.BLACK} />
+        </View>
+        <View style={styles.recommended}></View>
+        <View>
+          <Text style={styles.title}>Recommended for you</Text>
+          <ScrollView horizontal>
+            <View style={styles.list}>
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+              <Card />
+            </View>
+          </ScrollView>
+        </View>
         <Text style={styles.title}>Popular recipes</Text>
-        <ScrollView style={styles.recipes}>
-          <Recipe />
-          <Recipe />
-          <Recipe />
-          <Recipe />
-          <Recipe />
+        <ScrollView>
+          <View>
+            <Recipe />
+            <Recipe />
+            <Recipe />
+            <Recipe />
+            <Recipe />
+          </View>
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 25,
+  },
+  content: {
+    paddingLeft: 25,
   },
   header: {
     alignItems: 'flex-end',
-    marginVertical: 20,
+    marginVertical: 10,
+    marginRight: 25,
   },
   recommended: {
-    backgroundColor: 'rgb(255, 209, 136)',
+    backgroundColor: COLORS.PRIMARY_ICON,
     width: 500,
     height: 500,
     borderRadius: 300,
@@ -59,12 +67,8 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
   },
   list: {
+    flexDirection: 'row',
     height: 235,
-    width: 390,
-  },
-  recipes: {
-    alignSelf: 'stretch',
-    width: '105%',
   },
 })
 
