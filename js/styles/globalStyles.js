@@ -6,7 +6,6 @@ const COLORS = {
   PRIMARY_FONT: '#333333',
   SECONDARY_FONT: '#575757',
   WHITE: '#ffffff',
-  BLACK: '#000000',
   PRIMARY_ICON: '#ffd188',
   SECONDARY_ICON: '#ff9f88',
   BACKGROUND: '#f4f4f4',
@@ -26,15 +25,11 @@ const globalStyles = StyleSheet.create({
   cardImage: {
     height: '100%',
     width: 'auto',
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
     resizeMode: 'cover',
   },
   cardInfo: {
     padding: 10,
     backgroundColor: COLORS.WHITE,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
   },
   cardDetails: {
     alignItems: 'center',
