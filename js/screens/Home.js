@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 import { Card, Recipe } from '../components'
 import { COLORS } from '../styles'
 
@@ -9,9 +9,9 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Ionicons name='md-menu' size={32} color={COLORS.BLACK} />
+          <MaterialIcons name='menu' size={32} color={COLORS.SECONDARY_FONT} />
         </View>
-        <View style={styles.recommended}></View>
+        <View style={styles.backgroundCircle}></View>
         <View>
           <Text style={styles.title}>Recommended for you</Text>
           <ScrollView horizontal>
@@ -43,6 +43,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.BACKGROUND,
   },
   content: {
     paddingLeft: 25,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginRight: 25,
   },
-  recommended: {
+  backgroundCircle: {
     backgroundColor: COLORS.PRIMARY_ICON,
     width: 500,
     height: 500,
