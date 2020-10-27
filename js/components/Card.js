@@ -7,13 +7,13 @@ const Card = () => {
   return (
     <View style={[styles.card, globalStyles.card]}>
       <Image
-        style={globalStyles.cardImage}
+        style={[styles.cardImage, globalStyles.cardImage]}
         source={{
           uri:
             'https://cdn.zeplin.io/5f84bab3e28dc983c2bcd193/assets/D4588D2A-5A54-4A19-B2E3-FF60A0CCC37C.png',
         }}
       />
-      <View style={globalStyles.cardInfo}>
+      <View style={[styles.cardInfo, globalStyles.cardInfo]}>
         <Text style={globalStyles.cardTitle}>Shakshuka</Text>
         <View style={globalStyles.cardDetails}>
           <View style={globalStyles.cardTimer}>
@@ -21,7 +21,7 @@ const Card = () => {
               style={globalStyles.clock}
               name='access-time'
               size={20}
-              color='gray'
+              color={COLORS.SECONDARY_FONT}
             />
             <Text>20 mins</Text>
           </View>
@@ -50,6 +50,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: 250,
     marginRight: 25,
+  },
+  cardImage: {
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  cardInfo: {
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
 })
 

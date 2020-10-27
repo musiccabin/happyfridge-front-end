@@ -8,7 +8,7 @@ const Recipe = () => {
     <View style={[styles.card, globalStyles.card]}>
       <View style={styles.cardImageWrapper}>
         <Image
-          style={globalStyles.cardImage}
+          style={[styles.cardImage, globalStyles.cardImage]}
           source={{
             uri:
               'https://cafedelites.com/wp-content/uploads/2016/11/Creamy-Herb-Chicken-2700.jpg',
@@ -22,10 +22,10 @@ const Recipe = () => {
         <View style={globalStyles.cardDetails}>
           <View style={globalStyles.cardTimer}>
             <MaterialIcons
-              style={styles.clock}
+              style={globalStyles.clock}
               name='access-time'
               size={20}
-              color='gray'
+              color={COLORS.SECONDARY_FONT}
             />
             <Text>20 mins</Text>
           </View>
@@ -57,9 +57,15 @@ const styles = StyleSheet.create({
   cardImageWrapper: {
     flexBasis: '30%',
   },
+  cardImage: {
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
   cardInfo: {
-    flexBasis: '70%',
+    flexBasis: '65%',
     justifyContent: 'center',
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
   },
   cardTitle: {
     paddingVertical: 5,
