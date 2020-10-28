@@ -16,7 +16,7 @@ const Recipe = () => {
         />
       </View>
       <View style={[styles.cardInfo, globalStyles.cardInfo]}>
-        <Text style={[styles.cardTitle, globalStyles.subTitle]}>
+        <Text style={[styles.cardTitle, globalStyles.titleSmall]}>
           Creamy Herb Chicken
         </Text>
         <View style={globalStyles.cardDetails}>
@@ -27,7 +27,7 @@ const Recipe = () => {
               size={20}
               color={COLORS.SECONDARY_FONT}
             />
-            <Text style={globalStyles.content}>20 mins</Text>
+            <Text style={globalStyles.subTitle}>20 mins</Text>
           </View>
           <View style={globalStyles.icons}>
             <MaterialIcons

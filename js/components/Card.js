@@ -14,7 +14,7 @@ const Card = () => {
         }}
       />
       <View style={[styles.cardInfo, globalStyles.cardInfo]}>
-        <Text style={globalStyles.title}>Shakshuka</Text>
+        <Text style={globalStyles.titleMedium}>Shakshuka</Text>
         <View style={globalStyles.cardDetails}>
           <View style={globalStyles.cardTimer}>
             <MaterialIcons
@@ -23,7 +23,7 @@ const Card = () => {
               size={20}
               color={COLORS.SECONDARY_FONT}
             />
-            <Text style={globalStyles.content}>20 mins</Text>
+            <Text style={globalStyles.subTitle}>20 mins</Text>
           </View>
           <View style={globalStyles.icons}>
             <MaterialIcons
