@@ -14,7 +14,7 @@ const Card = () => {
         }}
       />
       <View style={[styles.cardInfo, globalStyles.cardInfo]}>
-        <Text style={globalStyles.cardTitle}>Shakshuka</Text>
+        <Text style={globalStyles.titleL}>Shakshuka</Text>
         <View style={globalStyles.cardDetails}>
           <View style={globalStyles.cardTimer}>
             <MaterialIcons
@@ -23,7 +23,7 @@ const Card = () => {
               size={20}
               color={COLORS.SECONDARY_FONT}
             />
-            <Text>20 mins</Text>
+            <Text style={globalStyles.titleS}>20 mins</Text>
           </View>
           <View style={globalStyles.icons}>
             <MaterialIcons
@@ -46,19 +46,16 @@ const Card = () => {
 
 const styles = StyleSheet.create({
   card: {
-    height: 150,
+    height: 218,
     flexDirection: 'column',
     width: 250,
     marginRight: 25,
   },
   cardImage: {
+    height: 150,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-  },
-  cardInfo: {
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
+  }
 })
 
 export default Card

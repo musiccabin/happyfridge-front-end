@@ -17,19 +17,35 @@ const globalStyles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 5,
     elevation: 2,
+    backgroundColor: COLORS.WHITE,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
   },
-  cardTitle: {
-    paddingVertical: 5,
+  titleXL: {
+    paddingVertical: 25,
+    fontSize: 20,
+    color: COLORS.PRIMARY_FONT,
+  },
+  titleL: {
+    paddingBottom: 5,
     fontSize: 18,
+    color: COLORS.PRIMARY_FONT
+  },
+  titleM:{
+    fontSize: 16,
+    color: COLORS.PRIMARY_FONT
+  },
+  titleS: {
+    fontSize:14,
+    color: COLORS.SECONDARY_FONT
   },
   cardImage: {
-    height: '100%',
-    width: 'auto',
     resizeMode: 'cover',
   },
   cardInfo: {
     padding: 10,
-    backgroundColor: COLORS.WHITE,
   },
   cardDetails: {
     alignItems: 'center',

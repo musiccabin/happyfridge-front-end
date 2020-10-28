@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Card, Recipe } from '../components'
-import { COLORS } from '../styles'
+import { COLORS, globalStyles } from '../styles'
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
         </View>
         <View style={styles.backgroundCircle}></View>
         <View>
-          <Text style={styles.title}>Recommended for you</Text>
+          <Text style={globalStyles.titleXL}>Recommended for you</Text>
           <ScrollView horizontal>
             <View style={styles.list}>
               <Card />
@@ -25,7 +25,7 @@ const Home = () => {
             </View>
           </ScrollView>
         </View>
-        <Text style={styles.title}>Popular recipes</Text>
+        <Text style={globalStyles.titleXL}>Popular recipes</Text>
         <ScrollView>
           <View>
             <Recipe />
@@ -58,14 +58,10 @@ const styles = StyleSheet.create({
     width: 500,
     height: 500,
     borderRadius: 300,
-    top: -180,
-    left: 60,
+    top: -120,
+    left: 50,
     position: 'absolute',
     zIndex: -1,
-  },
-  title: {
-    fontSize: 22,
-    paddingVertical: 25,
   },
   list: {
     flexDirection: 'row',

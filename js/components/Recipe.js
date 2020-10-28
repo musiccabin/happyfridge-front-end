@@ -16,7 +16,7 @@ const Recipe = () => {
         />
       </View>
       <View style={[styles.cardInfo, globalStyles.cardInfo]}>
-        <Text style={[styles.cardTitle, globalStyles.cardTitle]}>
+        <Text style={[styles.cardTitle, globalStyles.titleM]}>
           Creamy Herb Chicken
         </Text>
         <View style={globalStyles.cardDetails}>
@@ -27,7 +27,7 @@ const Recipe = () => {
               size={20}
               color={COLORS.SECONDARY_FONT}
             />
-            <Text>20 mins</Text>
+            <Text style={globalStyles.titleS}>20 mins</Text>
           </View>
           <View style={globalStyles.icons}>
             <MaterialIcons
@@ -50,26 +50,22 @@ const Recipe = () => {
 
 const styles = StyleSheet.create({
   card: {
-    height: 100,
+    height: 73,
+    width: '85%',
     flexDirection: 'row',
     marginTop: 25,
   },
-  cardImageWrapper: {
-    flexBasis: '30%',
-  },
   cardImage: {
+    height: '100%',
+    width: 73,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
   },
   cardInfo: {
     flexBasis: '65%',
     justifyContent: 'center',
-    borderBottomRightRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  cardTitle: {
-    paddingVertical: 5,
-    fontSize: 18,
   },
 })
 
