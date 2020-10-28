@@ -13,7 +13,7 @@ const Home = () => {
         </View>
         <View style={styles.backgroundCircle}></View>
         <View>
-          <Text style={globalStyles.titleLarge}>Recommended for you</Text>
+          <Text style={globalStyles.titleXL}>Recommended for you</Text>
           <ScrollView horizontal>
             <View style={styles.list}>
               <Card />
@@ -25,7 +25,7 @@ const Home = () => {
             </View>
           </ScrollView>
         </View>
-        <Text style={globalStyles.titleLarge}>Popular recipes</Text>
+        <Text style={globalStyles.titleXL}>Popular recipes</Text>
         <ScrollView>
           <View>
             <Recipe />

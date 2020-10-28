@@ -23,21 +23,21 @@ const globalStyles = StyleSheet.create({
     borderBottomRightRadius: 10,
     borderTopRightRadius: 10,
   },
-  titleLarge: {
+  titleXL: {
     paddingVertical: 25,
     fontSize: 20,
     color: COLORS.PRIMARY_FONT,
   },
-  titleMedium: {
+  titleL: {
     paddingBottom: 5,
     fontSize: 18,
     color: COLORS.PRIMARY_FONT
   },
-  titleSmall:{
+  titleM:{
     fontSize: 16,
     color: COLORS.PRIMARY_FONT
   },
-  subTitle: {
+  titleS: {
     fontSize:14,
     color: COLORS.SECONDARY_FONT
   },
