@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     height: 218,
     flexDirection: 'column',
     width: 250,
-    marginRight: 25,
+    marginRight: 15,
   },
   cardImage: {
     height: 150,

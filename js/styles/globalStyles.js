@@ -13,8 +13,9 @@ const COLORS = {
 
 const globalStyles = StyleSheet.create({
   card: {
-    shadowOffset: { width: 5, height: 5 },
-    shadowOpacity: 0.12,
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.15,
+    shadowColor: '#747474',
     shadowRadius: 5,
     elevation: 2,
     backgroundColor: COLORS.WHITE,
