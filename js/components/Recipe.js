@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     height: 73,
     width: '85%',
     flexDirection: 'row',
-    marginTop: 25,
+    marginBottom: 15,
   },
   cardImage: {
     height: '100%',

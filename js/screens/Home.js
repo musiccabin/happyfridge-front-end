@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { Card, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 
@@ -9,7 +9,7 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <MaterialIcons name='menu' size={32} color={COLORS.SECONDARY_FONT} />
+          <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
         </View>
         <View style={styles.backgroundCircle}></View>
         <View>
@@ -25,16 +25,18 @@ const Home = () => {
             </View>
           </ScrollView>
         </View>
-        <Text style={globalStyles.titleXL}>Popular recipes</Text>
-        <ScrollView>
-          <View>
-            <Recipe />
-            <Recipe />
-            <Recipe />
-            <Recipe />
-            <Recipe />
-          </View>
-        </ScrollView>
+        <View>
+          <Text style={globalStyles.titleXL}>Popular recipes</Text>
+          <ScrollView>
+            <View>
+              <Recipe />
+              <Recipe />
+              <Recipe />
+              <Recipe />
+              <Recipe />
+            </View>
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   )
