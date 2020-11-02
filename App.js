@@ -1,8 +1,8 @@
 import React from 'react'
-import { Home } from './js/screens'
+import { Home, RecipeDetails } from './js/screens'
 
 const App = () => {
-  return <Home />
+  return <RecipeDetails />
 }
 
 export default App
