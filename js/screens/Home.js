@@ -7,7 +7,7 @@ import { COLORS, globalStyles } from '../styles'
 const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View style={globalStyles.content}>
         <View style={styles.header}>
           <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
         </View>
@@ -46,9 +46,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.BACKGROUND,
-  },
-  content: {
-    paddingLeft: 25,
   },
   header: {
     alignItems: 'flex-end',
