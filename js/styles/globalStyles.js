@@ -12,6 +12,12 @@ const COLORS = {
 }
 
 const globalStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    paddingLeft: 25,
+  },
   card: {
     shadowOffset: { width: 1, height: 3 },
     shadowOpacity: 0.15,
@@ -32,15 +38,15 @@ const globalStyles = StyleSheet.create({
   titleL: {
     paddingBottom: 5,
     fontSize: 18,
-    color: COLORS.PRIMARY_FONT
+    color: COLORS.PRIMARY_FONT,
   },
-  titleM:{
+  titleM: {
     fontSize: 16,
-    color: COLORS.PRIMARY_FONT
+    color: COLORS.PRIMARY_FONT,
   },
   titleS: {
-    fontSize:14,
-    color: COLORS.SECONDARY_FONT
+    fontSize: 14,
+    color: COLORS.SECONDARY_FONT,
   },
   cardImage: {
     resizeMode: 'cover',
