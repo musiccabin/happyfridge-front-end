@@ -4,7 +4,7 @@ import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { Card, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={globalStyles.content}>
@@ -16,7 +16,7 @@ const Home = () => {
           <Text style={globalStyles.titleXL}>Recommended for you</Text>
           <ScrollView horizontal>
             <View style={styles.list}>
-              <Card />
+              <Card onPress={() => navigation.navigate('RecipeDetails')} />
               <Card />
               <Card />
               <Card />
