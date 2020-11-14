@@ -4,10 +4,10 @@ import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { Card, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View style={globalStyles.content}>
         <View style={styles.header}>
           <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
         </View>
@@ -16,7 +16,7 @@ const Home = () => {
           <Text style={globalStyles.titleXL}>Recommended for you</Text>
           <ScrollView horizontal>
             <View style={styles.list}>
-              <Card />
+              <Card onPress={() => navigation.navigate('RecipeDetails')} />
               <Card />
               <Card />
               <Card />
@@ -46,9 +46,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.BACKGROUND,
-  },
-  content: {
-    paddingLeft: 25,
   },
   header: {
     alignItems: 'flex-end',
