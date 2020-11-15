@@ -9,6 +9,7 @@ const COLORS = {
   PRIMARY_ICON: '#ffd188',
   SECONDARY_ICON: '#ff9f88',
   BACKGROUND: '#f4f4f4',
+  RED: '#ff7a5c',
 }
 
 const globalStyles = StyleSheet.create({
@@ -71,6 +72,27 @@ const globalStyles = StyleSheet.create({
   },
   icon: {
     paddingRight: 10,
+  },
+  label: {
+    marginBottom: 5,
+    marginLeft: 5,
+    fontSize: 14,
+    color: COLORS.PRIMARY_FONT,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    height: 32,
+    backgroundColor: '#fff',
+    marginHorizontal: 5,
+    color: COLORS.PRIMARY_FONT,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginVertical: 10,
   },
 })
 

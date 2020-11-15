@@ -9,6 +9,8 @@ import {
   LeftOvers,
   About,
   RecipeDetails,
+  SignUp,
+  Login,
 } from '../screens'
 
 const HomeStack = createStackNavigator()
@@ -62,17 +64,29 @@ const AboutScreen = () => {
   )
 }
 
+const RegisterStack = createStackNavigator()
+
+const RegisterScreen = () => {
+  return (
+    <RegisterStack.Navigator>
+      <RegisterStack.Screen name='SignUp' component={SignUp} />
+      <RegisterStack.Screen name='Login' component={Login} />
+    </RegisterStack.Navigator>
+  )
+}
+
 const Tab = createBottomTabNavigator()
 
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator initialRouteName='Register'>
         <Tab.Screen name='Home' component={HomeStackScreen} />
         <Tab.Screen name='ShoppingList' component={ShoppingListScreen} />
         <Tab.Screen name='Favorites' component={FavoritesScreen} />
         <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
         <Tab.Screen name='About' component={AboutScreen} />
+        <Tab.Screen name='Register' component={RegisterScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )
