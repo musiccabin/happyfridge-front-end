@@ -80,7 +80,7 @@ const Tab = createBottomTabNavigator()
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName='Register'>
+      <Tab.Navigator>
         <Tab.Screen name='Home' component={HomeStackScreen} />
         <Tab.Screen name='ShoppingList' component={ShoppingListScreen} />
         <Tab.Screen name='Favorites' component={FavoritesScreen} />
