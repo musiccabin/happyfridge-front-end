@@ -1,7 +1,7 @@
 const provinces = [
   {
     id: 1,
-    name: 'PE',
+    name: 'BC',
   },
   {
     id: 2,
@@ -33,7 +33,7 @@ const provinces = [
   },
   {
     id: 8,
-    name: 'BC',
+    name: 'PE',
   },
   {
     id: 9,

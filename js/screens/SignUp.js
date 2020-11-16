@@ -15,11 +15,18 @@ const SignUp = () => {
   const [firstName, setFirstName] = useState()
   const [lastName, setLastName] = useState()
   const [province, setProvince] = useState()
-  const [city, SetCity] = useState()
+  const [selectedProvince, setSelectedProvince] = useState('BC')
+  const [city, setCity] = useState()
+  const [selectedCity, setSelectedCity] = useState('Vancouver')
   const [postalCode, setPostalCode] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
+
+  useEffect(() => {
+    setCity(cities)
+    setProvince(provinces)
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -51,23 +58,38 @@ const SignUp = () => {
         <View style={globalStyles.inputWrapper}>
           <View style={styles.small}>
             <Text style={globalStyles.label}>Province</Text>
-            <TextInput
-              style={[globalStyles.input]}
-              textContentType='name'
-              autoCompleteType='name'
-              value={province}
-              onChangeText={text => setProvince(text)}
-            />
+            <Picker
+              selectedValue={selectedProvince}
+              textStyle={{ fontSize: 12 }}
+              itemStyle={[globalStyles.input, globalStyles.picker]}
+              onValueChange={value => setSelectedProvince(value)}
+            >
+              {provinces.map(province => (
+                <Picker.Item
+                  key={province.id}
+                  label={province.name}
+                  value={province.name}
+                />
+              ))}
+            </Picker>
           </View>
           <View style={styles.half}>
-            <Text style={[globalStyles.label]}>City</Text>
-            <TextInput
-              style={[globalStyles.input]}
-              textContentType='addressCity'
-              autoCompleteType='name'
-              value={city}
-              onChangeText={text => SetCity(text)}
-            />
+            <Text style={[globalStyles.label, globalStyles.pickerLabel]}>
+              City
+            </Text>
+            <Picker
+              selectedValue={selectedCity}
+              itemStyle={[globalStyles.input, globalStyles.picker]}
+              onValueChange={value => setSelectedCity(value)}
+            >
+              {cities.map(city => (
+                <Picker.Item
+                  key={city.id}
+                  label={city.name}
+                  value={city.name}
+                />
+              ))}
+            </Picker>
           </View>
           <View style={styles.medium}>
             <Text style={[globalStyles.label]}>Postal code</Text>

@@ -79,6 +79,9 @@ const globalStyles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.PRIMARY_FONT,
   },
+  pickerLabel: {
+    marginLeft: 15,
+  },
   input: {
     borderWidth: 1,
     borderRadius: 10,
@@ -87,6 +90,11 @@ const globalStyles = StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: 5,
     color: COLORS.PRIMARY_FONT,
+  },
+  picker: {
+    height: 40,
+    marginVertical: 0,
+    transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
   },
   inputWrapper: {
     flexDirection: 'row',
