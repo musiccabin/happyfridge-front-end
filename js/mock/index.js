@@ -1,2 +1,4 @@
 import ingridients from './ingridients'
-export { ingridients }
+import cities from './cities'
+import provinces from './provinces'
+export { ingridients, cities, provinces }

@@ -4,4 +4,15 @@ import Favorites from './Favorites'
 import LeftOvers from './LeftOvers'
 import About from './About'
 import RecipeDetails from './RecipeDetails'
-export { Home, ShoppingList, Favorites, LeftOvers, About, RecipeDetails }
+import SignUp from './SignUp'
+import Login from './Login'
+export {
+  Home,
+  ShoppingList,
+  Favorites,
+  LeftOvers,
+  About,
+  RecipeDetails,
+  SignUp,
+  Login,
+}
