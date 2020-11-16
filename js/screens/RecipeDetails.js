@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Text, FlatList, StyleSheet, SafeAreaView } from 'react-native'
+import { View, Text, FlatList, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
-import { Carousel, Button } from '../components'
+import { Carousel, Button, CardList } from '../components'
 import { globalStyles, COLORS } from '../styles'
 import { ingridients } from '../mock'
 
@@ -10,14 +10,15 @@ const RecipeDetails = () => {
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
         <Carousel />
-        <View style={[globalStyles.card, styles.content, styles.card]}>
+        <View style={[globalStyles.card, globalStyles.content, styles.card]}>
+          <View style={styles.dragger} ></View>
           <View style={styles.cardHeader}>
             <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
-            <View style={styles.icons}>
+            <View style={globalStyles.icons}>
               <MaterialCommunityIcons
                 name='pencil'
                 size={32}
-                style={styles.icon}
+                style={globalStyles.icon}
                 color={COLORS.SECONDARY_FONT}
               />
               <MaterialIcons
@@ -36,36 +37,41 @@ const RecipeDetails = () => {
             />
             <Text style={globalStyles.titleS}>20 mins</Text>
           </View>
-          <View style={styles.ingridientsWrapper}>
-            <Text style={globalStyles.titleL}>Ingridients</Text>
-            <FlatList
-              contentContainerStyle={styles.ingridients}
-              data={ingridients}
-              renderItem={({ item }) => (
-                <View style={styles.ingridient}>
-                  <Text style={[globalStyles.titleS, styles.ingridientTitle]}>
-                    {item.title}
-                  </Text>
-                  <Text style={[globalStyles.titleS, styles.ingridientSize]}>
-                    {item.size}
-                  </Text>
-                  <View style={styles.emptySpace}></View>
-                </View>
-              )}
-              keyExtractor={item => item.id}
-              numColumns={2}
-            />
-          </View>
-          <View style={styles.insctructions}>
-            <Text style={globalStyles.titleL}>Instructions</Text>
-            <Text style={[globalStyles.titleM, styles.insctruction]}>
-              I first put this recipe up on the blog nearly 3 years ago, and
-              it’s totally stood the test of time!
-            </Text>
-            <View style={styles.buttonWrapper}>
-              <Button>Make It!</Button>
+          <ScrollView>
+            <View style={styles.wrapper}>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingridients</Text>
+              <FlatList
+                contentContainerStyle={styles.ingridients}
+                data={ingridients}
+                renderItem={({ item }) => (
+                  <View style={styles.ingridient}>
+                    <Text style={[globalStyles.titleS, styles.ingridientTitle]}>
+                      {item.title}
+                    </Text>
+                    <Text style={[globalStyles.titleS, styles.ingridientSize]}>
+                      {item.size}
+                    </Text>
+                  </View>
+                )}
+                keyExtractor={item => item.id}
+                numColumns={2}
+              />
             </View>
-          </View>
+            <View style={styles.wrapper}>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>Instructions</Text>
+              <Text style={globalStyles.titleS}>
+                I first put this recipe up on the blog nearly 3 years ago, and
+                it’s totally stood the test of time!
+              </Text>
+              <View style={styles.buttonWrapper}>
+                <Button>Recipe Complete</Button>
+              </View>
+            </View>
+            <View style={styles.wrapper}>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>Similar Recipes</Text>
+              <CardList />
+            </View>
+          </ScrollView>
         </View>
       </View>
     </SafeAreaView>
@@ -75,12 +81,11 @@ const RecipeDetails = () => {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    marginTop: -10,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },
-  content: {
-    paddingHorizontal: 25,
+  dragger: {
+    height: 20
   },
   cardHeader: {
     flexDirection: 'row',
@@ -88,41 +93,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
   },
-  icons: {
-    flexDirection: 'row',
-  },
-  icon: {
-    paddingRight: 10,
-  },
-  ingridientsWrapper: {
-    marginTop: 15,
-  },
-  ingridients: {
-    marginTop: 5,
-    marginBottom: 20,
-  },
   ingridient: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingBottom: 7,
   },
   ingridientTitle: {
-    flexBasis: '45%',
-  },
-  emptySpace: {
-    paddingLeft: 10,
+    flexBasis: '60%',
   },
   ingridientSize: {
-    flexBasis: '45%',
+    flexBasis: '30%',
     textAlign: 'right',
   },
-  insctructions: {
-    marginTop: 10,
+  wrapper: {
+    marginTop: 20
   },
-  insctruction: {
-    paddingTop: 10,
+  marginBottom: {
+    marginBottom: 15
   },
   buttonWrapper: { alignItems: 'center' },
 })

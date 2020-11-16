@@ -17,7 +17,7 @@ const globalStyles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingLeft: 25,
+    paddingHorizontal: 20,
   },
   card: {
     shadowOffset: { width: 1, height: 3 },
@@ -32,12 +32,10 @@ const globalStyles = StyleSheet.create({
     borderTopRightRadius: 10,
   },
   titleXL: {
-    paddingVertical: 25,
     fontSize: 20,
     color: COLORS.PRIMARY_FONT,
   },
   titleL: {
-    paddingBottom: 5,
     fontSize: 18,
     color: COLORS.PRIMARY_FONT,
   },
@@ -63,6 +61,7 @@ const globalStyles = StyleSheet.create({
   cardTimer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 4
   },
   clock: {
     paddingRight: 5,
