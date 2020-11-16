@@ -1,42 +1,31 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
-import { MaterialIcons, Feather } from '@expo/vector-icons'
-import { Card, Recipe } from '../components'
+import { Feather } from '@expo/vector-icons'
+import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 
 const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
+      </View>
+      <View style={styles.backgroundCircle}></View>
       <View style={globalStyles.content}>
-        <View style={styles.header}>
-          <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
-        </View>
-        <View style={styles.backgroundCircle}></View>
-        <View>
-          <Text style={globalStyles.titleXL}>Recommended for you</Text>
-          <ScrollView horizontal>
-            <View style={styles.list}>
-              <Card onPress={() => navigation.navigate('RecipeDetails')} />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-            </View>
-          </ScrollView>
-        </View>
-        <View>
-          <Text style={globalStyles.titleXL}>Popular recipes</Text>
-          <ScrollView>
-            <View>
-              <Recipe />
-              <Recipe />
-              <Recipe />
-              <Recipe />
-              <Recipe />
-            </View>
-          </ScrollView>
-        </View>
+        <Text style={[globalStyles.titleXL, styles.title]}>Recommended for you</Text>
+        <CardList navigation={navigation} />
+      </View>
+      <View style={[globalStyles.content, styles.poplularRecipes]}>
+        <Text style={[globalStyles.titleXL, styles.title]}>Popular recipes</Text>
+        <ScrollView >
+          <View>
+            <Recipe />
+            <Recipe />
+            <Recipe />
+            <Recipe />
+            <Recipe />
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   )
@@ -62,10 +51,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: -1,
   },
-  list: {
-    flexDirection: 'row',
-    height: 235,
+  poplularRecipes: {
+    marginTop: 40
   },
+  title: {
+    marginBottom: 20
+  }
 })
 
 export default Home
