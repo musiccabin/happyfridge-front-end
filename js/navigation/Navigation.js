@@ -11,6 +11,7 @@ import {
   RecipeDetails,
   SignUp,
   Login,
+  MealPlan
 } from '../screens'
 
 const HomeStack = createStackNavigator()
@@ -75,6 +76,20 @@ const RegisterScreen = () => {
   )
 }
 
+/* ---------------- Meal Plan Screen ---------------- */ 
+
+const MealPlanStack = createStackNavigator()
+
+const MealPlanScreen = () => {
+  return (
+    <MealPlanStack.Navigator>
+      <MealPlanStack.Screen name='MealPlan' component={MealPlan} />
+    </MealPlanStack.Navigator>
+  )
+}
+
+
+
 const Tab = createBottomTabNavigator()
 
 const Navigation = () => {
@@ -86,6 +101,7 @@ const Navigation = () => {
         <Tab.Screen name='Favorites' component={FavoritesScreen} />
         <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
         <Tab.Screen name='About' component={AboutScreen} />
+        <Tab.Screen name='MealPlan' component={MealPlanScreen} />
         <Tab.Screen name='Register' component={RegisterScreen} />
       </Tab.Navigator>
     </NavigationContainer>

@@ -101,6 +101,10 @@ const globalStyles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
+  pinCenter: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 })
 
 export { globalStyles, COLORS }
