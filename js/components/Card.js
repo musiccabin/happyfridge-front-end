@@ -3,7 +3,24 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 
-const Card = ({ onPress }) => {
+const Card = ({ onPress, marginTop, marginBottom, marginRight, height, width }) => {
+
+  const styles = StyleSheet.create({
+    card: {
+      height: height,
+      flexDirection: 'column',
+      width: width,
+      marginRight: marginRight,
+      marginTop: marginTop,
+      marginBottom:marginBottom
+    },
+    cardImage: {
+      height: 150,
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+    },
+  })
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.card, globalStyles.card]}>
@@ -46,18 +63,5 @@ const Card = ({ onPress }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  card: {
-    height: 218,
-    flexDirection: 'column',
-    width: 250,
-    marginRight: 15,
-  },
-  cardImage: {
-    height: 150,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-})
 
 export default Card

@@ -1,4 +1,7 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+
+const adjuster = 100
+const windowWidth = Dimensions.get('window').width + adjuster
 
 const COLORS = {
   PRIMARY: '#ffb846',
@@ -10,6 +13,13 @@ const COLORS = {
   SECONDARY_ICON: '#ff9f88',
   BACKGROUND: '#f4f4f4',
   RED: '#ff7a5c',
+}
+
+const zeroMargins = {
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0
 }
 
 const globalStyles = StyleSheet.create({
@@ -107,13 +117,18 @@ const globalStyles = StyleSheet.create({
   },
   absoluteCenterContainer: {
     position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    ...zeroMargins
+  },
+  circle: {
+    right: -(adjuster / 2),
+    left: -(adjuster / 2),
+    width: windowWidth,
+    height: windowWidth,
+    borderRadius: windowWidth / 2,
+    backgroundColor: COLORS.PRIMARY_ICON,
+    zIndex: -1
   }
 })
 
