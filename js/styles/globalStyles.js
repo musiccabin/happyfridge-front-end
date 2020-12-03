@@ -1,7 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native'
-
-const adjuster = 100
-const windowWidth = Dimensions.get('window').width + adjuster
+import { StyleSheet } from 'react-native'
+import { adjuster, windowWidthAdjuster } from '../utils'
 
 const COLORS = {
   PRIMARY: '#ffb846',
@@ -124,9 +122,9 @@ const globalStyles = StyleSheet.create({
   circle: {
     right: -(adjuster / 2),
     left: -(adjuster / 2),
-    width: windowWidth,
-    height: windowWidth,
-    borderRadius: windowWidth / 2,
+    width: windowWidthAdjuster,
+    height: windowWidthAdjuster,
+    borderRadius: windowWidthAdjuster / 2,
     backgroundColor: COLORS.PRIMARY_ICON,
     zIndex: -1
   }

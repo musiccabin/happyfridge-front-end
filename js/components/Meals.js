@@ -1,12 +1,13 @@
 import React from 'react'
-import { View, StyleSheet, Dimensions, Pressable, Text, ScrollView } from 'react-native'
+import { View, StyleSheet, Pressable, Text, ScrollView } from 'react-native'
 import Card from './Card'
 import { COLORS, globalStyles } from '../styles'
+import { windowWidth } from '../utils'
 
 const Meals = ({ data, emptyTitle, topButtonVisibility }) => {
 
-    let margin = 25, count = 0, mb = 0
-    const windowWidth = Dimensions.get('window').width - 60
+    let marginTop = 25, count = 0, marginBottom = 0
+    const cardWidth = windowWidth - 60
 
     return (
         <View style={styles.mainContainer}>
@@ -30,12 +31,12 @@ const Meals = ({ data, emptyTitle, topButtonVisibility }) => {
                         </Text>
                         </Pressable>
                     }
-                    <ScrollView showsVerticalScrollIndicator={false} >
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         {
                             data.map(() => {
                                 count++
-                                if (count == data.length) mb = margin
-                                return <Card marginTop={margin} height={218} width={windowWidth} marginBottom={mb} />
+                                if (count == data.length) marginBottom = marginTop
+                                return <Card marginTop={marginTop} height={218} width={cardWidth} marginBottom={marginBottom} />
                             })
                         }
                     </ScrollView>

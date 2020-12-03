@@ -12,7 +12,7 @@ const Card = ({ onPress, marginTop, marginBottom, marginRight, height, width }) 
       width: width,
       marginRight: marginRight,
       marginTop: marginTop,
-      marginBottom:marginBottom
+      marginBottom:marginBottom,
     },
     cardImage: {
       height: 150,
