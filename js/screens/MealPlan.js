@@ -7,7 +7,7 @@ const MealPlan = () => {
     const [data, setData] = useState(arr)
 
     return (
-        <Meals data={data} emptyTitle={`You don’t have any meal plan yet.\n Why not add a recipe?`} topButtonVisibility={true} />
+        <Meals data={data} emptyTitle={`You don’t have any meal plan yet.\n Why not add a recipe?`} showClearButton={true} />
     )
 }
 

@@ -1,13 +1,17 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { View, StyleSheet, Pressable, Text, ScrollView } from 'react-native'
 import Card from './Card'
-import { COLORS, globalStyles } from '../styles'
-import { windowWidth } from '../utils'
+import { COLORS, globalStyles, windowWidth } from '../styles'
 
-const Meals = ({ data, emptyTitle, topButtonVisibility }) => {
+const Meals = ({ data, emptyTitle, showClearButton }) => {
 
-    let marginTop = 25, count = 0, marginBottom = 0
-    const cardWidth = windowWidth - 60
+    let count = 0, marginBottom = 0
+    const [topButtonVisibility, setTopButtonVisibility] = useState(true)
+
+    useEffect(() => {
+        data.length == 0 ? setTopButtonVisibility(false) : setTopButtonVisibility(true) 
+    }, [topButtonVisibility]);
+
 
     return (
         <View style={styles.mainContainer}>
@@ -18,25 +22,24 @@ const Meals = ({ data, emptyTitle, topButtonVisibility }) => {
                 <View style={globalStyles.absoluteCenterContainer}>
                     <Text style={styles.text}>
                         {emptyTitle}
-                        {/* {`You don’t have any meal plan yet.\n Why not add a recipe?`} */}
                     </Text>
                 </View>
                 :
                 <View style={styles.cardContainer}>
                     {
-                        topButtonVisibility &&
+                        topButtonVisibility && showClearButton &&
                         <Pressable style={styles.clearBtn}>
                             <Text style={{ ...globalStyles.titleM, color: 'white' }}>
                                 Clear All
-                        </Text>
+                            </Text>
                         </Pressable>
                     }
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {
                             data.map(() => {
                                 count++
-                                if (count == data.length) marginBottom = marginTop
-                                return <Card marginTop={marginTop} height={218} width={cardWidth} marginBottom={marginBottom} />
+                                if (count == data.length) marginBottom = 25
+                                return <Card marginTop={25} height={218} width={windowWidth - 60} marginBottom={marginBottom} />
                             })
                         }
                     </ScrollView>

@@ -1,2 +1,2 @@
-import { globalStyles, COLORS } from './globalStyles'
-export { globalStyles, COLORS }
+import { globalStyles, COLORS, windowWidth } from './globalStyles'
+export { globalStyles, COLORS, windowWidth }
