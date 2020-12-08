@@ -6,12 +6,6 @@ import { COLORS, globalStyles, windowWidth } from '../styles'
 const Meals = ({ data, emptyTitle, showClearButton }) => {
 
     let count = 0, marginBottom = 0
-    const [topButtonVisibility, setTopButtonVisibility] = useState(true)
-
-    useEffect(() => {
-        data.length == 0 ? setTopButtonVisibility(false) : setTopButtonVisibility(true) 
-    }, [topButtonVisibility]);
-
 
     return (
         <View style={styles.mainContainer}>
@@ -27,7 +21,7 @@ const Meals = ({ data, emptyTitle, showClearButton }) => {
                 :
                 <View style={styles.cardContainer}>
                     {
-                        topButtonVisibility && showClearButton &&
+                        data.length != 0 && showClearButton &&
                         <Pressable style={styles.clearBtn}>
                             <Text style={{ ...globalStyles.titleM, color: 'white' }}>
                                 Clear All

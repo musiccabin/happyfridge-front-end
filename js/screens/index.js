@@ -8,6 +8,7 @@ import SignUp from './SignUp'
 import Login from './Login'
 import MealPlan from './MealPlan'
 import Completed from './Completed'
+import Preferences from './Preferences'
 
 export {
   Home,
@@ -19,5 +20,6 @@ export {
   SignUp,
   Login,
   MealPlan,
-  Completed
+  Completed,
+  Preferences
 }

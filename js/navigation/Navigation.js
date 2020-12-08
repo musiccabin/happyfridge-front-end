@@ -11,7 +11,8 @@ import {
   RecipeDetails,
   SignUp,
   Login,
-  MealPlan
+  MealPlan,
+  Preferences
 } from '../screens'
 
 const HomeStack = createStackNavigator()
@@ -65,6 +66,16 @@ const AboutScreen = () => {
   )
 }
 
+const PreferencesStack = createStackNavigator()
+
+const PreferencesScreen = () => {
+  return (
+    <PreferencesStack.Navigator>
+      <PreferencesStack.Screen name='Preferences' component={Preferences} />
+    </PreferencesStack.Navigator>
+  )
+}
+
 const RegisterStack = createStackNavigator()
 
 const RegisterScreen = () => {
@@ -75,8 +86,6 @@ const RegisterScreen = () => {
     </RegisterStack.Navigator>
   )
 }
-
-/* ---------------- Meal Plan Screen ---------------- */ 
 
 const MealPlanStack = createStackNavigator()
 
@@ -100,7 +109,7 @@ const Navigation = () => {
         <Tab.Screen name='ShoppingList' component={ShoppingListScreen} />
         <Tab.Screen name='Favorites' component={FavoritesScreen} />
         <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
-        <Tab.Screen name='About' component={AboutScreen} />
+        <Tab.Screen name='Preferences' component={PreferencesScreen} />
         <Tab.Screen name='MealPlan' component={MealPlanScreen} />
         <Tab.Screen name='Register' component={RegisterScreen} />
       </Tab.Navigator>
