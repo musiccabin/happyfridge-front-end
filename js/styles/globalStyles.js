@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+
+const windowWidth = Dimensions.get('window').width
 
 const COLORS = {
   PRIMARY: '#ffb846',
@@ -10,6 +12,13 @@ const COLORS = {
   SECONDARY_ICON: '#ff9f88',
   BACKGROUND: '#f4f4f4',
   RED: '#ff7a5c',
+}
+
+const zeroMargins = {
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0
 }
 
 const globalStyles = StyleSheet.create({
@@ -101,6 +110,25 @@ const globalStyles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
+  pinCenter: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  absoluteCenterContainer: {
+    position: 'absolute',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    ...zeroMargins
+  },
+  circle: {
+    right: -(100 / 2),
+    left: -(100 / 2),
+    width: windowWidth + 100,
+    height: windowWidth + 100,
+    borderRadius: windowWidth + 100 / 2,
+    backgroundColor: COLORS.PRIMARY_ICON,
+    zIndex: -1
+  }
 })
 
-export { globalStyles, COLORS }
+export { globalStyles, COLORS, windowWidth }

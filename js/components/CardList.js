@@ -3,16 +3,16 @@ import { View, StyleSheet, ScrollView } from 'react-native'
 import Card from './Card'
 
 
-const CardList = ({navigation}) => {
+const CardList = ({ navigation }) => {
   return (
     <ScrollView horizontal>
       <View style={styles.list}>
-        <Card onPress={() => navigation.navigate('RecipeDetails')} />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <Card onPress={() => navigation.navigate('RecipeDetails')} marginRight={15} height={218} width={250} />
+        <Card marginRight={15} height={218} width={250} />
+        <Card marginRight={15} height={218} width={250} />
+        <Card marginRight={15} height={218} width={250} />
+        <Card marginRight={15} height={218} width={250} />
+        <Card marginRight={15} height={218} width={250} />
       </View>
     </ScrollView>
   );
