@@ -12,7 +12,8 @@ import {
   SignUp,
   Login,
   MealPlan,
-  Preferences
+  Preferences,
+  UpdateUsage
 } from '../screens'
 
 const HomeStack = createStackNavigator()
@@ -52,6 +53,7 @@ const LeftOversScreen = () => {
   return (
     <LeftOversStack.Navigator>
       <LeftOversStack.Screen name='LeftOvers' component={LeftOvers} />
+      <HomeStack.Screen name='UpdateUsage' component={UpdateUsage} />
     </LeftOversStack.Navigator>
   )
 }

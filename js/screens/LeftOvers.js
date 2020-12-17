@@ -1,10 +1,12 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 
-const LeftOvers = () => {
+const LeftOvers = ({ navigation }) => {
   return (
     <View>
-      <Text>Leftovers screen</Text>
+      <Pressable onPress={() => navigation.navigate('UpdateUsage') }>
+        <Text>update usage</Text>
+      </Pressable>
     </View>
   )
 }
