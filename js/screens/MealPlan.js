@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Meals } from '../components'
 
-const FavoriteMeals = () => {
+const MealPlan = () => {
 
     let arr = [1, 2, 3, 4, 5, 6, 7]
     const [data, setData] = useState(arr)
 
     return (
-        <Meals data={data} emptyTitle={`Looks like you haven't added any favorite recipes.`} />
+        <Meals data={data} emptyTitle={`You don’t have any meal plan yet.\n Why not add a recipe?`} showClearButton={true} />
     )
 }
 
-export default FavoriteMeals
+export default MealPlan

@@ -1,11 +1,15 @@
-import Home from "./Home";
-import ShoppingList from "./ShoppingList";
-import Favorites from "./Favorites";
-import LeftOvers from "./LeftOvers";
-import About from "./About";
-import RecipeDetails from "./RecipeDetails";
-import SignUp from "./SignUp";
-import Login from "./Login";
+import Home from './Home'
+import ShoppingList from './ShoppingList'
+import Favorites from './Favorites'
+import LeftOvers from './LeftOvers'
+import About from './About'
+import RecipeDetails from './RecipeDetails'
+import SignUp from './SignUp'
+import Login from './Login'
+import MealPlan from './MealPlan'
+import Completed from './Completed'
+import Preferences from './Preferences'
+
 export {
   Home,
   ShoppingList,
@@ -15,4 +19,7 @@ export {
   RecipeDetails,
   SignUp,
   Login,
-};
+  MealPlan,
+  Completed,
+  Preferences
+}
