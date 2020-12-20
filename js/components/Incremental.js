@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
+import { View, StyleSheet, TextInput, Pressable } from 'react-native'
 import { COLORS } from '../styles'
+import { Feather } from '@expo/vector-icons';
 
-const DropDown = ({ inheritStyle, callback }) => {
+const Incremental = ({ inheritStyle, callback }) => {
 
     const [value, setValue] = useState(1)
 
@@ -11,25 +12,27 @@ const DropDown = ({ inheritStyle, callback }) => {
         callback(value)
     }
 
+    function handleManual(value) {
+        setValue(value)
+        callback(value)
+    }
+
     return (
         <View style={inheritStyle}>
             <View style={styles.container}>
                 <Pressable onPress={() => { setValue(value + 1); callback(value + 1) }}>
-                    <Image
-                        style={styles.icon}
-                        source={{
-                            uri: 'https://png.pngtree.com/png-vector/20190214/ourmid/pngtree-vector-plus-icon-png-image_515260.jpg'
-                        }}
-                    />
+                    <Feather name="plus" size={18} color="black" />
                 </Pressable>
-                <Text style={styles.text}>{value}</Text>
-                <Pressable onPress={() => { value > 0 && handleDecrement(value-1) }}>
-                    <Image
-                        style={styles.icon}
-                        source={{
-                            uri: 'https://cdn0.iconfinder.com/data/icons/typicons-2/24/minus-512.png'
-                        }}
-                    />
+                <TextInput
+                    style={styles.text}
+                    onChangeText={text => text.length != 0 ? handleManual(parseInt(text)) : handleManual(0)}
+                    multiline={false}
+                    keyboardType={'numeric'}
+                    maxLength={3}
+                    value={value.toString()}
+                />
+                <Pressable onPress={() => { value > 0 && handleDecrement(value - 1) }}>
+                    <Feather name="minus" size={18} color="black" />
                 </Pressable>
             </View>
             <View style={styles.line}></View>
@@ -53,4 +56,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DropDown
+export default Incremental
