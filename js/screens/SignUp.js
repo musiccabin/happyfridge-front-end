@@ -33,7 +33,7 @@ const SignUp = () => {
       <Text style={[globalStyles.titleXL, styles.signInTitle]}>Sign Up</Text>
       <View style={styles.form}>
         <View style={globalStyles.inputWrapper}>
-          <View style={styles.half}>
+          <View style={globalStyles.half}>
             <Text style={globalStyles.label}>First name</Text>
             <TextInput
               style={[globalStyles.input]}
@@ -43,7 +43,7 @@ const SignUp = () => {
               onChangeText={text => setFirstName(text)}
             />
           </View>
-          <View style={styles.half}>
+          <View style={globalStyles.half}>
             <Text style={[globalStyles.label]}>Last name</Text>
             <TextInput
               style={[globalStyles.input]}
@@ -56,7 +56,7 @@ const SignUp = () => {
         </View>
 
         <View style={globalStyles.inputWrapper}>
-          <View style={styles.small}>
+          <View style={globalStyles.small}>
             <Text style={globalStyles.label}>Province</Text>
             <Picker
               selectedValue={selectedProvince}
@@ -73,7 +73,7 @@ const SignUp = () => {
               ))}
             </Picker>
           </View>
-          <View style={styles.half}>
+          <View style={globalStyles.half}>
             <Text style={[globalStyles.label, globalStyles.pickerLabel]}>
               City
             </Text>
@@ -91,7 +91,7 @@ const SignUp = () => {
               ))}
             </Picker>
           </View>
-          <View style={styles.medium}>
+          <View style={globalStyles.medium}>
             <Text style={[globalStyles.label]}>Postal code</Text>
             <TextInput
               style={[globalStyles.input]}
@@ -104,7 +104,7 @@ const SignUp = () => {
         </View>
 
         <View style={globalStyles.inputWrapper}>
-          <View style={styles.full}>
+          <View style={globalStyles.full}>
             <Text style={globalStyles.label}>Email</Text>
             <TextInput
               style={[globalStyles.input]}
@@ -117,7 +117,7 @@ const SignUp = () => {
         </View>
 
         <View style={globalStyles.inputWrapper}>
-          <View style={styles.half}>
+          <View style={globalStyles.half}>
             <Text style={globalStyles.label}>Password</Text>
             <TextInput
               style={[globalStyles.input]}
@@ -128,7 +128,7 @@ const SignUp = () => {
               onChangeText={text => setPassword(text)}
             />
           </View>
-          <View style={styles.half}>
+          <View style={globalStyles.half}>
             <Text style={[globalStyles.label]}>Confirm Password</Text>
             <TextInput
               style={[globalStyles.input]}
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    color: COLORS.RED,
+    color: COLORS.SECONDARY,
   },
   registerButton: {
     marginLeft: 'auto',
@@ -182,23 +182,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   haveAccountText: {
-    color: COLORS.RED,
+    color: COLORS.SECONDARY,
   },
   signUp: {
-    color: COLORS.RED,
+    color: COLORS.SECONDARY,
     marginLeft: 5,
-  },
-  full: {
-    width: '100%',
-  },
-  half: {
-    width: '50%',
-  },
-  small: {
-    width: '20%',
-  },
-  medium: {
-    width: '30%',
   },
 })
 

@@ -1,2 +1,3 @@
-import Navigation from './Navigation'
-export { Navigation }
+import Navigation from "./Navigation";
+import LeftOverTabs from "./LeftOverTabs";
+export { Navigation, LeftOverTabs };
