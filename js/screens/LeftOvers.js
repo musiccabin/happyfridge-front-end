@@ -1,3 +1,12 @@
+import React from 'react'
+import { View, Text, Pressable } from 'react-native'
+
+const LeftOvers = ({ navigation }) => {
+  return (
+    <View>
+      <Pressable onPress={() => navigation.navigate('UpdateUsage') }>
+        <Text>update usage</Text>
+      </Pressable>
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Picker } from "react-native";
 import { Button } from "../components";

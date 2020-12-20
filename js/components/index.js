@@ -6,4 +6,7 @@ import Button from './Button'
 import LeftOverList from './LeftOverList'
 import Meals from './Meals'
 import CheckList from './CheckList'
-export { Card, Recipe, Carousel, Button, CardList, Meals, CheckList}
+import DropDown from './DropDown'
+import Incremental from './Incremental'
+
+export { Card, Recipe, Carousel, Button, CardList, Meals, CheckList, DropDown, Incremental}
