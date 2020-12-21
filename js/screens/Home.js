@@ -19,8 +19,8 @@ const Home = ({ navigation }) => {
         <Text style={[globalStyles.titleXL, styles.title]}>Popular recipes</Text>
         <ScrollView >
           <View>
-            <Recipe />
-            <Recipe />
+            <Recipe  />
+            <Recipe recipeCompleted={true} />
             <Recipe />
             <Recipe />
             <Recipe />
