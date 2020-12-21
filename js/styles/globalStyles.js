@@ -81,6 +81,7 @@ const globalStyles = StyleSheet.create({
   icon: {
     paddingRight: 10,
   },
+  iconSize: 18,
   label: {
     marginBottom: 5,
     marginLeft: 5,

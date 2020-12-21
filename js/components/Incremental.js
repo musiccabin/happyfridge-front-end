@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, TextInput, Pressable } from 'react-native'
-import { COLORS } from '../styles'
+import { COLORS, globalStyles } from '../styles'
 import { Feather } from '@expo/vector-icons';
 
 const Incremental = ({ inheritStyle, callback }) => {
@@ -18,10 +18,10 @@ const Incremental = ({ inheritStyle, callback }) => {
     }
 
     return (
-        <View style={inheritStyle}>
+        <View style={[inheritStyle]}>
             <View style={styles.container}>
                 <Pressable onPress={() => { setValue(value + 1); callback(value + 1) }}>
-                    <Feather name="plus" size={18} color="black" />
+                    <Feather name="plus" size={globalStyles.iconSize} style={styles.icon} color="black" />
                 </Pressable>
                 <TextInput
                     style={styles.text}
@@ -32,7 +32,7 @@ const Incremental = ({ inheritStyle, callback }) => {
                     value={value.toString()}
                 />
                 <Pressable onPress={() => { value > 0 && handleDecrement(value - 1) }}>
-                    <Feather name="minus" size={18} color="black" />
+                    <Feather name="minus" size={globalStyles.iconSize} style={styles.icon} color="black" />
                 </Pressable>
             </View>
             <View style={styles.line}></View>
@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     icon: {
-        width: 20,
-        height: 20,
+        top: 3,
+        color: COLORS.SECONDARY_FONT
     },
     line: {
         borderBottomColor: COLORS.PRIMARY_FONT,
         borderBottomWidth: 1,
-        paddingTop: 7
+        paddingTop: 5.5
     },
 });
 
