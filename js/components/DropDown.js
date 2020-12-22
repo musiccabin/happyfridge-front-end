@@ -63,11 +63,16 @@ const DropDown = ({ title, categories, inheritStyle, listZIndex, callback, butto
             <Pressable style={buttonStyle} onPress={() => toggle()}>
                 <Text style={styles.text}>{selectedCategory}</Text>
                 <View style={styles.line}></View>
-                <Ionicons style={styles.icon} size={globalStyles.iconSize} name={icon} color={COLORS.SECONDARY_FONT} />
+                <Ionicons
+                    style={styles.icon}
+                    size={globalStyles.iconSize}
+                    name={icon}
+                    color={COLORS.SECONDARY_FONT}
+                />
             </Pressable>
             {pickerVisibility &&
                 <FlatList
-                    style={[styles.list]}
+                    style={styles.list}
                     data={categories}
                     ItemSeparatorComponent={Separator}
                     keyExtractor={(_, index) => index.toString()}

@@ -18,7 +18,7 @@ const Incremental = ({ inheritStyle, callback }) => {
     }
 
     return (
-        <View style={[inheritStyle]}>
+        <View style={inheritStyle}>
             <View style={styles.container}>
                 <Pressable onPress={() => { setValue(value + 1); callback(value + 1) }}>
                     <Feather name="plus" size={globalStyles.iconSize} style={styles.icon} color="black" />
