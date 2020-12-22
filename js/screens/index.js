@@ -10,6 +10,8 @@ import MealPlan from './MealPlan'
 import Completed from './Completed'
 import Preferences from './Preferences'
 import UpdateUsage from './UpdateUsage'
+import GroceryList from './GroceryList'
+import Profile from './Profile'
 
 export {
   Home,
@@ -23,5 +25,7 @@ export {
   MealPlan,
   Completed,
   Preferences,
-  UpdateUsage
+  UpdateUsage,
+  GroceryList,
+  Profile,
 }
