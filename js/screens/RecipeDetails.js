@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, FlatList, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { Carousel, Button, CardList } from '../components'
 import { globalStyles, COLORS } from '../styles'
 import { ingridients } from '../mock'
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const RecipeDetails = () => {
+
+  const [mealCompleted, setMealCompleted] = useState(true)
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
@@ -21,9 +25,11 @@ const RecipeDetails = () => {
                 style={globalStyles.icon}
                 color={COLORS.SECONDARY_FONT}
               />
+              {mealCompleted && <SimpleLineIcons name="badge" size={32} color={COLORS.PRIMARY_ICON} />}
               <MaterialIcons
                 name='favorite'
                 size={32}
+                style={globalStyles.icon}
                 color={COLORS.SECONDARY_ICON}
               />
             </View>

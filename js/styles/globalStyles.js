@@ -76,11 +76,12 @@ const globalStyles = StyleSheet.create({
     paddingRight: 5,
   },
   icons: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   icon: {
     paddingRight: 10,
   },
+  iconSize: 18,
   label: {
     marginBottom: 5,
     marginLeft: 5,

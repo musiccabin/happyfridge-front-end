@@ -7,7 +7,7 @@ const CardList = ({ navigation }) => {
   return (
     <ScrollView horizontal>
       <View style={styles.list}>
-        <Card onPress={() => navigation.navigate('RecipeDetails')} marginRight={15} height={218} width={250} />
+        <Card recipeCompleted={true} onPress={() => navigation.navigate('RecipeDetails')} marginRight={15} height={218} width={250} />
         <Card marginRight={15} height={218} width={250} />
         <Card marginRight={15} height={218} width={250} />
         <Card marginRight={15} height={218} width={250} />

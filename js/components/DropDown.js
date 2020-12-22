@@ -1,12 +1,52 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableHighlight, FlatList, Pressable } from 'react-native'
+import { View, Text, StyleSheet, TouchableHighlight, FlatList, Pressable } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
+import { Ionicons } from '@expo/vector-icons'
 
-const DropDown = ({ title, categories, inheritStyle, callback }) => {
+const DropDown = ({ title, categories, inheritStyle, listZIndex, callback, buttonStyle, listTop }) => {
 
     const [pickerVisibility, setPickerVisibility] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState(categories[0].itemName)
-    const [image, setImage] = useState('https://assets.stickpng.com/images/58f8bd170ed2bdaf7c128308.png')
+    const [selectedCategory, setSelectedCategory] = useState(categories[0])
+    const [icon, setIcon] = useState('ios-arrow-up')
+
+    const styles = StyleSheet.create({
+        titleText: {
+            marginBottom: 10
+        },
+        line: {
+            borderBottomColor: COLORS.PRIMARY_FONT,
+            borderBottomWidth: 1,
+            paddingTop: 7
+        },
+        separatorLine: {
+            borderBottomColor: COLORS.PRIMARY_FONT,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+        },
+        listText: {
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+        },
+        text: {
+            width: '90%',
+            paddingStart: 10
+        },
+        icon: {
+            color: COLORS.SECONDARY_FONT,
+            position: 'absolute',
+            right: 10,
+            top: 3
+        },
+        list: {
+            backgroundColor: COLORS.PRIMARY_ICON,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5,
+            position: 'absolute',
+            right: 0,
+            left: 0,
+            zIndex: listZIndex,
+            ...listTop
+        }
+    });
 
     const Separator = () => {
         return <View style={styles.separatorLine}></View>
@@ -14,20 +54,20 @@ const DropDown = ({ title, categories, inheritStyle, callback }) => {
 
     const toggle = () => {
         setPickerVisibility(!pickerVisibility)
-        setImage(pickerVisibility ? 'https://assets.stickpng.com/images/58f8bd170ed2bdaf7c128308.png' : "https://cdn.iconscout.com/icon/free/png-256/top-arrow-25-1112318.png")
+        setIcon(pickerVisibility ? 'ios-arrow-up' : 'ios-arrow-down')
     }
 
     return (
         <View style={inheritStyle}>
-            { title && <Text style={[globalStyles.titleS], styles.titleText}>{title}</Text>}
-            <Pressable onPress={() => toggle()}>
+            {title && <Text style={[globalStyles.titleS], styles.titleText}>{title}</Text>}
+            <Pressable style={buttonStyle} onPress={() => toggle()}>
                 <Text style={styles.text}>{selectedCategory}</Text>
                 <View style={styles.line}></View>
-                <Image
+                <Ionicons
                     style={styles.icon}
-                    source={{
-                        uri: image
-                    }}
+                    size={globalStyles.iconSize}
+                    name={icon}
+                    color={COLORS.SECONDARY_FONT}
                 />
             </Pressable>
             {pickerVisibility &&
@@ -39,11 +79,11 @@ const DropDown = ({ title, categories, inheritStyle, callback }) => {
                     renderItem={
                         ({ item }) =>
                             <TouchableHighlight
-                                onPress={() => { callback(item.itemName); setSelectedCategory(item.itemName); toggle() }}
+                                onPress={() => { callback(item); setSelectedCategory(item); toggle() }}
                                 activeOpacity={0.1}
                                 underlayColor={COLORS.SECONDARY}
                             >
-                                <Text style={styles.listText}>{item.itemName}</Text>
+                                <Text style={styles.listText}>{item}</Text>
                             </TouchableHighlight>
                     }
                 />
@@ -51,39 +91,5 @@ const DropDown = ({ title, categories, inheritStyle, callback }) => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    titleText: {
-        marginBottom: 10
-    },
-    line: {
-        borderBottomColor: COLORS.PRIMARY_FONT,
-        borderBottomWidth: 1,
-    },
-    separatorLine: {
-        borderBottomColor: COLORS.PRIMARY_FONT,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    listText: {
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-    },
-    text: {
-        width: '90%',
-        padding: 5
-    },
-    icon: {
-        width: 15,
-        height: 15,
-        position: 'absolute',
-        right: 10,
-        top: 7
-    },
-    list: {
-        backgroundColor: COLORS.PRIMARY_ICON,
-        borderBottomLeftRadius: 5,
-        borderBottomRightRadius: 5,
-    }
-});
 
 export default DropDown
