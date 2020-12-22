@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
-import { COLORS } from '../styles'
+import { COLORS, globalStyles } from '../styles'
 import { GroceryListTabs } from '../navigation'
 import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
@@ -41,8 +41,8 @@ const GroceryList = () => {
 
 const styles = StyleSheet.create({
   container: {
+    ...globalStyles.container,
     backgroundColor: COLORS.WHITE,
-    flex: 1,
   },
 })
 

@@ -109,8 +109,8 @@ const GroceryScreen = () => {
   return (
     <GroceryListStack.Navigator
       screenOptions={{
-        headerTitleStyle: { ...globalStyles.titleXL, fontWeight: '300' },
-        headerStyle: { marginVertical: 30 },
+        headerTitleStyle: { ...globalStyles.navHeaderWrapper },
+        headerStyle: { ...globalStyles.navHeaderTitle },
         header: ({ scene, navigation }) => (
           <NavHeader scene={scene} navigation={navigation} />
         ),
@@ -127,8 +127,8 @@ const ProfileScreen = () => {
   return (
     <ProfileStack.Navigator
       screenOptions={{
-        headerTitleStyle: { ...globalStyles.titleXL, fontWeight: '300' },
-        headerStyle: { marginVertical: 30 },
+        headerTitleStyle: { ...globalStyles.navHeaderWrapper },
+        headerStyle: { ...globalStyles.navHeaderTitle },
         header: ({ scene, navigation }) => (
           <NavHeader
             scene={scene}

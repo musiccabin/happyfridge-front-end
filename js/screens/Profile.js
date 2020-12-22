@@ -41,11 +41,11 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
+    ...globalStyles.container,
     backgroundColor: COLORS.WHITE,
-    flex: 1,
   },
   content: {
-    paddingHorizontal: 25,
+    paddingHorizontal: 30,
   },
   header: {
     alignItems: 'center',

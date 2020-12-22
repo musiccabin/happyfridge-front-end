@@ -18,10 +18,6 @@ const GroceryListTabs = ({ data }) => {
           borderBottomWidth: 1,
           borderBottomColor: COLORS.SEPARATOR,
         },
-        tabStyle: {
-          height: 45,
-          borderTopWidth: 0,
-        },
         inactiveTintColor: COLORS.PRIMARY_FONT,
         activeTintColor: COLORS.PRIMARY,
         indicatorStyle: {

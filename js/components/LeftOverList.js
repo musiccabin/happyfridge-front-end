@@ -33,7 +33,7 @@ const LeftOverList = ({ data }) => {
                 style={
                   activeTab === idx
                     ? styles.headerActiveCategory
-                    : styles.headerCategory
+                    : globalStyles.titleM
                 }
               >
                 {category}
@@ -69,36 +69,34 @@ const LeftOverList = ({ data }) => {
 
 const styles = StyleSheet.create({
   header: {
+    ...globalStyles.content,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 25,
     borderTopWidth: 1,
     borderTopColor: COLORS.SEPARATOR,
     backgroundColor: COLORS.WHITE,
   },
   category: {
     ...globalStyles.titleM,
+    ...globalStyles.content,
     backgroundColor: COLORS.BACKGROUND,
-    paddingHorizontal: 25,
     paddingVertical: 5,
   },
   listWrapper: {
     backgroundColor: COLORS.WHITE,
   },
   list: {
+    ...globalStyles.content,
     backgroundColor: COLORS.WHITE,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 25,
+    paddingVertical: 25,
   },
   headerActiveCategoryWrapper: {
     borderBottomWidth: 1,
     borderBottomColor: COLORS.PRIMARY,
-  },
-  headerCategory: {
-    fontSize: 16,
   },
   headerActiveCategory: {
     color: COLORS.PRIMARY,
