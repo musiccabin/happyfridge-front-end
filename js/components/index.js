@@ -8,5 +8,20 @@ import Meals from './Meals'
 import CheckList from './CheckList'
 import DropDown from './DropDown'
 import Incremental from './Incremental'
+import NavHeader from './NavHeader'
+import ProfileLink from './ProfileLink'
 
-export { Card, Recipe, Carousel, Button, CardList, Meals, CheckList, DropDown, Incremental}
+export {
+  Card,
+  Recipe,
+  Carousel,
+  Button,
+  CardList,
+  Meals,
+  CheckList,
+  DropDown,
+  Incremental,
+  LeftOverList,
+  NavHeader,
+  ProfileLink,
+}
