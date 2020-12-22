@@ -13,8 +13,12 @@ import {
   Login,
   MealPlan,
   Preferences,
-  UpdateUsage
+  UpdateUsage,
+  GroceryList,
+  Profile,
 } from '../screens'
+import { globalStyles } from '../styles'
+import { NavHeader } from '../components'
 
 const HomeStack = createStackNavigator()
 
@@ -99,14 +103,52 @@ const MealPlanScreen = () => {
   )
 }
 
+const GroceryListStack = createStackNavigator()
 
+const GroceryScreen = () => {
+  return (
+    <GroceryListStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { ...globalStyles.titleXL, fontWeight: '300' },
+        headerStyle: { marginVertical: 30 },
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
+      <GroceryListStack.Screen name='Grocery List' component={GroceryList} />
+    </GroceryListStack.Navigator>
+  )
+}
+
+const ProfileStack = createStackNavigator()
+
+const ProfileScreen = () => {
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { ...globalStyles.titleXL, fontWeight: '300' },
+        headerStyle: { marginVertical: 30 },
+        header: ({ scene, navigation }) => (
+          <NavHeader
+            scene={scene}
+            navigation={navigation}
+            profileIcon={false}
+          />
+        ),
+      }}
+    >
+      <ProfileStack.Screen name='Profile' component={Profile} />
+    </ProfileStack.Navigator>
+  )
+}
 
 const Tab = createBottomTabNavigator()
 
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator initialRouteName='ShoppingList'>
         <Tab.Screen name='Home' component={HomeStackScreen} />
         <Tab.Screen name='ShoppingList' component={ShoppingListScreen} />
         <Tab.Screen name='Favorites' component={FavoritesScreen} />
@@ -114,6 +156,8 @@ const Navigation = () => {
         <Tab.Screen name='Preferences' component={PreferencesScreen} />
         <Tab.Screen name='MealPlan' component={MealPlanScreen} />
         <Tab.Screen name='Register' component={RegisterScreen} />
+        <Tab.Screen name='GroceryList' component={GroceryScreen} />
+        <Tab.Screen name='Profile' component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )
