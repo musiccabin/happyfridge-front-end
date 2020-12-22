@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, StyleSheet } from 'react-native'
-import { COLORS, globalStyles } from '../styles'
+import { SafeAreaView } from 'react-native'
+import { globalStyles } from '../styles'
 import { GroceryListTabs } from '../navigation'
 import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
@@ -33,17 +33,10 @@ const GroceryList = () => {
   }, [])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <GroceryListTabs data={structuredData} />
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...globalStyles.container,
-    backgroundColor: COLORS.WHITE,
-  },
-})
 
 export default GroceryList
