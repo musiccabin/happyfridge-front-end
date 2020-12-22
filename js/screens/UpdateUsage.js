@@ -1,49 +1,78 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { DropDown, Incremental, Button } from '../components'
 
 const UpdateUsage = () => {
 
-    const category = [{ itemName: "Dairy" }, { itemName: "Nuts and Seeds" }, { itemName: "Meat" }, { itemName: "Produce" }, { itemName: "Frozen" },]
-    const parts = [{ itemName: "1/4" }, { itemName: "1/3" }, { itemName: "1/2" }, { itemName: "2/3" }, { itemName: "3/4", itemName: "0" },]
-    const units = [{ itemName: "lb" }, { itemName: "kg" }]
-    const [categoryTitle, setCategoryTitle] = useState(category[0].itemName)
+    const category = ["Dairy", "Nuts and Seeds", "Meat", "Produce", "Frozen"]
+    const parts = ["1/4", "1/3", "1/3", "2/3", "0"]
+    const units = ["kg", "lb"]
+    const [categoryTitle, setCategoryTitle] = useState(category[0])
     const [wholeTitle, setWholeTitle] = useState("1")
-    const [partTitle, setPartTitle] = useState(parts[0].itemName)
-    const [unitTitle, setUnitTitle] = useState(units[0].itemName)
+    const [partTitle, setPartTitle] = useState(parts[0])
+    const [unitTitle, setUnitTitle] = useState(units[0])
 
     return (
-        <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={[globalStyles.titleM]}>{categoryTitle}</Text>
-                <Text style={[globalStyles.titleM]}>{wholeTitle != 0 && wholeTitle} {partTitle != 0 && partTitle} {unitTitle}</Text>
-            </View>
-            <View style={styles.parentContainer}>
-                <View style={styles.leftChildContainer}>
-                    <DropDown title={"Category"} categories={category} callback={(value) => setCategoryTitle(value)} />
-                    <DropDown title={"Unit"} categories={units} callback={(value) => setUnitTitle(value)} inheritStyle={{marginTop: 40}} />
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <Text style={globalStyles.titleM}>
+                        {categoryTitle}
+                    </Text>
+                    <Text style={globalStyles.titleM}>
+                        {wholeTitle != 0 && wholeTitle} {partTitle != 0 && partTitle} {unitTitle}
+                    </Text>
                 </View>
-                <View style={styles.rightChildContainer}>
-                    <View style={styles.quantityTitleContainer}>
-                        <Text style={styles.quantityTitle}>Quantity</Text>
+                <View style={styles.parentContainer}>
+                    <View style={styles.leftChildContainer}>
+                        <View style={{ zIndex: 9 }}>
+                            <DropDown
+                                title={"Category"}
+                                listTop={{ marginTop: 59 }}
+                                buttonStyle={{ marginTop: 7 }}
+                                categories={category}
+                                callback={(value) => setCategoryTitle(value)}
+                            />
+                        </View>
+                        <DropDown
+                            title={"Unit"}
+                            listTop={{ marginTop: 52 }}
+                            categories={units}
+                            callback={(value) => setUnitTitle(value)}
+                            inheritStyle={{ marginTop: 40 }}
+                        />
                     </View>
-                    <View style={styles.quantityContainer}>
-                        <Incremental inheritStyle={{ flexBasis: '35%' }} callback={(value) => setWholeTitle(value)} />
-                        <DropDown categories={parts} inheritStyle={{ flexBasis: '55%' }} callback={(value) => setPartTitle(value)} />
+                    <View style={styles.rightChildContainer}>
+                        <View style={styles.quantityTitleContainer}>
+                            <Text style={styles.quantityTitle}>Quantity</Text>
+                        </View>
+                        <View style={styles.quantityContainer}>
+                            <Incremental
+                                inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
+                                callback={(value) => setWholeTitle(value)}
+                            />
+                            <DropDown
+                                categories={parts}
+                                listTop={{ marginTop: 32 }}
+                                inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
+                                callback={(value) => setPartTitle(value)}
+                            />
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <Button children={"Save"} style={{ width: 110 }} />
+                        </View>
                     </View>
-                    <View style={styles.buttonContainer}><Button children={"Save"} style={{ width: 110 }} /></View>
                 </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingLeft: 20,
-        paddingRight: 20,
+        ...globalStyles.container,
+        ...globalStyles.content,
         paddingTop: 50,
         backgroundColor: COLORS.WHITE,
     },
@@ -87,7 +116,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginTop: 35,
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        zIndex: -1
     }
 });
 

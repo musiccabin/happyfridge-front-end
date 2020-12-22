@@ -2,8 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
+import { SimpleLineIcons } from '@expo/vector-icons'
 
-const Recipe = () => {
+const Recipe = ({ recipeCompleted }) => {
   return (
     <View style={[styles.card, globalStyles.card]}>
       <View style={styles.cardImageWrapper}>
@@ -30,6 +31,15 @@ const Recipe = () => {
             <Text style={globalStyles.titleS}>20 mins</Text>
           </View>
           <View style={globalStyles.icons}>
+            {
+              recipeCompleted && <SimpleLineIcons
+                name="badge"
+                style={globalStyles.icon}
+                size={24}
+                color="black"
+                color={COLORS.PRIMARY_ICON}
+              />
+            }
             <MaterialIcons
               name='add-circle'
               style={globalStyles.icon}
@@ -64,8 +74,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
   },
   cardInfo: {
-    flexBasis: '65%',
-    justifyContent: 'center',
+    flexBasis: '75%',
+    justifyContent: 'center'
   },
 })
 
