@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-  View, 
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { Carousel, Button, CardList, FavoriteIcon } from '../components'
 import { globalStyles, COLORS } from '../styles'
@@ -27,47 +20,30 @@ const RecipeDetails = () => {
   const [favorite, setFavorite] = useState(false)
   const toogleFavorite = () => setFavorite(!favorite)
   const even = (index) => (index + 1) % 2 == 0
-  const [drag, setDrag] = useState(false)
-  const draggable = useSpring({
-    top: drag ? '0%' : '50%', 
-    height: drag ? '100%' : '50%'
-  })
-  const AnimatedView = animated(View)
 
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
         <Carousel />
-        <AnimatedView style={[globalStyles.card, globalStyles.content, styles.card, draggable]}>
-          <TouchableOpacity style={styles.dragger} onPress={() => setDrag(!drag)} />
-          <ScrollView>
-            <View style={styles.cardHeader}>
-              <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
-              <View style={globalStyles.icons}>
-                <MaterialCommunityIcons
-                  name='pencil'
-                  size={32}
-                  style={globalStyles.icon}
-                  color={COLORS.SECONDARY_FONT}
-                />
-                {mealCompleted && 
-                <SimpleLineIcons
-                  name="badge"
-                  size={30}
-                  style={globalStyles.icon}
-                  color={COLORS.PRIMARY_ICON} 
-                />}
-                <FavoriteIcon favorite={favorite} toogleFavorite={toogleFavorite} />
-              </View>
-            </View>
-            <View style={globalStyles.cardTimer}>
-              <MaterialIcons
-                style={globalStyles.clock}
-                name='access-time'
-                size={20}
+        <View style={[globalStyles.card, globalStyles.content, styles.card]}>
+          <View style={styles.dragger} ></View>
+          <View style={styles.cardHeader}>
+            <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
+            <View style={globalStyles.icons}>
+              <MaterialCommunityIcons
+                name='pencil'
+                size={32}
+                style={globalStyles.icon}
                 color={COLORS.SECONDARY_FONT}
               />
-              <Text style={globalStyles.titleS}>20 mins</Text>
+              {mealCompleted && 
+              <SimpleLineIcons
+                name="badge"
+                size={30}
+                style={globalStyles.icon}
+                color={COLORS.PRIMARY_ICON} 
+              />}
+              <FavoriteIcon favorite={favorite} toogleFavorite={toogleFavorite} />
             </View>
             <TouchableOpacity>
               <Text style={styles.anchorText}>Edit ingridient usages</Text>
@@ -133,9 +109,17 @@ const styles = StyleSheet.create({
     ...globalStyles.row,
     flexWrap: 'wrap',
   },
-  ingridient: {
-    ...globalStyles.row,
+  ingridients: {
+    width: '100%',
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap:'wrap',
+  },
+  ingridient: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingBottom: 7,
     flexBasis: '46%',
   },
@@ -162,10 +146,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     backgroundColor: COLORS.PRIMARY,
     borderRadius: 100 / 2,
-  },
-  anchorText: {
-    ...globalStyles.anchorText,
-    marginTop: 10
-  }})
+  }
+})
 
 export default RecipeDetails
