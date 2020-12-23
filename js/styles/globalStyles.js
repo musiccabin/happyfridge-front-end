@@ -11,7 +11,7 @@ const COLORS = {
   PRIMARY_ICON: '#ffd188',
   SECONDARY_ICON: '#ff9f88',
   BACKGROUND: '#f4f4f4',
-  RED: '#ff7a5c',
+  SEPARATOR: '#bfbfbf',
 }
 
 const zeroMargins = {
@@ -70,17 +70,18 @@ const globalStyles = StyleSheet.create({
   cardTimer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4
+    marginTop: 4,
   },
   clock: {
     paddingRight: 5,
   },
   icons: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   icon: {
     paddingRight: 10,
   },
+  iconSize: 18,
   label: {
     marginBottom: 5,
     marginLeft: 5,
@@ -109,6 +110,18 @@ const globalStyles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     marginVertical: 10,
+  },
+  full: {
+    width: '100%',
+  },
+  half: {
+    width: '50%',
+  },
+  small: {
+    width: '20%',
+  },
+  medium: {
+    width: '30%',
   },
   pinCenter: {
     justifyContent: 'center',

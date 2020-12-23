@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
         <ScrollView >
           <View>
             {popularRecipes.map((recipe) => {
-              <Recipe />
+              <Recipe recipeCompleted={true} />
             })}
           </View>
         </ScrollView>

@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    color: COLORS.RED,
+    color: COLORS.SECONDARY,
   },
   registerButton: {
     marginLeft: 'auto',
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     color: COLORS.SECONDARY_FONT,
   },
   signUp: {
-    color: COLORS.RED,
+    color: COLORS.SECONDARY,
     marginLeft: 5,
   },
 })
