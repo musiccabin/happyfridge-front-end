@@ -1,127 +1,51 @@
-import React from 'react'
-import { View, Text, Pressable } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { Button, LeftOverList } from '../components'
+import { COLORS, globalStyles } from '../styles'
+import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
 const LeftOvers = ({ navigation }) => {
-  return (
-    <View>
-      <Pressable onPress={() => navigation.navigate('UpdateUsage') }>
-        <Text>update usage</Text>
-      </Pressable>
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Picker } from "react-native";
-import { Button } from "../components";
-import { COLORS, globalStyles } from "../styles";
-import { LeftOverTabs } from "../navigation";
+  const [structuredData, setStructuredData] = useState()
 
-const LeftOvers = () => {
-  const [name, setName] = useState();
-  const [quantity, setQuantity] = useState();
-  const [selectedUnit, setSelectedUnit] = useState();
-  const [selectedCategory, setSelectedCategory] = useState();
-
-  const data = [
-    {
-      id: 1,
-      name: "Bananas",
-      category: "produce",
-      quantity: "1",
-      unit: "lb",
-    },
-    {
-      id: 2,
-      name: "Chicken",
-      category: "meat",
-      quantity: "2",
-      unit: "lb",
-    },
-    {
-      id: 3,
-      name: "Frozen Beans",
-      category: "frozen",
-      quantity: "3",
-      unit: "lb",
-    },
-    {
-      id: 4,
-      name: "Milk",
-      category: "dairy",
-      quantity: "3",
-      unit: "lb",
-    },
-    {
-      id: 5,
-      name: "Seaweed",
-      category: "other",
-      quantity: 4,
-      unit: "lb",
-    },
-  ];
+  useEffect(() => {
+    setStructuredData([
+      {
+        title: 'Produce',
+        data: [...produceData],
+      },
+      {
+        title: 'Meat',
+        data: [...meatData],
+      },
+      {
+        title: 'Frozen',
+        data: [...frozenData],
+      },
+      {
+        title: 'Dairy',
+        data: [...dairyData],
+      },
+      {
+        title: 'Nuts & Seeds',
+        data: [...nutsData],
+      },
+    ])
+  }, [])
 
   return (
     <View style={styles.container}>
-      <View style={[globalStyles.content, styles.separator]}>
-        <Text style={[globalStyles.titleXL, styles.title]}>
-          How much of each ingredient {"\n"} did you use?
+      <View style={styles.separator}>
+        <Text style={styles.title}>
+          How much of each ingredient {'\n'} did you use?
         </Text>
-        <View style={globalStyles.inputWrapper}>
-          <View style={globalStyles.half}>
-            <Text style={styles.label}>Ingridient</Text>
-            <TextInput
-              value={name}
-              onChangeText={(text) => setName(text)}
-              style={styles.input}
-            />
-          </View>
-          <View style={globalStyles.half}>
-            <Text>Category</Text>
-            <Picker
-              selectedValue={selectedCategory}
-              itemStyle={styles.pickerItem}
-              style={styles.picker}
-              onValueChange={(value) => setSelectedCategory(value)}
-            >
-              <Picker.Item label="Produce" value="produce" />
-              <Picker.Item label="Meat" value="meat" />
-            </Picker>
-          </View>
-        </View>
-        <View style={globalStyles.inputWrapper}>
-          <View style={globalStyles.medium}>
-            <Text style={styles.label}>Quantity</Text>
-            <TextInput
-              value={quantity}
-              onChangeText={(text) => setQuantity(text)}
-              style={styles.input}
-            />
-          </View>
-          <View style={globalStyles.medium}>
-            <Text>Unit</Text>
-            <Picker
-              selectedValue={selectedUnit}
-              itemStyle={styles.pickerItem}
-              style={styles.picker}
-              onValueChange={(value) => setSelectedUnit(value)}
-            >
-              <Picker.Item label="lb" value="lb" />
-              <Picker.Item label="kg" value="kg" />
-            </Picker>
-          </View>
-          <View style={globalStyles.medium}>
-            <Button
-              onPress={() => alert("leftover added")}
-              style={styles.saveButton}
-            >
-              Save
-            </Button>
-          </View>
-        </View>
+        <Pressable onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.text}>I used the exact recipe amounts!</Text>
+        </Pressable>
       </View>
-      <View style={styles.leftOverTabs}>
-        <LeftOverTabs data={data} />
-      </View>
+      <LeftOverList data={structuredData} />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -130,32 +54,21 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.WHITE,
   },
   title: {
-    textAlign: "center",
+    ...globalStyles.titleXL,
+    textAlign: 'center',
     paddingBottom: 15,
   },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.PRIMARY,
-    fontSize: 14,
-    paddingVertical: 5,
-  },
-  picker: {
-    paddingHorizontal: 10,
-  },
-  pickerItem: {
-    height: 50,
-  },
-  saveButton: {
-    width: 140,
+  text: {
+    ...globalStyles.titleM,
+    textAlign: 'center',
+    color: '#ff7a5c',
   },
   separator: {
+    ...globalStyles.content,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.SEPARATOR,
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
-  leftOverTabs: {
-    flex: 1,
-  },
-});
+})
 
-export default LeftOvers;
+export default LeftOvers

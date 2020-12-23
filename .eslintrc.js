@@ -18,5 +18,6 @@ module.exports = {
   plugins: ['react', 'react-native'],
   rules: {
     'react/prop-types': 0,
+    'react/display-name': false,
   },
 }
