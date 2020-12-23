@@ -10,6 +10,7 @@ import DropDown from './DropDown'
 import Incremental from './Incremental'
 import NavHeader from './NavHeader'
 import ProfileLink from './ProfileLink'
+import FavoriteIcon from './FavoriteIcon'
 
 export {
   Card,
@@ -24,4 +25,5 @@ export {
   LeftOverList,
   NavHeader,
   ProfileLink,
+  FavoriteIcon
 }

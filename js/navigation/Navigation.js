@@ -24,7 +24,20 @@ const HomeStack = createStackNavigator()
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { ...globalStyles.navHeaderWrapper },
+        headerStyle: { ...globalStyles.navHeaderTitle },
+        header: ({ scene, navigation }) => (
+          <NavHeader
+            scene={scene}
+            navigation={navigation}
+            profileIcon={false}
+            renderTitle={false}
+          />
+        ),
+      }}
+    >
       <HomeStack.Screen name='Home' component={Home} />
       <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
     </HomeStack.Navigator>

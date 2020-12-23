@@ -8,14 +8,15 @@ import {
 } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 
-const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
+const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, children }) => {
   const { options } = scene?.descriptor
   const title =
-    options.headerTitle !== undefined
+    renderTitle &&
+    (options.headerTitle !== undefined
       ? options.headerTitle
       : options.title !== undefined
       ? options.title
-      : scene.route.name
+      : scene.route.name)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
