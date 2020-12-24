@@ -1,53 +1,78 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import {
+  View, 
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { Carousel, Button, CardList, FavoriteIcon } from '../components'
 import { globalStyles, COLORS } from '../styles'
 import { ingridients } from '../mock'
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons'
+import {useSpring, animated} from 'react-spring'
+import { PanGestureHandler, Animated, State } from 'react-native-gesture-handler'
 
+const steps = [
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+]
 const RecipeDetails = () => {
 
   const [mealCompleted, setMealCompleted] = useState(true)
   const [favorite, setFavorite] = useState(false)
   const toogleFavorite = () => setFavorite(!favorite)
   const even = (index) => (index + 1) % 2 == 0
+  const [drag, setDrag] = useState(false)
+  const draggable = useSpring({
+    top: drag ? '0%' : '50%', 
+    height: drag ? '100%' : '50%'
+  })
+  const AnimatedView = animated(View)
 
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
         <Carousel />
-        <View style={[globalStyles.card, globalStyles.content, styles.card]}>
-          <View style={styles.dragger} ></View>
-          <View style={styles.cardHeader}>
-            <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
-            <View style={globalStyles.icons}>
-              <MaterialCommunityIcons
-                name='pencil'
-                size={32}
-                style={globalStyles.icon}
+        <AnimatedView style={[globalStyles.card, globalStyles.content, styles.card, draggable]}>
+          <TouchableOpacity style={styles.dragger} onPress={() => setDrag(!drag)} />
+          <ScrollView>
+            <View style={styles.cardHeader}>
+              <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
+              <View style={globalStyles.icons}>
+                <MaterialCommunityIcons
+                  name='pencil'
+                  size={32}
+                  style={globalStyles.icon}
+                  color={COLORS.SECONDARY_FONT}
+                />
+                {mealCompleted && 
+                <SimpleLineIcons
+                  name="badge"
+                  size={30}
+                  style={globalStyles.icon}
+                  color={COLORS.PRIMARY_ICON} 
+                />}
+                <FavoriteIcon favorite={favorite} toogleFavorite={toogleFavorite} />
+              </View>
+            </View>
+            <View style={globalStyles.cardTimer}>
+              <MaterialIcons
+                style={globalStyles.clock}
+                name='access-time'
+                size={20}
                 color={COLORS.SECONDARY_FONT}
               />
-              {mealCompleted && 
-              <SimpleLineIcons
-                name="badge"
-                size={30}
-                style={globalStyles.icon}
-                color={COLORS.PRIMARY_ICON} 
-              />}
-              <FavoriteIcon favorite={favorite} toogleFavorite={toogleFavorite} />
+              <Text style={globalStyles.titleS}>20 mins</Text>
             </View>
-          </View>
-          <View style={globalStyles.cardTimer}>
-            <MaterialIcons
-              style={globalStyles.clock}
-              name='access-time'
-              size={20}
-              color={COLORS.SECONDARY_FONT}
-            />
-            <Text style={globalStyles.titleS}>20 mins</Text>
-          </View>
-          <ScrollView>
+            <TouchableOpacity>
+              <Text style={styles.anchorText}>Edit ingridient usages</Text>
+            </TouchableOpacity>
             <View style={styles.wrapper}>
               <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingridients</Text>
               <View style={styles.ingridients}>
@@ -66,11 +91,17 @@ const RecipeDetails = () => {
               </View>
             </View>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Instructions</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>Intro</Text>
               <Text style={globalStyles.titleS}>
                 I first put this recipe up on the blog nearly 3 years ago, and
                 it’s totally stood the test of time!
               </Text>
+            </View>
+            <View style={styles.wrapper}>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>Instructions</Text>
+              {steps.map((step, index) =>
+                <Text style={[globalStyles.titleS, styles.marginBottom]}>{index + 1}. {step}</Text>
+              )}
               <View style={styles.buttonWrapper}>
                 <Button onPress={() => setMealCompleted(!mealCompleted)}>Recipe Complete</Button>
               </View>
@@ -80,7 +111,7 @@ const RecipeDetails = () => {
               <CardList />
             </View>
           </ScrollView>
-        </View>
+        </AnimatedView>
       </View>
     </SafeAreaView>
   )
@@ -91,6 +122,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    position: "absolute",
+    zIndex: 10,
   },
   dragger: {
     height: 20
@@ -138,7 +171,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     backgroundColor: COLORS.PRIMARY,
     borderRadius: 100 / 2,
-  }
-})
+  },
+  anchorText: {
+    ...globalStyles.anchorText,
+    marginTop: 10
+  }})
 
 export default RecipeDetails

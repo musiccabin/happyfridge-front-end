@@ -56,6 +56,10 @@ const globalStyles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.SECONDARY_FONT,
   },
+  anchorText: {
+    fontSize: 14,
+    color: COLORS.SECONDARY
+  },
   cardImage: {
     resizeMode: 'cover',
   },

@@ -41,7 +41,7 @@ const Login = () => {
         </TouchableOpacity>
         <Button style={styles.registerButton}>Let's go!</Button>
         <View style={styles.createAccount}>
-          <Text style={styles.createAccountText}>Don't have an account?</Text>
+          <Text style={globalStyles.anchorText}>Don't have an account?</Text>
           <TouchableOpacity>
             <Text style={styles.signUp}>Sign Up</Text>
           </TouchableOpacity>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    color: COLORS.SECONDARY,
+    ...globalStyles.anchorText
   },
   registerButton: {
     marginLeft: 'auto',
@@ -82,11 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
   },
-  createAccountText: {
-    color: COLORS.SECONDARY_FONT,
-  },
   signUp: {
-    color: COLORS.SECONDARY,
+    ...globalStyles.anchorText,
     marginLeft: 5,
   },
 })
