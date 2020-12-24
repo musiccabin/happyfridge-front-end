@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
+import { ProfileIcon } from '../../assets/icons'
 import { COLORS, globalStyles } from '../styles'
 
 const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
@@ -28,7 +29,7 @@ const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
                 navigation.navigate('Profile')
               }}
             >
-              <Text>Profile Icon</Text>
+              <ProfileIcon heigth={50} width={50} />
             </TouchableOpacity>
           )}
         </View>
