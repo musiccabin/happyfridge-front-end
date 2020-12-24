@@ -51,11 +51,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
   },
-  avatar: {
-    width: 115,
-    height: 115,
-    borderRadius: 100 / 2,
-  },
   camera: {
     position: 'absolute',
     bottom: 10,
