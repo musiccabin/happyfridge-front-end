@@ -70,9 +70,7 @@ const LeftOverList = ({ data }) => {
 const styles = StyleSheet.create({
   header: {
     ...globalStyles.content,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...globalStyles.row,
     borderTopWidth: 1,
     borderTopColor: COLORS.SEPARATOR,
     backgroundColor: COLORS.WHITE,
@@ -88,10 +86,8 @@ const styles = StyleSheet.create({
   },
   list: {
     ...globalStyles.content,
+    ...globalStyles.row,
     backgroundColor: COLORS.WHITE,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     paddingVertical: 25,
   },
   headerActiveCategoryWrapper: {

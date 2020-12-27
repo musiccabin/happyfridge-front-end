@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
-import { View, Text, FlatList, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { Carousel, Button, CardList } from '../components'
 import { globalStyles, COLORS } from '../styles'
 import { ingridients } from '../mock'
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons'
 
 const RecipeDetails = () => {
-
   const [mealCompleted, setMealCompleted] = useState(true)
 
   return (
@@ -15,7 +21,7 @@ const RecipeDetails = () => {
       <View style={globalStyles.container}>
         <Carousel />
         <View style={[globalStyles.card, globalStyles.content, styles.card]}>
-          <View style={styles.dragger} ></View>
+          <View style={styles.dragger}></View>
           <View style={styles.cardHeader}>
             <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
             <View style={globalStyles.icons}>
@@ -25,7 +31,13 @@ const RecipeDetails = () => {
                 style={globalStyles.icon}
                 color={COLORS.SECONDARY_FONT}
               />
-              {mealCompleted && <SimpleLineIcons name="badge" size={32} color={COLORS.PRIMARY_ICON} />}
+              {mealCompleted && (
+                <SimpleLineIcons
+                  name='badge'
+                  size={32}
+                  color={COLORS.PRIMARY_ICON}
+                />
+              )}
               <MaterialIcons
                 name='favorite'
                 size={32}
@@ -45,7 +57,9 @@ const RecipeDetails = () => {
           </View>
           <ScrollView>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingridients</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Ingridients
+              </Text>
               <FlatList
                 contentContainerStyle={styles.ingridients}
                 data={ingridients}
@@ -64,7 +78,9 @@ const RecipeDetails = () => {
               />
             </View>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Instructions</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Instructions
+              </Text>
               <Text style={globalStyles.titleS}>
                 I first put this recipe up on the blog nearly 3 years ago, and
                 it’s totally stood the test of time!
@@ -74,7 +90,9 @@ const RecipeDetails = () => {
               </View>
             </View>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Similar Recipes</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Similar Recipes
+              </Text>
               <CardList />
             </View>
           </ScrollView>
@@ -91,19 +109,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
   },
   dragger: {
-    height: 20
+    height: 20,
   },
   cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    ...globalStyles.row,
     flexWrap: 'wrap',
   },
   ingridient: {
+    ...globalStyles.row,
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     paddingBottom: 7,
   },
   ingridientTitle: {
@@ -114,10 +128,10 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   wrapper: {
-    marginTop: 20
+    marginTop: 20,
   },
   marginBottom: {
-    marginBottom: 15
+    marginBottom: 15,
   },
   buttonWrapper: { alignItems: 'center' },
 })
