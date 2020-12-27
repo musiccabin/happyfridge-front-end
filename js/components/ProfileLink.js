@@ -32,9 +32,7 @@ const ProfileLink = ({ to, name, icon }) => {
 
 const styles = StyleSheet.create({
   option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...globalStyles.row,
     marginVertical: 20,
   },
   optionInfo: {

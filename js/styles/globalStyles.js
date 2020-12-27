@@ -66,9 +66,9 @@ const globalStyles = StyleSheet.create({
   cardInfo: {
     padding: 10,
   },
-  cardDetails: {
-    alignItems: 'center',
+  row: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   cardTimer: {
@@ -80,7 +80,7 @@ const globalStyles = StyleSheet.create({
     paddingRight: 5,
   },
   icons: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   icon: {
     paddingRight: 10,

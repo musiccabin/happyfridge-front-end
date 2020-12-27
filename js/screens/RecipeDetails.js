@@ -23,7 +23,6 @@ const steps = [
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
 ]
 const RecipeDetails = () => {
-
   const [mealCompleted, setMealCompleted] = useState(true)
   const [favorite, setFavorite] = useState(false)
   const toogleFavorite = () => setFavorite(!favorite)
@@ -107,7 +106,9 @@ const RecipeDetails = () => {
               </View>
             </View>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Similar Recipes</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Similar Recipes
+              </Text>
               <CardList />
             </View>
           </ScrollView>
@@ -126,25 +127,15 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   dragger: {
-    height: 20
+    height: 20,
   },
   cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    ...globalStyles.row,
     flexWrap: 'wrap',
   },
-  ingridients: {
-    width: '100%',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap:'wrap',
-  },
   ingridient: {
+    ...globalStyles.row,
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingBottom: 7,
     flexBasis: '46%',
   },
@@ -159,10 +150,10 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   wrapper: {
-    marginTop: 20
+    marginTop: 20,
   },
   marginBottom: {
-    marginBottom: 15
+    marginBottom: 15,
   },
   buttonWrapper: { alignItems: 'center' },
   dot: {
