@@ -24,7 +24,14 @@ const HomeStack = createStackNavigator()
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <HomeStack.Screen name='Home' component={Home} />
       <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
     </HomeStack.Navigator>
@@ -35,7 +42,14 @@ const ShoppingListStack = createStackNavigator()
 
 const ShoppingListScreen = () => {
   return (
-    <ShoppingListStack.Navigator>
+    <ShoppingListStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <ShoppingListStack.Screen name='ShoppingList' component={ShoppingList} />
     </ShoppingListStack.Navigator>
   )
@@ -45,7 +59,14 @@ const FavoritesStack = createStackNavigator()
 
 const FavoritesScreen = () => {
   return (
-    <FavoritesStack.Navigator>
+    <FavoritesStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <FavoritesStack.Screen name='Favorites' component={Favorites} />
     </FavoritesStack.Navigator>
   )
@@ -55,7 +76,14 @@ const LeftOversStack = createStackNavigator()
 
 const LeftOversScreen = () => {
   return (
-    <LeftOversStack.Navigator>
+    <LeftOversStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <LeftOversStack.Screen name='LeftOvers' component={LeftOvers} />
       <HomeStack.Screen name='UpdateUsage' component={UpdateUsage} />
     </LeftOversStack.Navigator>
@@ -66,7 +94,14 @@ const AboutStack = createStackNavigator()
 
 const AboutScreen = () => {
   return (
-    <AboutStack.Navigator>
+    <AboutStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <AboutStack.Screen name='About' component={About} />
     </AboutStack.Navigator>
   )
@@ -76,7 +111,14 @@ const PreferencesStack = createStackNavigator()
 
 const PreferencesScreen = () => {
   return (
-    <PreferencesStack.Navigator>
+    <PreferencesStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <PreferencesStack.Screen name='Preferences' component={Preferences} />
     </PreferencesStack.Navigator>
   )
@@ -86,7 +128,14 @@ const RegisterStack = createStackNavigator()
 
 const RegisterScreen = () => {
   return (
-    <RegisterStack.Navigator>
+    <RegisterStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <RegisterStack.Screen name='SignUp' component={SignUp} />
       <RegisterStack.Screen name='Login' component={Login} />
     </RegisterStack.Navigator>
@@ -157,7 +206,7 @@ const Tab = createBottomTabNavigator()
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName='ShoppingList'>
+      <Tab.Navigator initialRouteName='Home'>
         <Tab.Screen name='Home' component={HomeStackScreen} />
         <Tab.Screen name='ShoppingList' component={ShoppingListScreen} />
         <Tab.Screen name='Favorites' component={FavoritesScreen} />
@@ -165,6 +214,8 @@ const Navigation = () => {
         <Tab.Screen name='Preferences' component={PreferencesScreen} />
         <Tab.Screen name='MealPlan' component={MealPlanScreen} />
         <Tab.Screen name='GroceryList' component={GroceryScreen} />
+        <Tab.Screen name='Profile' component={ProfileScreen} />
+        <Tab.Screen name='Register' component={RegisterScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )

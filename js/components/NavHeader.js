@@ -12,12 +12,8 @@ import { COLORS, globalStyles } from '../styles'
 const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
   const isLogin = true
   const { options } = scene?.descriptor
-  const title =
-    options.headerTitle !== undefined
-      ? options.headerTitle
-      : options.title !== undefined
-      ? options.title
-      : scene.route.name
+  const title = options.headerTitle || options.title || scene.route.name
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>

@@ -1,22 +1,18 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, { useState} from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
-import { Feather } from '@expo/vector-icons'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { useQuery } from '@apollo/client'
 import { Context } from '../context'
-import { getPopularRecipes } from '../graphql/queries'
+import { popularRecipes } from '../graphql/queries'
 
 
 const Home = ({ navigation }) => {
-  const { data, error } = useQuery(getPopularRecipes)
+  const { data, error, loading } = useQuery(popularRecipes)
   const [login, setLogin] = useState(false)
-
+  if (loading) return null
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
-      </View>
       <View style={styles.backgroundCircle}></View>
       <View style={globalStyles.content}>
         <Text style={[globalStyles.titleXL, styles.title]}>Recommended for you</Text>
