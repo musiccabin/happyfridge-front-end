@@ -16,6 +16,7 @@ import {
   UpdateUsage,
   GroceryList,
   Profile,
+  Dashboard,
 } from '../screens'
 import { globalStyles } from '../styles'
 import { NavHeader } from '../components'
@@ -143,6 +144,24 @@ const ProfileScreen = () => {
   )
 }
 
+const DashboardStack = createStackNavigator()
+
+const DashboardScreen = () => {
+  return (
+    <DashboardStack.Navigator
+      screenOptions={{
+        headerTitleStyle: { ...globalStyles.navHeaderWrapper },
+        headerStyle: { ...globalStyles.navHeaderTitle },
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
+      <DashboardStack.Screen name='Dashboard' component={Dashboard} />
+    </DashboardStack.Navigator>
+  )
+}
+
 const Tab = createBottomTabNavigator()
 
 const Navigation = () => {
@@ -158,6 +177,7 @@ const Navigation = () => {
         <Tab.Screen name='Register' component={RegisterScreen} />
         <Tab.Screen name='GroceryList' component={GroceryScreen} />
         <Tab.Screen name='Profile' component={ProfileScreen} />
+        <Tab.Screen name='Dashboard' component={DashboardScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )

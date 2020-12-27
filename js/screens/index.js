@@ -12,6 +12,7 @@ import Preferences from './Preferences'
 import UpdateUsage from './UpdateUsage'
 import GroceryList from './GroceryList'
 import Profile from './Profile'
+import Dashboard from './Dashboard'
 
 export {
   Home,
@@ -28,4 +29,5 @@ export {
   UpdateUsage,
   GroceryList,
   Profile,
+  Dashboard,
 }
