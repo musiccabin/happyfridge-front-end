@@ -16,6 +16,7 @@ import {
   UpdateUsage,
   GroceryList,
   Profile,
+  AddEditGrocery
 } from '../screens'
 import { globalStyles } from '../styles'
 import { NavHeader } from '../components'
@@ -69,6 +70,16 @@ const AboutScreen = () => {
     <AboutStack.Navigator>
       <AboutStack.Screen name='About' component={About} />
     </AboutStack.Navigator>
+  )
+}
+
+const AddEditGroceryStack = createStackNavigator()
+
+const AddEditGroceryScreen = () => {
+  return (
+    <AddEditGroceryStack.Navigator>
+      <AddEditGroceryStack.Screen name='AddEditGrocery' component={AddEditGrocery} />
+    </AddEditGroceryStack.Navigator>
   )
 }
 
@@ -157,6 +168,7 @@ const Navigation = () => {
         <Tab.Screen name='MealPlan' component={MealPlanScreen} />
         <Tab.Screen name='Register' component={RegisterScreen} />
         <Tab.Screen name='GroceryList' component={GroceryScreen} />
+        <Tab.Screen name='AddEditGrocery' component={AddEditGroceryScreen} />
         <Tab.Screen name='Profile' component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
