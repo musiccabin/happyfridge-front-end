@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { CardList, Recipe } from '../components'
@@ -9,12 +9,8 @@ import { getPopularRecipes } from '../graphql/queries'
 
 
 const Home = ({ navigation }) => {
-  const {popularRecipes, setPopularRecipes} = useContext(Context)
   const { data, error } = useQuery(getPopularRecipes)
-  useEffect(() => {
-    setPopularRecipes(data)
-    console.log(error)
-  })
+  const [login, setLogin] = useState(false)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,7 +26,7 @@ const Home = ({ navigation }) => {
         <Text style={[globalStyles.titleXL, styles.title]}>Popular recipes</Text>
         <ScrollView >
           <View>
-            {popularRecipes.map((recipe) => {
+            {data.popularRecipes.map((recipe) => {
               <Recipe recipeCompleted={true} />
             })}
           </View>

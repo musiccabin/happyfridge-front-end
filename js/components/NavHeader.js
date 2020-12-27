@@ -10,6 +10,7 @@ import { ProfileIcon } from '../../assets/icons'
 import { COLORS, globalStyles } from '../styles'
 
 const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
+  const isLogin = true
   const { options } = scene?.descriptor
   const title =
     options.headerTitle !== undefined
@@ -26,7 +27,7 @@ const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
           {profileIcon && (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('Profile')
+                navigation.navigate(isLogin ? 'Profile' : 'Login')
               }}
             >
               <ProfileIcon heigth={50} width={50} />

@@ -97,7 +97,14 @@ const MealPlanStack = createStackNavigator()
 
 const MealPlanScreen = () => {
   return (
-    <MealPlanStack.Navigator>
+    <MealPlanStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
       <MealPlanStack.Screen name='MealPlan' component={MealPlan} />
     </MealPlanStack.Navigator>
   )
@@ -109,8 +116,7 @@ const GroceryScreen = () => {
   return (
     <GroceryListStack.Navigator
       screenOptions={{
-        headerTitleStyle: { ...globalStyles.navHeaderWrapper },
-        headerStyle: { ...globalStyles.navHeaderTitle },
+        ...navigationStyle,
         header: ({ scene, navigation }) => (
           <NavHeader scene={scene} navigation={navigation} />
         ),
@@ -127,8 +133,7 @@ const ProfileScreen = () => {
   return (
     <ProfileStack.Navigator
       screenOptions={{
-        headerTitleStyle: { ...globalStyles.navHeaderWrapper },
-        headerStyle: { ...globalStyles.navHeaderTitle },
+        ...navigationStyle,
         header: ({ scene, navigation }) => (
           <NavHeader
             scene={scene}
@@ -143,6 +148,10 @@ const ProfileScreen = () => {
   )
 }
 
+const navigationStyle = {
+  headerTitleStyle: { ...globalStyles.navHeaderWrapper },
+  headerStyle: { ...globalStyles.navHeaderTitle },
+}
 const Tab = createBottomTabNavigator()
 
 const Navigation = () => {
@@ -155,9 +164,7 @@ const Navigation = () => {
         <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
         <Tab.Screen name='Preferences' component={PreferencesScreen} />
         <Tab.Screen name='MealPlan' component={MealPlanScreen} />
-        <Tab.Screen name='Register' component={RegisterScreen} />
         <Tab.Screen name='GroceryList' component={GroceryScreen} />
-        <Tab.Screen name='Profile' component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   )
