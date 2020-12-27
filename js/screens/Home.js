@@ -1,15 +1,13 @@
-import React, { useState} from 'react'
+import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { useQuery } from '@apollo/client'
-import { Context } from '../context'
 import { popularRecipes } from '../graphql/queries'
 
 
 const Home = ({ navigation }) => {
   const { data, error, loading } = useQuery(popularRecipes)
-  const [login, setLogin] = useState(false)
   if (loading) return null
   return (
     <SafeAreaView style={styles.container}>
