@@ -20,7 +20,7 @@ const Recipe = ({ recipeCompleted }) => {
         <Text style={[styles.cardTitle, globalStyles.titleM]}>
           Creamy Herb Chicken
         </Text>
-        <View style={globalStyles.cardDetails}>
+        <View style={globalStyles.row}>
           <View style={globalStyles.cardTimer}>
             <MaterialIcons
               style={globalStyles.clock}
@@ -31,15 +31,15 @@ const Recipe = ({ recipeCompleted }) => {
             <Text style={globalStyles.titleS}>20 mins</Text>
           </View>
           <View style={globalStyles.icons}>
-            {
-              recipeCompleted && <SimpleLineIcons
-                name="badge"
+            {recipeCompleted && (
+              <SimpleLineIcons
+                name='badge'
                 style={globalStyles.icon}
                 size={24}
-                color="black"
+                color='black'
                 color={COLORS.PRIMARY_ICON}
               />
-            }
+            )}
             <MaterialIcons
               name='add-circle'
               style={globalStyles.icon}
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   cardInfo: {
     flexBasis: '75%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 })
 

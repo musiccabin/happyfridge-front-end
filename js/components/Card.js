@@ -4,8 +4,15 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
 
-const Card = ({ onPress, marginTop, marginBottom, marginRight, height, width, recipeCompleted }) => {
-
+const Card = ({
+  onPress,
+  marginTop,
+  marginBottom,
+  marginRight,
+  height,
+  width,
+  recipeCompleted,
+}) => {
   const styles = StyleSheet.create({
     card: {
       height: height,
@@ -34,7 +41,7 @@ const Card = ({ onPress, marginTop, marginBottom, marginRight, height, width, re
         />
         <View style={[styles.cardInfo, globalStyles.cardInfo]}>
           <Text style={globalStyles.titleL}>Shakshuka</Text>
-          <View style={globalStyles.cardDetails}>
+          <View style={globalStyles.row}>
             <View style={globalStyles.cardTimer}>
               <MaterialIcons
                 style={globalStyles.clock}
@@ -45,15 +52,15 @@ const Card = ({ onPress, marginTop, marginBottom, marginRight, height, width, re
               <Text style={globalStyles.titleS}>20 mins</Text>
             </View>
             <View style={globalStyles.icons}>
-            {
-              recipeCompleted && <SimpleLineIcons
-                name="badge"
-                style={globalStyles.icon}
-                size={24}
-                color="black"
-                color={COLORS.PRIMARY_ICON}
-              />
-            }
+              {recipeCompleted && (
+                <SimpleLineIcons
+                  name='badge'
+                  style={globalStyles.icon}
+                  size={24}
+                  color='black'
+                  color={COLORS.PRIMARY_ICON}
+                />
+              )}
               <MaterialIcons
                 name='remove-circle'
                 size={24}
@@ -72,6 +79,5 @@ const Card = ({ onPress, marginTop, marginBottom, marginRight, height, width, re
     </TouchableOpacity>
   )
 }
-
 
 export default Card

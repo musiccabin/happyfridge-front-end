@@ -33,12 +33,13 @@ const Dashboard = () => {
             '#5cc6ba',
           ]}
           labels={({ datum }) => `${datum.x}\n${datum.z}`}
-          innerRadius={78}
+          innerRadius={65}
           padAngle={2}
         />
       </View>
-      <Text style={styles.title}>Top 10 meat ingridients used</Text>
-      <ScrollView style={styles.ingridients}>
+      <ScrollView style={globalStyles.content}>
+        <Text style={styles.title}>Top 10 meat ingridients used</Text>
+
         <View style={styles.ingridient}>
           <Text style={globalStyles.titleL}>Chicken (x5)</Text>
           <Text style={globalStyles.titleL}>10lb</Text>
@@ -61,18 +62,12 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.SEPARATOR,
     borderBottomWidth: 0.3,
   },
-  ingridients: {
-    paddingHorizontal: 20,
-  },
   title: {
     ...globalStyles.titleXL,
     marginVertical: 20,
-    paddingHorizontal: 20,
   },
   ingridient: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    ...globalStyles.row,
     paddingVertical: 10,
   },
 })
