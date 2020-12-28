@@ -10,8 +10,10 @@ import {
 import { Button } from '../components'
 import { cities, provinces } from '../mock'
 import { globalStyles, COLORS } from '../styles'
+import { signUpMutation } from '../graphql/mutations'
+import { useMutation } from '@apollo/client'
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const [firstName, setFirstName] = useState()
   const [lastName, setLastName] = useState()
   const [province, setProvince] = useState()
@@ -23,11 +25,32 @@ const SignUp = () => {
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
 
+  const [signUp, { data }] = useMutation(signUpMutation)
+
   useEffect(() => {
     setCity(cities)
     setProvince(provinces)
   }, [])
 
+  const submit = () => {
+    let value = {
+      attributes: {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      authProvider: {
+        credentials: {
+          email: email,
+          password: password
+        }
+      }
+    }
+    signUp({variables: {value: value}}).then(({data}) => {
+      if (data) {
+        navigation.navigate('Home')
+      }
+    })
+  } 
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.titleXL, styles.signInTitle]}>Sign Up</Text>
@@ -141,8 +164,8 @@ const SignUp = () => {
           </View>
         </View>
 
-        <Button style={styles.registerButton}>Create account</Button>
-        <TouchableOpacity style={styles.haveAccount}>
+        <Button style={styles.registerButton} onPress={() => submit()}>Create account</Button>
+        <TouchableOpacity style={styles.haveAccount} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.haveAccountText}>I have an account!</Text>
         </TouchableOpacity>
       </View>

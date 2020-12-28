@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   SafeAreaView,
   View,
@@ -8,15 +8,13 @@ import {
 } from 'react-native'
 import { ProfileIcon } from '../../assets/icons'
 import { COLORS, globalStyles } from '../styles'
+import { Context } from '../context'
 
 const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
+  const {currentUser} = useContext(Context)
   const { options } = scene?.descriptor
-  const title =
-    options.headerTitle !== undefined
-      ? options.headerTitle
-      : options.title !== undefined
-      ? options.title
-      : scene.route.name
+  const title = options.headerTitle || options.title || scene.route.name
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -26,7 +24,7 @@ const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
           {profileIcon && (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('Profile')
+                navigation.navigate(currentUser ? 'Profile' : 'Login')
               }}
             >
               <ProfileIcon heigth={50} width={50} />
