@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    color: COLORS.SECONDARY,
+    ...globalStyles.anchorText
   },
   registerButton: {
     marginLeft: 'auto',
@@ -99,11 +99,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
   },
-  createAccountText: {
-    color: COLORS.SECONDARY_FONT,
-  },
   signUp: {
-    color: COLORS.SECONDARY,
+    ...globalStyles.anchorText,
     marginLeft: 5,
   },
 })

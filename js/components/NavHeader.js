@@ -9,9 +9,9 @@ import {
 import { ProfileIcon } from '../../assets/icons'
 import { COLORS, globalStyles } from '../styles'
 
-const NavHeader = ({ scene, navigation, profileIcon = true, children }) => {
+const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, children }) => {
   const { options } = scene?.descriptor
-  const title = options.headerTitle || options.title || scene.route.name
+  const title = renderTitle && (options.headerTitle || options.title || scene.route.name)
 
   return (
     <SafeAreaView style={styles.container}>

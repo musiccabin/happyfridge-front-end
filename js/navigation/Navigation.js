@@ -46,7 +46,12 @@ const HomeStackScreen = () => {
       screenOptions={{
         ...navigationStyle,
         header: ({ scene, navigation }) => (
-          <NavHeader scene={scene} navigation={navigation} />
+          <NavHeader 
+            scene={scene} 
+            navigation={navigation}
+            profileIcon={false}
+            renderTitle={false} 
+          />
         ),
       }}
     >

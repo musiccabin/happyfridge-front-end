@@ -166,7 +166,7 @@ const SignUp = ({navigation}) => {
 
         <Button style={styles.registerButton} onPress={() => submit()}>Create account</Button>
         <TouchableOpacity style={styles.haveAccount} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.haveAccountText}>I have an account!</Text>
+          <Text style={globalStyles.anchorText}>I have an account!</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -203,13 +203,6 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     flexDirection: 'row',
     marginTop: 10,
-  },
-  haveAccountText: {
-    color: COLORS.SECONDARY,
-  },
-  signUp: {
-    color: COLORS.SECONDARY,
-    marginLeft: 5,
   },
 })
 
