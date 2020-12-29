@@ -1,10 +1,13 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 
-const About = () => {
+const About = ({ navigation }) => {
   return (
     <View>
       <Text>About screen</Text>
+      <Pressable onPress={() => navigation.goBack()}>
+        <Text>Go Back</Text>
+      </Pressable>
     </View>
   )
 }

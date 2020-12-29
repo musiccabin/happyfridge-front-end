@@ -20,6 +20,18 @@ import {
 } from '../screens'
 import { globalStyles } from '../styles'
 import { NavHeader } from '../components'
+import {
+  HomeIcon,
+  HomeInActiveIcon,
+  GroceryIcon,
+  GroceryInActiveIcon,
+  FavoriteIcon,
+  FavoriteInActiveIcon,
+  MealPlanIcon,
+  MealPlanInActiveIcon,
+  LeftOverIcon,
+  LeftOverInActiveIcon,
+} from '../../assets/menu-icons'
 
 const navigationStyle = {
   headerTitleStyle: { ...globalStyles.navHeaderWrapper },
@@ -96,40 +108,6 @@ const LeftOversScreen = () => {
   )
 }
 
-const AboutStack = createStackNavigator()
-
-const AboutScreen = () => {
-  return (
-    <AboutStack.Navigator
-      screenOptions={{
-        ...navigationStyle,
-        header: ({ scene, navigation }) => (
-          <NavHeader scene={scene} navigation={navigation} />
-        ),
-      }}
-    >
-      <AboutStack.Screen name='About' component={About} />
-    </AboutStack.Navigator>
-  )
-}
-
-const PreferencesStack = createStackNavigator()
-
-const PreferencesScreen = () => {
-  return (
-    <PreferencesStack.Navigator
-      screenOptions={{
-        ...navigationStyle,
-        header: ({ scene, navigation }) => (
-          <NavHeader scene={scene} navigation={navigation} />
-        ),
-      }}
-    >
-      <PreferencesStack.Screen name='Preferences' component={Preferences} />
-    </PreferencesStack.Navigator>
-  )
-}
-
 const RegisterStack = createStackNavigator()
 
 const RegisterScreen = () => {
@@ -199,44 +177,81 @@ const ProfileScreen = () => {
       }}
     >
       <ProfileStack.Screen name='Profile' component={Profile} />
+      <ProfileStack.Screen name='About' component={About} />
+      <ProfileStack.Screen name='Preferences' component={Preferences} />
+      <ProfileStack.Screen name='Dashboard' component={Dashboard} />
     </ProfileStack.Navigator>
   )
 }
 
-const DashboardStack = createStackNavigator()
+const RootStack = createStackNavigator()
 
-const DashboardScreen = () => {
+const RootStackScreen = () => {
   return (
-    <DashboardStack.Navigator
-      screenOptions={{
-        ...navigationStyle,
-        header: ({ scene, navigation }) => (
-          <NavHeader scene={scene} navigation={navigation} />
-        ),
-      }}
-    >
-      <DashboardStack.Screen name='Dashboard' component={Dashboard} />
-    </DashboardStack.Navigator>
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Screen name='Home' component={HomeTabs} />
+      <RootStack.Screen name='Profile' component={ProfileScreen} />
+    </RootStack.Navigator>
   )
 }
 
 const Tab = createBottomTabNavigator()
 
+const HomeTabs = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName='Home'
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          const { name } = route
+          if (name === 'Home') {
+            if (focused) {
+              return <HomeIcon />
+            } else {
+              return <HomeInActiveIcon />
+            }
+          } else if (name === 'GroceryList') {
+            if (focused) {
+              return <GroceryIcon />
+            } else {
+              return <GroceryInActiveIcon />
+            }
+          } else if (name === 'Favorites') {
+            if (focused) {
+              return <FavoriteIcon />
+            } else {
+              return <FavoriteInActiveIcon />
+            }
+          } else if (name === 'MealPlan') {
+            if (focused) {
+              return <MealPlanIcon />
+            } else {
+              return <MealPlanInActiveIcon />
+            }
+          } else if (name === 'LeftOvers') {
+            if (focused) {
+              return <LeftOverIcon />
+            } else {
+              return <LeftOverInActiveIcon />
+            }
+          }
+        },
+      })}
+      tabBarOptions={{ showLabel: false }}
+    >
+      <Tab.Screen name='Home' component={HomeStackScreen} />
+      <Tab.Screen name='GroceryList' component={GroceryScreen} />
+      <Tab.Screen name='Favorites' component={FavoritesScreen} />
+      <Tab.Screen name='MealPlan' component={MealPlanScreen} />
+      <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
+    </Tab.Navigator>
+  )
+}
+
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName='Home'>
-        <Tab.Screen name='Home' component={HomeStackScreen} />
-        <Tab.Screen name='ShoppingList' component={ShoppingListScreen} />
-        <Tab.Screen name='Favorites' component={FavoritesScreen} />
-        <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
-        <Tab.Screen name='Preferences' component={PreferencesScreen} />
-        <Tab.Screen name='MealPlan' component={MealPlanScreen} />
-        <Tab.Screen name='GroceryList' component={GroceryScreen} />
-        <Tab.Screen name='Profile' component={ProfileScreen} />
-        <Tab.Screen name='Register' component={RegisterScreen} />
-        <Tab.Screen name='Dashboard' component={DashboardScreen} />
-      </Tab.Navigator>
+      <RootStackScreen />
     </NavigationContainer>
   )
 }
