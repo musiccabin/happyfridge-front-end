@@ -31,6 +31,6 @@ export {
   ProfileLink,
   CategoryUnit,
   Quantity,
-  UsageBar
+  UsageBar,
   FavoriteIcon
 }
