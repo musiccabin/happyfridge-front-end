@@ -12,6 +12,9 @@ import { cities, provinces } from '../mock'
 import { globalStyles, COLORS } from '../styles'
 import { signUpMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
+import { Context } from '../context'
+
+const { initCurrentUser } = useContext(Context)
 
 const SignUp = ({navigation}) => {
   const [firstName, setFirstName] = useState()
@@ -47,6 +50,7 @@ const SignUp = ({navigation}) => {
     }
     signUp({variables: {value: value}}).then(({data}) => {
       if (data) {
+        initCurrentUser()
         navigation.navigate('Home')
       }
     })

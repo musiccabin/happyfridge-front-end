@@ -22,7 +22,7 @@ export const recommendedRecipes = gql`
   }
 `
 
-export const currentUser = gql`
+export const currentUserQuery = gql`
   query currentUser {
     currentUser {
       id

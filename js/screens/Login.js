@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Button } from '../components'
-import { globalStyles, COLORS } from '../styles'
+import { globalStyles } from '../styles'
 import { signInMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
+import { Context } from '../context'
+
+const { initCurrentUser } = useContext(Context)
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState()
@@ -26,6 +29,7 @@ const Login = ({navigation}) => {
     }
     signIn({variables: {value: value}}).then(({data}) => {
       if (data) {
+        initCurrentUser()
         navigation.navigate('Home')
       }
     })
