@@ -27,10 +27,10 @@ const Profile = () => {
           <Text style={styles.email}>edinkaymakchi@gmail.com</Text>
         </View>
         <View style={styles.options}>
-          <ProfileLink name='About' icon='infocirlceo' to='Home' />
-          <ProfileLink name='Preferences' icon='setting' to='Home' />
+          <ProfileLink name='About' icon='infocirlceo' to='About' />
+          <ProfileLink name='Preferences' icon='setting' to='Preferences' />
           <ProfileLink name='Completed meals' icon='check' to='Home' />
-          <ProfileLink name='Dashboard' icon='dashboard' to='Home' />
+          <ProfileLink name='Dashboard' icon='dashboard' to='Dashboard' />
           <ProfileLink name='Edit profile' icon='profile' to='Home' />
           <ProfileLink name='Log Out' icon='logout' to='Home' />
         </View>

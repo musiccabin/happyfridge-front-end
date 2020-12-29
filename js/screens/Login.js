@@ -8,11 +8,28 @@ import {
 } from 'react-native'
 import { Button } from '../components'
 import { globalStyles, COLORS } from '../styles'
+import { signInMutation } from '../graphql/mutations'
+import { useMutation } from '@apollo/client'
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 
+  const [signIn, { data }] = useMutation(signInMutation)
+
+  const login = () => {
+    let value = {
+      credentials: {
+        email: email,
+        password: password,
+      }
+    }
+    signIn({variables: {value: value}}).then(({data}) => {
+      if (data) {
+        navigation.navigate('Home')
+      }
+    })
+  }
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.titleXL, styles.signInTitle]}>Sign in</Text>
@@ -39,10 +56,10 @@ const Login = () => {
         <TouchableOpacity>
           <Text style={styles.forgotPassword}>Forgot password?</Text>
         </TouchableOpacity>
-        <Button style={styles.registerButton}>Let's go!</Button>
+        <Button style={styles.registerButton} onPress={() => login()}>Let's go!</Button>
         <View style={styles.createAccount}>
           <Text style={styles.createAccountText}>Don't have an account?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.signUp}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -69,7 +86,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    color: COLORS.SECONDARY,
+    ...globalStyles.anchorText
   },
   registerButton: {
     marginLeft: 'auto',
@@ -82,11 +99,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
   },
-  createAccountText: {
-    color: COLORS.SECONDARY_FONT,
-  },
   signUp: {
-    color: COLORS.SECONDARY,
+    ...globalStyles.anchorText,
     marginLeft: 5,
   },
 })

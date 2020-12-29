@@ -13,6 +13,8 @@ import ProfileLink from './ProfileLink'
 import CategoryUnit from './CategoryUnit'
 import Quantity from './Quantity'
 import UsageBar from './UsageBar'
+import FavoriteIcon from './FavoriteIcon'
+
 
 export {
   Card,
@@ -30,4 +32,5 @@ export {
   CategoryUnit,
   Quantity,
   UsageBar
+  FavoriteIcon
 }

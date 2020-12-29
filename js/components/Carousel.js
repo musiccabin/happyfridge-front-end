@@ -42,7 +42,7 @@ const Carousel = () => {
 
 const styles = StyleSheet.create({
   viewPager: {
-    height: '45%',
+    height: '55%',
   },
   page: {
     justifyContent: 'center',
