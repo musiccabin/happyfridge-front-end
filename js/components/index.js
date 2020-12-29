@@ -10,6 +10,9 @@ import DropDown from './DropDown'
 import Incremental from './Incremental'
 import NavHeader from './NavHeader'
 import ProfileLink from './ProfileLink'
+import CategoryUnit from './CategoryUnit'
+import Quantity from './Quantity'
+import UsageBar from './UsageBar'
 
 export {
   Card,
@@ -24,4 +27,7 @@ export {
   LeftOverList,
   NavHeader,
   ProfileLink,
+  CategoryUnit,
+  Quantity,
+  UsageBar
 }

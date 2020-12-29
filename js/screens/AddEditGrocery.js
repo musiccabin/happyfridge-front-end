@@ -10,7 +10,7 @@ import {
     TouchableWithoutFeedback
 } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
-import { DropDown, Incremental, Button } from '../components'
+import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
 
 const AddEditGrocery = () => {
 
@@ -34,20 +34,16 @@ const AddEditGrocery = () => {
             backgroundColor: COLORS.WHITE,
             ...globalStyles.container
         },
-        titleContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-        },
         inputContainer: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 30
+            marginTop: 70
         },
         leftContainer: {
             flexBasis: '55%',
         },
         rightContainer: {
-            flexBasis: '40%',
+            flexBasis: '40%'
         },
         input: {
             borderBottomColor: failedStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
@@ -55,26 +51,6 @@ const AddEditGrocery = () => {
             marginTop: 20,
             paddingBottom: 4,
             paddingHorizontal: 4
-        },
-        quantityContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: COLORS.BACKGROUND,
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            borderRadius: 7,
-            borderTopLeftRadius: 0
-        },
-        quantityTitleContainer: {
-            marginTop: 30,
-            backgroundColor: COLORS.BACKGROUND,
-            width: 80,
-            borderTopLeftRadius: 7,
-            borderTopRightRadius: 7
-        },
-        quantityTitle: {
-            paddingTop: 7,
-            paddingStart: 10,
         },
         list: {
             backgroundColor: COLORS.PRIMARY_ICON,
@@ -96,7 +72,8 @@ const AddEditGrocery = () => {
         },
         button: {
             marginTop: 60,
-            width: 145
+            width: 145,
+            zIndex: -2
         },
         ingredientText: {
             color: failedStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT
@@ -139,14 +116,12 @@ const AddEditGrocery = () => {
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setIsUserTyping(false) }}>
             <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={globalStyles.titleM}>
-                        {categoryTitle}
-                    </Text>
-                    <Text style={globalStyles.titleM}>
-                        {wholeTitle != 0 && wholeTitle} {partTitle != 0 && partTitle} {unitTitle}
-                    </Text>
-                </View>
+                <UsageBar
+                    categoryTitle={categoryTitle}
+                    wholeTitle={wholeTitle}
+                    partTitle={partTitle}
+                    unitTitle={unitTitle}
+                />
                 <View style={styles.inputContainer}>
                     <View style={styles.leftContainer}>
                         <Text style={styles.ingredientText}>Ingredient</Text>
@@ -179,39 +154,20 @@ const AddEditGrocery = () => {
                                     </TouchableHighlight>
                             }
                         />}
-                        <View style={styles.quantityTitleContainer}>
-                            <Text style={styles.quantityTitle}>Quantity</Text>
-                        </View>
-                        <View style={styles.quantityContainer}>
-                            <Incremental
-                                inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
-                                callback={(value) => setWholeTitle(value)}
-                            />
-                            <DropDown
-                                categories={parts}
-                                listTop={{ marginTop: 32 }}
-                                inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
-                                callback={(value) => setPartTitle(value)}
+                        <View style={{ marginTop: 30 }}>
+                            <Quantity
+                                wholeCallback={(value) => setWholeTitle(value)}
+                                partCallback={(value) => setPartTitle(value)}
+                                parts={parts}
                             />
                         </View>
                     </View>
                     <View style={styles.rightContainer}>
-                        <View style={{ zIndex: 9 }}>
-                            <DropDown
-                                title={"Category"}
-                                listTop={{ top: 59 }}
-                                buttonStyle={{ marginTop: 7 }}
-                                categories={category}
-                                callback={(value) => setCategoryTitle(value)}
-                            />
-                        </View>
-                        <DropDown
-                            title={"Unit"}
-                            categories={units}
-                            buttonStyle={{ marginTop: 4 }}
-                            callback={(value) => setUnitTitle(value)}
-                            inheritStyle={{ marginTop: 40 }}
-                            listTop={{ top: 56 }}
+                        <CategoryUnit
+                            categories={category}
+                            units={units}
+                            categoryCallback={(value) => setCategoryTitle(value)}
+                            unitCallback={(value) => setUnitTitle(value)}
                         />
                         <Button
                             children={"Save"}
