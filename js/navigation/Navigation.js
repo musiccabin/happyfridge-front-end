@@ -300,7 +300,7 @@ const Navigation = () => {
         <Tab.Screen name='AddEditGrocery' component={AddEditGroceryScreen} />
         <Tab.Screen name='Profile' component={ProfileScreen} />
       </Tab.Navigator>
-      <RootStackScreen />
+      {/* <RootStackScreen /> */}
     </NavigationContainer>
   )
 }
