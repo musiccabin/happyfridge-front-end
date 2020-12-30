@@ -56,15 +56,19 @@ const globalStyles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.SECONDARY_FONT,
   },
+  anchorText: {
+    fontSize: 14,
+    color: COLORS.SECONDARY
+  },
   cardImage: {
     resizeMode: 'cover',
   },
   cardInfo: {
     padding: 10,
   },
-  cardDetails: {
-    alignItems: 'center',
+  row: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   cardTimer: {
@@ -76,7 +80,7 @@ const globalStyles = StyleSheet.create({
     paddingRight: 5,
   },
   icons: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   icon: {
     paddingRight: 10,

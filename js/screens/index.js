@@ -13,6 +13,7 @@ import UpdateUsage from './UpdateUsage'
 import GroceryList from './GroceryList'
 import Profile from './Profile'
 import AddEditGrocery from './AddEditGrocery'
+import Dashboard from './Dashboard'
 
 export {
   Home,
@@ -29,5 +30,6 @@ export {
   UpdateUsage,
   GroceryList,
   Profile,
-  AddEditGrocery
+  AddEditGrocery,
+  Dashboard,
 }

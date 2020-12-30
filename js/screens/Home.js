@@ -1,29 +1,28 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
-import { Feather } from '@expo/vector-icons'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
+import { useQuery } from '@apollo/client'
+import { popularRecipes } from '../graphql/queries'
+
 
 const Home = ({ navigation }) => {
+  const { data, error, loading } = useQuery(popularRecipes)
+  if (loading) return null
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Feather name='menu' size={32} color={COLORS.SECONDARY_FONT} />
-      </View>
       <View style={styles.backgroundCircle}></View>
       <View style={globalStyles.content}>
         <Text style={[globalStyles.titleXL, styles.title]}>Recommended for you</Text>
         <CardList navigation={navigation} />
       </View>
-      <View style={[globalStyles.content, styles.poplularRecipes]}>
+      <View style={[globalStyles.content, styles.popularRecipes]}>
         <Text style={[globalStyles.titleXL, styles.title]}>Popular recipes</Text>
         <ScrollView >
           <View>
-            <Recipe  />
-            <Recipe recipeCompleted={true} />
-            <Recipe />
-            <Recipe />
-            <Recipe />
+            {data.popularRecipes.map((recipe) => {
+              <Recipe recipeCompleted={true} />
+            })}
           </View>
         </ScrollView>
       </View>
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: -1,
   },
-  poplularRecipes: {
+  popularRecipes: {
     marginTop: 40
   },
   title: {

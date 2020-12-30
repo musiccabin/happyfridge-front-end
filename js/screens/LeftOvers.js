@@ -59,9 +59,8 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   text: {
-    ...globalStyles.titleM,
+    ...globalStyles.anchorText,
     textAlign: 'center',
-    color: '#ff7a5c',
   },
   separator: {
     ...globalStyles.content,
