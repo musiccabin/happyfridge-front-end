@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import { signUpMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
 import { Context } from '../context'
 
-const { initCurrentUser } = useContext(Context)
 
 const SignUp = ({navigation}) => {
   const [firstName, setFirstName] = useState()
@@ -27,19 +26,33 @@ const SignUp = ({navigation}) => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
-
-  const [signUp, { data }] = useMutation(signUpMutation)
+  
+  const { setCurrentUser } = useContext(Context)
+  const [loginInfo, setLoginInfo] = useState()
+  const [signUp] = useMutation(signUpMutation)
 
   useEffect(() => {
     setCity(cities)
     setProvince(provinces)
   }, [])
 
+  useEffect(()=> {
+    setCurrentUser(loginInfo)
+  },[loginInfo])
+
+  const afterMutation = ({status, user}) => {
+    console.log(status)
+    setLoginInfo(user)
+    if (user) navigation.navigate('Home')
+  }
+
   const submit = () => {
     let value = {
       attributes: {
         firstName: firstName,
         lastName: lastName,
+        city: selectedCity,
+        province: selectedProvince,
       },
       authProvider: {
         credentials: {
@@ -49,9 +62,8 @@ const SignUp = ({navigation}) => {
       }
     }
     signUp({variables: {value: value}}).then(({data}) => {
-      if (data) {
-        initCurrentUser()
-        navigation.navigate('Home')
+      if (data.signUp) {
+        afterMutation(data.signUp)
       }
     })
   } 
