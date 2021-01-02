@@ -30,7 +30,7 @@ const Meals = ({ data, emptyTitle, showClearButton }) => {
                     }
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {
-                            data.map(() => {
+                            data.map((recipe) => {
                                 count++
                                 if (count == data.length) marginBottom = 25
                                 return <Card
@@ -38,7 +38,7 @@ const Meals = ({ data, emptyTitle, showClearButton }) => {
                                     height={218}
                                     width={windowWidth - 60}
                                     marginBottom={marginBottom}
-                                    recipeCompleted={true}
+                                    recipe={recipe}
                                 />
                             })
                         }

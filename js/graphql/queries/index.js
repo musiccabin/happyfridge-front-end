@@ -19,6 +19,24 @@ export const recommendedRecipesQuery = gql`
   ${MyRecipeFragment}
 `
 
+export const favRecipesQuery = gql`
+  query favRecipes {
+    favRecipes {
+      ...Myrecipe
+    }
+  }
+  ${MyRecipeFragment}
+`
+
+export const completedRecipesQuery = gql`
+  query completedRecipes {
+    completedRecipes {
+      ...Myrecipe
+    }
+  }
+  ${MyRecipeFragment}
+`
+
 export const currentUserQuery = gql`
   query currentUser {
     currentUser {
