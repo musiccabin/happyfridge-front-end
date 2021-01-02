@@ -2,13 +2,10 @@ import React from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
-import { useNavigation } from '@react-navigation/native'
 
-const ProfileLink = ({ to, name, icon }) => {
-  const navigation = useNavigation()
-
+const ProfileLink = ({ to, name, icon, onPress }) => {
   return (
-    <Pressable onPress={() => navigation.navigate(to)}>
+    <Pressable onPress={() => onPress()}>
       <View style={styles.option}>
         <View style={styles.optionInfo}>
           <AntDesign

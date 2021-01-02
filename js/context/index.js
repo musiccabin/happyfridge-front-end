@@ -1,18 +1,12 @@
-import React, {createContext, useState} from 'react'
-import { useQuery } from '@apollo/client'
-import { currentUserQuery } from '../graphql/queries'
+import React, { createContext, useState, useEffect } from 'react'
 
 export const Context = createContext()
 
-export const Provider = ({children}) => {
-  const [currentUser, setCurrentUser] = useState(false)
-  const initCurrentUser = () => {
-    const { data } = useQuery(currentUserQuery)
-    setCurrentUser(data)
-  }
+export const Provider = ({children}) => {  
+  const [currentUser, setCurrentUser] = useState(null)
   const values = {
     currentUser,
-    initCurrentUser,
+    setCurrentUser,
   }
   return (
     <Context.Provider value={values} >

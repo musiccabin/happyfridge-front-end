@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   SafeAreaView,
   View,
@@ -10,9 +10,9 @@ import { ProfileIcon } from '../../assets/icons'
 import { COLORS, globalStyles } from '../styles'
 import { Context } from '../context'
 
-const { currentUser } = useContext(Context)
 
 const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, children }) => {
+  const { currentUser } = useContext(Context)
   const { options } = scene?.descriptor
   const title = renderTitle && (options.headerTitle || options.title || scene.route.name)
 

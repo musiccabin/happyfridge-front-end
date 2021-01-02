@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import { ProfileLink } from '../components'
+import { Context } from '../context'
+import { useMutation } from '@apollo/client'
+import { useNavigation } from '@react-navigation/native'
+import { signOutMutation } from '../graphql/mutations'
 
 const Profile = () => {
+  const [signOut] = useMutation(signOutMutation)
+  const { currentUser, setCurrentUser } = useContext(Context)
+  const {navigate} = useNavigation()
+
+  const logOut = () => {
+    signOut({variables: {value: {clientMutationId: null}}}).then(({data}) => {
+      if (data) {
+        setCurrentUser(null)
+        navigate('Home')
+      }
+    })
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -22,17 +38,19 @@ const Profile = () => {
               color={COLORS.SECONDARY_FONT}
             />
           </View>
-          <Text style={styles.fullName}>Susannah Sun</Text>
-          <Text style={styles.location}>Vancouver, BC</Text>
-          <Text style={styles.email}>edinkaymakchi@gmail.com</Text>
+          <Text style={styles.fullName}>
+            {currentUser.firstName} {currentUser.lastName}
+          </Text>
+          <Text style={styles.location}>{currentUser.city}, {currentUser.province}</Text>
+          <Text style={styles.email}>{currentUser.email}</Text>
         </View>
         <View style={styles.options}>
-          <ProfileLink name='About' icon='infocirlceo' to='About' />
-          <ProfileLink name='Preferences' icon='setting' to='Preferences' />
-          <ProfileLink name='Completed meals' icon='check' to='Home' />
-          <ProfileLink name='Dashboard' icon='dashboard' to='Dashboard' />
-          <ProfileLink name='Edit profile' icon='profile' to='Home' />
-          <ProfileLink name='Log Out' icon='logout' to='Home' />
+          <ProfileLink name='About' icon='infocirlceo' onPress={() => navigate('About')} />
+          <ProfileLink name='Preferences' icon='setting' onPress={() => navigate('Preferences')} />
+          <ProfileLink name='Completed meals' icon='check' onPress={() => navigate('Home')} />
+          <ProfileLink name='Dashboard' icon='dashboard' onPress={() => navigate('Dashboard')} />
+          <ProfileLink name='Edit profile' icon='profile' onPress={() => navigate('Home')} />
+          <ProfileLink name='Log Out' icon='logout' onPress={() => logOut()} />
         </View>
       </View>
     </SafeAreaView>
