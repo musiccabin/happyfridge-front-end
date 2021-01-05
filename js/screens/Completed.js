@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Meals } from '../components'
+import {completedRecipesQuery} from '../graphql/queries'
+import { useQuery } from '@apollo/client'
 
 const Completed = () => {
-
-    let arr = [1, 2, 3, 4, 5, 6, 7]
-    const [data, setData] = useState(arr)
-
+    const { data, error, loading } = useQuery(completedRecipesQuery)
+    if (loading) return null
+    if (error) console.error(error)
     return (
-        <Meals data={data} emptyTitle={`You haven't completed any meals yet. Let's get started!`} />
+        <Meals data={data.completedRecipes} emptyTitle={`Looks like you haven't added any favorite recipes.`} />
     )
 }
 
