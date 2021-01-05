@@ -1,12 +1,12 @@
-import React, {createContext, useState} from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 
 export const Context = createContext()
 
-export const Provider = ({children}) => {
-  const [currentUser, setcurrentUser] = useState(false)
+export const Provider = ({children}) => {  
+  const [currentUser, setCurrentUser] = useState(null)
   const values = {
     currentUser,
-    setcurrentUser,
+    setCurrentUser,
   }
   return (
     <Context.Provider value={values} >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {
   View,
   Text,
@@ -7,15 +7,27 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { Button } from '../components'
-import { globalStyles, COLORS } from '../styles'
+import { globalStyles } from '../styles'
 import { signInMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
+import { Context } from '../context'
 
 const Login = ({navigation}) => {
+  const { setCurrentUser } = useContext(Context)
+  const [loginInfo, setLoginInfo] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+  const [signIn] = useMutation(signInMutation)
 
-  const [signIn, { data }] = useMutation(signInMutation)
+  useEffect(()=> {
+    setCurrentUser(loginInfo)
+  },[loginInfo])
+
+  const afterMutation = ({status, user}) => {
+    console.log(status)
+    setLoginInfo(user)
+    if (user) navigation.navigate('Home')
+  }
 
   const login = () => {
     let value = {
@@ -25,8 +37,8 @@ const Login = ({navigation}) => {
       }
     }
     signIn({variables: {value: value}}).then(({data}) => {
-      if (data) {
-        navigation.navigate('Home')
+      if (data.signIn) {
+        afterMutation(data.signIn)
       }
     })
   }

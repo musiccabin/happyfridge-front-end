@@ -1,33 +1,29 @@
 import { gql }  from '@apollo/client'
+import {MyRecipeFragment, UserFragment} from '../fregments'
 
-export const popularRecipes = gql`
+export const popularRecipesQuery = gql`
   query popularRecipes {
     popularRecipes {
-      id
-      title
-      cookingTime
-      cookingTimeInMin
+      ...Myrecipe
     }
   }
+  ${MyRecipeFragment}
 `
 
-export const recommendedRecipes = gql`
+export const recommendedRecipesQuery = gql`
   query recommendedRecipes {
     recommendedRecipes {
-      id
-      title
-      cookingTime
-      cookingTimeInMin
+      ...Myrecipe
     }
   }
+  ${MyRecipeFragment}
 `
 
-export const currentUser = gql`
+export const currentUserQuery = gql`
   query currentUser {
     currentUser {
-      id
-      firstName
-      lastName
+      ...User
     }
   }
+  ${UserFragment}
 `

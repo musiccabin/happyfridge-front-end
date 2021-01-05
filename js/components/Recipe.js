@@ -4,21 +4,21 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
 
-const Recipe = ({ recipeCompleted }) => {
+const Recipe = ({ recipe }) => {
+  const recipeCompleted = false
   return (
     <View style={[styles.card, globalStyles.card]}>
       <View style={styles.cardImageWrapper}>
         <Image
           style={[styles.cardImage, globalStyles.cardImage]}
           source={{
-            uri:
-              'https://cafedelites.com/wp-content/uploads/2016/11/Creamy-Herb-Chicken-2700.jpg',
+            uri: '' + recipe.avatarFileName,
           }}
         />
       </View>
       <View style={[styles.cardInfo, globalStyles.cardInfo]}>
         <Text style={[styles.cardTitle, globalStyles.titleM]}>
-          Creamy Herb Chicken
+          {recipe.title}
         </Text>
         <View style={globalStyles.row}>
           <View style={globalStyles.cardTimer}>
@@ -28,7 +28,7 @@ const Recipe = ({ recipeCompleted }) => {
               size={20}
               color={COLORS.SECONDARY_FONT}
             />
-            <Text style={globalStyles.titleS}>20 mins</Text>
+            <Text style={globalStyles.titleS}>{recipe.cookingTimeInMin}</Text>
           </View>
           <View style={globalStyles.icons}>
             {recipeCompleted && (

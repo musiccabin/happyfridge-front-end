@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -32,6 +32,9 @@ import {
   LeftOverIcon,
   LeftOverInActiveIcon,
 } from '../../assets/menu-icons'
+import { useQuery } from '@apollo/client'
+import { currentUserQuery } from '../graphql/queries'
+import { Context } from '../context'
 
 const navigationStyle = {
   headerTitleStyle: { ...globalStyles.navHeaderWrapper },
@@ -49,14 +52,15 @@ const HomeStackScreen = () => {
           <NavHeader 
             scene={scene} 
             navigation={navigation}
-            profileIcon={false}
-            renderTitle={false} 
+            renderTitle={false}
           />
         ),
       }}
     >
       <HomeStack.Screen name='Home' component={Home} />
       <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
+      <HomeStack.Screen name='SignUp' component={SignUp} />
+      <HomeStack.Screen name='Login' component={Login} />
     </HomeStack.Navigator>
   )
 }
@@ -191,7 +195,9 @@ const ProfileScreen = () => {
 
 const RootStack = createStackNavigator()
 
-const RootStackScreen = () => {
+const RootStackScreen = ({currentUser}) => {
+  const { setCurrentUser } = useContext(Context)
+  setCurrentUser(currentUser)
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
       <RootStack.Screen name='Home' component={HomeTabs} />
@@ -254,9 +260,13 @@ const HomeTabs = () => {
 }
 
 const Navigation = () => {
+  const { data, error, loading } = useQuery(currentUserQuery)
+  if (error) console.error(error)
+  if (loading) return null
+  console.log(data)
   return (
     <NavigationContainer>
-      <RootStackScreen />
+      <RootStackScreen currentUser={data.currentUser} />
     </NavigationContainer>
   )
 }

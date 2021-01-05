@@ -1,23 +1,36 @@
 import { gql } from '@apollo/client'
+import {UserFragment} from '../fregments'
 
 export const signUpMutation = gql`
   mutation createUser($value: CreateUserMutationInput!) {
     createUser(input: $value ) {
+      status
+      clientMutationId
       user{
-        id
-        email
+        ...User
       }
     }
   }
+  ${UserFragment}
 `
 
 export const signInMutation = gql`
   mutation signIn($value: SignInMutationInput!) {
     signIn(input: $value ) {
+      status
+      clientMutationId
       user{
-        id
-        email
+        ...User
       }
+    }
+  }
+  ${UserFragment}
+`
+
+export const signOutMutation = gql`
+  mutation signOut($value: SignOutMutationInput!) {
+    signOut(input: $value ) {
+      status
     }
   }
 `

@@ -11,8 +11,9 @@ const Card = ({
   marginRight,
   height,
   width,
-  recipeCompleted,
+  recipe,
 }) => {
+  const recipeCompleted = false
   const styles = StyleSheet.create({
     card: {
       height: height,
@@ -35,12 +36,11 @@ const Card = ({
         <Image
           style={[styles.cardImage, globalStyles.cardImage]}
           source={{
-            uri:
-              'https://cdn.zeplin.io/5f84bab3e28dc983c2bcd193/assets/D4588D2A-5A54-4A19-B2E3-FF60A0CCC37C.png',
+            uri: '' + recipe.avatarFileName,
           }}
         />
         <View style={[styles.cardInfo, globalStyles.cardInfo]}>
-          <Text style={globalStyles.titleL}>Shakshuka</Text>
+          <Text style={globalStyles.titleL}>{recipe.title}</Text>
           <View style={globalStyles.row}>
             <View style={globalStyles.cardTimer}>
               <MaterialIcons
@@ -49,7 +49,7 @@ const Card = ({
                 size={20}
                 color={COLORS.SECONDARY_FONT}
               />
-              <Text style={globalStyles.titleS}>20 mins</Text>
+              <Text style={globalStyles.titleS}>{recipe.cookingTimeInMin}</Text>
             </View>
             <View style={globalStyles.icons}>
               {recipeCompleted && (

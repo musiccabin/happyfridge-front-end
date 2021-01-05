@@ -1,28 +1,33 @@
-import React from 'react'
+import React, {useContext, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { useQuery } from '@apollo/client'
-import { popularRecipes } from '../graphql/queries'
-
+import { popularRecipesQuery } from '../graphql/queries'
+import { Context } from '../context'
 
 const Home = ({ navigation }) => {
-  const { data, error, loading } = useQuery(popularRecipes)
+  const { currentUser } = useContext(Context)
+  const { data, error, loading } = useQuery(popularRecipesQuery)
+  
   if (loading) return null
+  if (error) console.error(error)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.backgroundCircle}></View>
+      {currentUser && 
       <View style={globalStyles.content}>
         <Text style={[globalStyles.titleXL, styles.title]}>Recommended for you</Text>
         <CardList navigation={navigation} />
-      </View>
+      </View>}
       <View style={[globalStyles.content, styles.popularRecipes]}>
         <Text style={[globalStyles.titleXL, styles.title]}>Popular recipes</Text>
         <ScrollView >
           <View>
-            {data.popularRecipes.map((recipe) => {
-              <Recipe recipeCompleted={true} />
-            })}
+            {data.popularRecipes.map((recipe) => 
+              <Recipe key={recipe.id} recipe={recipe} />
+            )}
           </View>
         </ScrollView>
       </View>
