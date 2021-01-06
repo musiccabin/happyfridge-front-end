@@ -4,7 +4,7 @@ import { globalStyles } from '../styles'
 import { GroceryListTabs } from '../navigation'
 import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
-const GroceryList = () => {
+const GroceryList = ({ navigation }) => {
   const [structuredData, setStructuredData] = useState()
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const GroceryList = () => {
 
   return (
     <SafeAreaView style={globalStyles.container}>
-      <GroceryListTabs data={structuredData} />
+      <GroceryListTabs data={structuredData} navigation={navigation} />
     </SafeAreaView>
   )
 }

@@ -5,7 +5,7 @@ import { LeftOverList } from '../components'
 
 const Tab = createMaterialTopTabNavigator()
 
-const GroceryListTabs = ({ data }) => {
+const GroceryListTabs = ({ data, navigation }) => {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -27,10 +27,10 @@ const GroceryListTabs = ({ data }) => {
       }}
     >
       <Tab.Screen name='To Buy'>
-        {() => <LeftOverList data={data} />}
+        {() => <LeftOverList navigation={navigation} data={data} />}
       </Tab.Screen>
       <Tab.Screen name='Completed'>
-        {() => <LeftOverList data={data} />}
+        {() => <LeftOverList navigation={navigation} data={data} />}
       </Tab.Screen>
     </Tab.Navigator>
   )

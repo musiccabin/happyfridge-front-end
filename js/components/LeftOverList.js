@@ -2,7 +2,7 @@ import React, { useState, createRef } from 'react'
 import { View, Text, SectionList, Pressable, StyleSheet } from 'react-native'
 import { globalStyles, COLORS } from '../styles'
 
-const LeftOverList = ({ data }) => {
+const LeftOverList = ({ data, navigation }) => {
   const listRef = createRef()
 
   const categories = ['Produce', 'Meat', 'Frozen', 'Dairy', 'Nuts & Seeds']
@@ -21,7 +21,9 @@ const LeftOverList = ({ data }) => {
     <>
       <View style={styles.header}>
         {categories.map((category, idx) => (
-          <Pressable key={idx} onPress={() => handleCategoryScroll(idx)}>
+          <Pressable key={idx} onPress={() =>
+            handleCategoryScroll(idx)
+          }>
             <View
               style={
                 activeTab === idx
@@ -53,13 +55,15 @@ const LeftOverList = ({ data }) => {
           <Text style={styles.category}>{title}</Text>
         )}
         renderItem={({ item }) => (
-          <View style={styles.list}>
-            <Text>{item.name}</Text>
-            <Text>
-              {item.quantity}
-              {item.unit}
-            </Text>
-          </View>
+          <Pressable onPress={() => navigation.navigate('AddEditGrocery')}>
+            <View style={styles.list}>
+              <Text>{item.name}</Text>
+              <Text>
+                {item.quantity}
+                {item.unit}
+              </Text>
+            </View>
+          </Pressable>
         )}
         keyExtractor={item => item.id}
       />

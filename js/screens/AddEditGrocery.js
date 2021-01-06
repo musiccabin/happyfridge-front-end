@@ -46,7 +46,7 @@ const AddEditGrocery = () => {
             flexBasis: '40%'
         },
         input: {
-            borderBottomColor: failedStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
+            borderBottomColor: failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT,
             borderBottomWidth: 1,
             marginTop: 20,
             paddingBottom: 4,
@@ -76,7 +76,7 @@ const AddEditGrocery = () => {
             zIndex: -2
         },
         ingredientText: {
-            color: failedStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT
+            color: failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
         }
     })
 
@@ -100,6 +100,7 @@ const AddEditGrocery = () => {
                     text: "Yes",
                     onPress: () => {
                         setFailedStyling(true)
+                        setIngredientValue(ingredientValue.slice(0, -1))
                     },
                     style: "cancel"
                 },
