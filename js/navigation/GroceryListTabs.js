@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { COLORS } from '../styles'
-import { LeftOverList } from '../components'
+import { IngredientList } from '../components'
 
 const Tab = createMaterialTopTabNavigator()
 
-const GroceryListTabs = ({ data, navigation }) => {
+const GroceryListTabs = ({ data }) => {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -27,10 +27,10 @@ const GroceryListTabs = ({ data, navigation }) => {
       }}
     >
       <Tab.Screen name='To Buy'>
-        {() => <LeftOverList navigation={navigation} data={data} />}
+        {() => <IngredientList data={data} />}
       </Tab.Screen>
       <Tab.Screen name='Completed'>
-        {() => <LeftOverList navigation={navigation} data={data} />}
+        {() => <IngredientList data={data} />}
       </Tab.Screen>
     </Tab.Navigator>
   )

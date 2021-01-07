@@ -1,8 +1,10 @@
 import React, { useState, createRef } from 'react'
 import { View, Text, SectionList, Pressable, StyleSheet } from 'react-native'
 import { globalStyles, COLORS } from '../styles'
+import { useNavigation } from '@react-navigation/native'
 
-const LeftOverList = ({ data, navigation }) => {
+const IngredientList = ({ data }) => {
+  const navigation = useNavigation()
   const listRef = createRef()
 
   const categories = ['Produce', 'Meat', 'Frozen', 'Dairy', 'Nuts & Seeds']
@@ -110,4 +112,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default LeftOverList
+export default IngredientList

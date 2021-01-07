@@ -25,7 +25,7 @@ const AddEditGrocery = () => {
     const [ingredientValue, setIngredientValue] = useState('')
     const [ingredients, setIngredients] = useState(ingredientArray)
     const [isUserTyping, setIsUserTyping] = useState(false)
-    const [failedStyling, setFailedStyling] = useState(false)
+    const [highlightStyling, setHighlightStyling] = useState(false)
 
     const styles = StyleSheet.create({
         container: {
@@ -46,7 +46,7 @@ const AddEditGrocery = () => {
             flexBasis: '40%'
         },
         input: {
-            borderBottomColor: failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT,
+            borderBottomColor: isUserTyping || highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
             borderBottomWidth: 1,
             marginTop: 20,
             paddingBottom: 4,
@@ -76,7 +76,7 @@ const AddEditGrocery = () => {
             zIndex: -2
         },
         ingredientText: {
-            color: failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
+            color: isUserTyping || highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT
         }
     })
 
@@ -99,7 +99,7 @@ const AddEditGrocery = () => {
                 {
                     text: "Yes",
                     onPress: () => {
-                        setFailedStyling(true)
+                        setHighlightStyling(true)
                         setIngredientValue(ingredientValue.slice(0, -1))
                     },
                     style: "cancel"

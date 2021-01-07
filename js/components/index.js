@@ -3,7 +3,7 @@ import CardList from './CardList'
 import Recipe from './Recipe'
 import Carousel from './Carousel'
 import Button from './Button'
-import LeftOverList from './LeftOverList'
+import IngredientList from './IngredientList'
 import Meals from './Meals'
 import CheckList from './CheckList'
 import DropDown from './DropDown'
@@ -25,7 +25,7 @@ export {
   CheckList,
   DropDown,
   Incremental,
-  LeftOverList,
+  IngredientList,
   NavHeader,
   ProfileLink,
   CategoryUnit,
