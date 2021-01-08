@@ -79,7 +79,11 @@ const DropDown = ({ title, categories, inheritStyle, listZIndex, callback, butto
                     renderItem={
                         ({ item }) =>
                             <TouchableHighlight
-                                onPress={() => { callback(item); setSelectedCategory(item); toggle() }}
+                                onPress={() => {
+                                    callback(item)
+                                    setSelectedCategory(item)
+                                    toggle()
+                                }}
                                 activeOpacity={0.1}
                                 underlayColor={COLORS.SECONDARY}
                             >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { Button, LeftOverList } from '../components'
+import { Button, IngredientList } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
@@ -42,7 +42,7 @@ const LeftOvers = ({ navigation }) => {
           <Text style={styles.text}>I used the exact recipe amounts!</Text>
         </Pressable>
       </View>
-      <LeftOverList data={structuredData} />
+      <IngredientList data={structuredData} />
     </View>
   )
 }
