@@ -4,9 +4,10 @@ import DropDown from './DropDown'
 import Incremental from './Incremental'
 import { COLORS } from '../styles'
 
-const Quantity = ({ wholeCallback, partCallback, parts, callbackIngredientHighlight }) => {
+const Quantity = ({ wholeCallback, partCallback, parts }) => {
 
     const [highlightStyling, setHighlightStyling] = useState(false)
+    const [temp, setTemp] = useState(false)
 
     const styles = StyleSheet.create({
         quantityContainer: {
@@ -42,6 +43,7 @@ const Quantity = ({ wholeCallback, partCallback, parts, callbackIngredientHighli
                     callback={(value) => wholeCallback(value)}
                     callbackLineColor={value => {
                         setHighlightStyling(value)
+                        setTemp(!value)
                     }}
                 />
                 <DropDown
@@ -49,9 +51,11 @@ const Quantity = ({ wholeCallback, partCallback, parts, callbackIngredientHighli
                     listTop={{ marginTop: 32 }}
                     inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
                     callback={(value) => partCallback(value)}
-                    callbackQuantity={value => setHighlightStyling(value)}
-                    quantityStyleState={highlightStyling}
-                    callbackIngredientHighlight = { () => callbackIngredientHighlight(false) }
+                    quantityStyleState={temp}
+                    callbackQuantity={value => {
+                        setHighlightStyling(value)
+                        setTemp(value)
+                    }}
                 />
             </View>
         </View>

@@ -4,7 +4,7 @@ import { COLORS, globalStyles } from '../styles'
 import { Ionicons } from '@expo/vector-icons'
 
 const DropDown = ({ title, categories, inheritStyle, listZIndex, 
-    callback, buttonStyle, listTop, callbackQuantity, quantityStyleState, callbackIngredientHighlight }) => {
+    callback, buttonStyle, listTop, callbackQuantity, quantityStyleState }) => {
 
     const [pickerVisibility, setPickerVisibility] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState(categories[0])
@@ -58,7 +58,7 @@ const DropDown = ({ title, categories, inheritStyle, listZIndex,
     const toggle = () => {
         setPickerVisibility(!pickerVisibility)
         setIcon(pickerVisibility ? 'ios-arrow-up' : 'ios-arrow-down')
-        highlightStyling ? setHighlightStyling(false) : setHighlightStyling(true)
+        setHighlightStyling(!highlightStyling)
     }
 
     return (
@@ -67,7 +67,6 @@ const DropDown = ({ title, categories, inheritStyle, listZIndex,
             <Pressable style={buttonStyle} onPress={() => {
                 toggle()
                 quantityStyleState ? callbackQuantity(false) : callbackQuantity(true)
-                callbackIngredientHighlight(false)
             }}>
                 <Text style={styles.text}>{selectedCategory}</Text>
                 <View style={styles.line}></View>
