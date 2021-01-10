@@ -21,4 +21,11 @@ export const signInMutation = gql`
     }
   }
 `
-
+export const NewLeftOverMutation = gql`
+  mutation newLeftover($value: NewLeftoverMutationInput!) {
+    newLeftover(input: $value) {
+      clientMutationId
+      groceryUpdated
+    }
+  }
+`

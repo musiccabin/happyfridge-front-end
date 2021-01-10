@@ -11,6 +11,8 @@ import {
 } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
+import { useMutation } from '@apollo/client';
+import { NewLeftOverMutation, newLeftOverMutation } from '../graphql/mutations'
 
 const AddEditGrocery = () => {
 
@@ -27,6 +29,7 @@ const AddEditGrocery = () => {
     const [isUserTyping, setIsUserTyping] = useState(false)
     const [failedStyling, setFailedStyling] = useState(false)
     const [highlightStyling, setHighlightStyling] = useState(false)
+    const [newLeftOverMutation, { data }] = useMutation(NewLeftOverMutation);
 
     const styles = StyleSheet.create({
         container: {
@@ -170,7 +173,6 @@ const AddEditGrocery = () => {
                                 wholeCallback={(value) => setWholeTitle(value)}
                                 partCallback={(value) => setPartTitle(value)}
                                 parts={parts}
-                                callbackIngredientHighlight={ () => setHighlightStyling(false) }
                             />
                         </View>
                     </View>
@@ -180,7 +182,7 @@ const AddEditGrocery = () => {
                             units={units}
                             categoryCallback={(value) => setCategoryTitle(value)}
                             unitCallback={(value) => setUnitTitle(value)}
-                            callbackIngredientHighlight={ () => setHighlightStyling(false) }
+                            callbackIngredientHighlight={() => setHighlightStyling(false)}
                         />
                         <Button
                             children={"Save"}
