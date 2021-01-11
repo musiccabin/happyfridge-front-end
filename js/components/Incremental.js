@@ -1,37 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, TextInput, Pressable } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { Feather } from '@expo/vector-icons';
 
-const Incremental = ({ inheritStyle, callback }) => {
+const Incremental = ({ inheritStyle, callback, callbackLineColor }) => {
 
     const [value, setValue] = useState(1)
 
-    function handleDecrement(value) {
-        setValue(value)
+    useEffect(() => {
         callback(value)
-    }
-
-    function handleManual(value) {
-        setValue(value)
-        callback(value)
-    }
+      }, [value])
 
     return (
         <View style={inheritStyle}>
             <View style={styles.container}>
-                <Pressable onPress={() => { setValue(value + 1); callback(value + 1) }}>
+                <Pressable onPress={() => {
+                    setValue(value + 1)
+                }}>
                     <Feather name="plus" size={globalStyles.iconSize} style={styles.icon} color="black" />
                 </Pressable>
                 <TextInput
                     style={styles.text}
-                    onChangeText={text => text.length != 0 ? handleManual(parseInt(text)) : handleManual(0)}
+                    onChangeText={text => {
+                        text.length != 0 ? setValue(parseInt(text)) : setValue(0)
+                        callbackLineColor(true)
+                    }}
                     multiline={false}
                     keyboardType={'numeric'}
                     maxLength={3}
                     value={value.toString()}
                 />
-                <Pressable onPress={() => { value > 0 && handleDecrement(value - 1) }}>
+                <Pressable onPress={() => { value > 0 && setValue(value - 1) }}>
                     <Feather name="minus" size={globalStyles.iconSize} style={styles.icon} color="black" />
                 </Pressable>
             </View>
@@ -54,6 +53,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingTop: 5.5
     },
-});
+})
 
 export default Incremental

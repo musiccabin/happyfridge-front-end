@@ -16,7 +16,9 @@ import {
   UpdateUsage,
   GroceryList,
   Profile,
+  AddEditGrocery,
   Dashboard,
+
 } from '../screens'
 import { globalStyles } from '../styles'
 import { NavHeader } from '../components'
@@ -117,6 +119,36 @@ const LeftOversScreen = () => {
   )
 }
 
+const AboutStack = createStackNavigator()
+
+const AboutScreen = () => {
+  return (
+    <AboutStack.Navigator>
+      <AboutStack.Screen name='About' component={About} />
+    </AboutStack.Navigator>
+  )
+}
+
+const AddEditGroceryStack = createStackNavigator()
+
+const AddEditGroceryScreen = () => {
+  return (
+    <AddEditGroceryStack.Navigator>
+      <AddEditGroceryStack.Screen name='AddEditGrocery' component={AddEditGrocery} />
+    </AddEditGroceryStack.Navigator>
+  )
+}
+
+const PreferencesStack = createStackNavigator()
+
+const PreferencesScreen = () => {
+  return (
+    <PreferencesStack.Navigator>
+      <PreferencesStack.Screen name='Preferences' component={Preferences} />
+    </PreferencesStack.Navigator>
+  )
+}
+
 const RegisterStack = createStackNavigator()
 
 const RegisterScreen = () => {
@@ -165,6 +197,7 @@ const GroceryScreen = () => {
       }}
     >
       <GroceryListStack.Screen name='Grocery List' component={GroceryList} />
+      <GroceryListStack.Screen name='AddEditGrocery' component={AddEditGrocery} />
     </GroceryListStack.Navigator>
   )
 }

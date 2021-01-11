@@ -12,7 +12,10 @@ const CheckList = ({ data, inheritStyles, callback }) => {
             style={inheritStyles}
             renderItem={
                 ({ item }) =>
-                    <Pressable onPress={() => callback(item.title)} disabled={item.visibility} style={[styles.button, item.checked ? styles.checkedButton : styles.unCheckedButton, item.visibility && styles.hidden]}>
+                    <Pressable
+                        onPress={() => callback(item.title)}
+                        disabled={item.visibility}
+                        style={[styles.button, item.checked ? styles.checkedButton : styles.unCheckedButton, item.visibility && styles.hidden]}>
                         <Text style={globalStyles.titleM}>{item.title}</Text>
                     </Pressable>
             }
