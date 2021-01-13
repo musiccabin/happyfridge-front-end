@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -18,7 +18,6 @@ import {
   Profile,
   AddEditGrocery,
   Dashboard,
-
 } from '../screens'
 import { globalStyles } from '../styles'
 import { NavHeader } from '../components'
@@ -34,8 +33,6 @@ import {
   LeftOverIcon,
   LeftOverInActiveIcon,
 } from '../../assets/menu-icons'
-import { useQuery } from '@apollo/client'
-import { currentUserQuery } from '../graphql/queries'
 import { Context } from '../context'
 
 const navigationStyle = {
@@ -51,8 +48,8 @@ const HomeStackScreen = () => {
       screenOptions={{
         ...navigationStyle,
         header: ({ scene, navigation }) => (
-          <NavHeader 
-            scene={scene} 
+          <NavHeader
+            scene={scene}
             navigation={navigation}
             renderTitle={false}
           />
@@ -61,8 +58,6 @@ const HomeStackScreen = () => {
     >
       <HomeStack.Screen name='Home' component={Home} />
       <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
-      <HomeStack.Screen name='SignUp' component={SignUp} />
-      <HomeStack.Screen name='Login' component={Login} />
     </HomeStack.Navigator>
   )
 }
@@ -134,7 +129,10 @@ const AddEditGroceryStack = createStackNavigator()
 const AddEditGroceryScreen = () => {
   return (
     <AddEditGroceryStack.Navigator>
-      <AddEditGroceryStack.Screen name='AddEditGrocery' component={AddEditGrocery} />
+      <AddEditGroceryStack.Screen
+        name='AddEditGrocery'
+        component={AddEditGrocery}
+      />
     </AddEditGroceryStack.Navigator>
   )
 }
@@ -153,14 +151,7 @@ const RegisterStack = createStackNavigator()
 
 const RegisterScreen = () => {
   return (
-    <RegisterStack.Navigator
-      screenOptions={{
-        ...navigationStyle,
-        header: ({ scene, navigation }) => (
-          <NavHeader scene={scene} navigation={navigation} />
-        ),
-      }}
-    >
+    <RegisterStack.Navigator initialRouteName='Login' headerMode='none'>
       <RegisterStack.Screen name='SignUp' component={SignUp} />
       <RegisterStack.Screen name='Login' component={Login} />
     </RegisterStack.Navigator>
@@ -197,7 +188,10 @@ const GroceryScreen = () => {
       }}
     >
       <GroceryListStack.Screen name='Grocery List' component={GroceryList} />
-      <GroceryListStack.Screen name='AddEditGrocery' component={AddEditGrocery} />
+      <GroceryListStack.Screen
+        name='AddEditGrocery'
+        component={AddEditGrocery}
+      />
     </GroceryListStack.Navigator>
   )
 }
@@ -228,9 +222,7 @@ const ProfileScreen = () => {
 
 const RootStack = createStackNavigator()
 
-const RootStackScreen = ({currentUser}) => {
-  const { setCurrentUser } = useContext(Context)
-  setCurrentUser(currentUser)
+const RootScreen = () => {
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
       <RootStack.Screen name='Home' component={HomeTabs} />
@@ -293,13 +285,11 @@ const HomeTabs = () => {
 }
 
 const Navigation = () => {
-  const { data, error, loading } = useQuery(currentUserQuery)
-  if (error) console.error(error)
-  if (loading) return null
-  console.log(data)
+  const { currentUser } = useContext(Context)
+
   return (
     <NavigationContainer>
-      <RootStackScreen currentUser={data.currentUser} />
+      {currentUser ? <RootScreen /> : <RegisterScreen />}
     </NavigationContainer>
   )
 }
