@@ -1,12 +1,10 @@
 import { gql } from '@apollo/client'
-import {UserFragment} from '../fregments'
+import { UserFragment } from '../fregments'
 
 export const signUpMutation = gql`
   mutation createUser($value: CreateUserMutationInput!) {
-    createUser(input: $value ) {
-      status
-      clientMutationId
-      user{
+    createUser(input: $value) {
+      user {
         ...User
       }
     }
@@ -16,10 +14,10 @@ export const signUpMutation = gql`
 
 export const signInMutation = gql`
   mutation signIn($value: SignInMutationInput!) {
-    signIn(input: $value ) {
+    signIn(input: $value) {
       status
       clientMutationId
-      user{
+      user {
         ...User
       }
     }
@@ -29,7 +27,7 @@ export const signInMutation = gql`
 
 export const signOutMutation = gql`
   mutation signOut($value: SignOutMutationInput!) {
-    signOut(input: $value ) {
+    signOut(input: $value) {
       status
     }
   }
