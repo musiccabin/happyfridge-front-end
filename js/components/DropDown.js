@@ -3,18 +3,21 @@ import { View, Text, StyleSheet, TouchableHighlight, FlatList, Pressable } from 
 import { COLORS, globalStyles } from '../styles'
 import { Ionicons } from '@expo/vector-icons'
 
-const DropDown = ({ title, categories, inheritStyle, listZIndex, callback, buttonStyle, listTop }) => {
+const DropDown = ({ title, categories, inheritStyle, listZIndex, 
+    callback, buttonStyle, listTop, callbackQuantity, quantityStyleState }) => {
 
     const [pickerVisibility, setPickerVisibility] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState(categories[0])
     const [icon, setIcon] = useState('ios-arrow-up')
+    const [highlightStyling, setHighlightStyling] = useState(false)
 
     const styles = StyleSheet.create({
         titleText: {
+            color: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
             marginBottom: 10
         },
         line: {
-            borderBottomColor: COLORS.PRIMARY_FONT,
+            borderBottomColor: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
             borderBottomWidth: 1,
             paddingTop: 7
         },
@@ -55,12 +58,16 @@ const DropDown = ({ title, categories, inheritStyle, listZIndex, callback, butto
     const toggle = () => {
         setPickerVisibility(!pickerVisibility)
         setIcon(pickerVisibility ? 'ios-arrow-up' : 'ios-arrow-down')
+        setHighlightStyling(!highlightStyling)
     }
 
     return (
         <View style={inheritStyle}>
             {title && <Text style={[globalStyles.titleS], styles.titleText}>{title}</Text>}
-            <Pressable style={buttonStyle} onPress={() => toggle()}>
+            <Pressable style={buttonStyle} onPress={() => {
+                toggle()
+                quantityStyleState ? callbackQuantity(false) : callbackQuantity(true)
+            }}>
                 <Text style={styles.text}>{selectedCategory}</Text>
                 <View style={styles.line}></View>
                 <Ionicons
@@ -83,6 +90,7 @@ const DropDown = ({ title, categories, inheritStyle, listZIndex, callback, butto
                                     callback(item)
                                     setSelectedCategory(item)
                                     toggle()
+                                    callbackQuantity(false)
                                 }}
                                 activeOpacity={0.1}
                                 underlayColor={COLORS.SECONDARY}

@@ -11,6 +11,8 @@ import {
 } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
+import { useMutation } from '@apollo/client';
+import { NewLeftOverMutation, newLeftOverMutation } from '../graphql/mutations'
 
 const AddEditGrocery = () => {
 
@@ -25,7 +27,9 @@ const AddEditGrocery = () => {
     const [ingredientValue, setIngredientValue] = useState('')
     const [ingredients, setIngredients] = useState(ingredientArray)
     const [isUserTyping, setIsUserTyping] = useState(false)
+    const [failedStyling, setFailedStyling] = useState(false)
     const [highlightStyling, setHighlightStyling] = useState(false)
+    const [newLeftOverMutation, { data }] = useMutation(NewLeftOverMutation);
 
     const styles = StyleSheet.create({
         container: {
@@ -46,11 +50,14 @@ const AddEditGrocery = () => {
             flexBasis: '40%'
         },
         input: {
-            borderBottomColor: isUserTyping || highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
+            borderBottomColor: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT,
             borderBottomWidth: 1,
             marginTop: 20,
             paddingBottom: 4,
             paddingHorizontal: 4
+        },
+        ingredientText: {
+            color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
         },
         list: {
             backgroundColor: COLORS.PRIMARY_ICON,
@@ -74,9 +81,6 @@ const AddEditGrocery = () => {
             marginTop: 60,
             width: 145,
             zIndex: -2
-        },
-        ingredientText: {
-            color: isUserTyping || highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT
         }
     })
 
@@ -92,6 +96,8 @@ const AddEditGrocery = () => {
     }
 
     const choiceAlert = () => {
+        setHighlightStyling(false)
+        setFailedStyling(false)
         Alert.alert(
             'Not a Singular Form',
             'Is the ingredient in singular form? (e.g. we want "apple" instead of "apples".)',
@@ -99,7 +105,7 @@ const AddEditGrocery = () => {
                 {
                     text: "Yes",
                     onPress: () => {
-                        setHighlightStyling(true)
+                        setFailedStyling(true)
                         setIngredientValue(ingredientValue.slice(0, -1))
                     },
                     style: "cancel"
@@ -115,7 +121,12 @@ const AddEditGrocery = () => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); setIsUserTyping(false) }}>
+        <TouchableWithoutFeedback onPress={() => {
+            Keyboard.dismiss()
+            setIsUserTyping(false)
+            setHighlightStyling(false)
+            setFailedStyling(false)
+        }}>
             <View style={styles.container}>
                 <UsageBar
                     categoryTitle={categoryTitle}
@@ -131,6 +142,7 @@ const AddEditGrocery = () => {
                             onChangeText={value => {
                                 setIngredientValue(value)
                                 setIsUserTyping(true)
+                                setHighlightStyling(true)
                                 value.length == 0 ? setIsUserTyping(false) : filteredIngredientArray(value)
                             }}
                             value={ingredientValue}
@@ -147,6 +159,7 @@ const AddEditGrocery = () => {
                                         onPress={() => {
                                             setIngredientValue(item)
                                             setIsUserTyping(false)
+                                            setHighlightStyling(false)
                                         }}
                                         activeOpacity={0.1}
                                         underlayColor={COLORS.SECONDARY}
@@ -169,13 +182,13 @@ const AddEditGrocery = () => {
                             units={units}
                             categoryCallback={(value) => setCategoryTitle(value)}
                             unitCallback={(value) => setUnitTitle(value)}
+                            callbackIngredientHighlight={() => setHighlightStyling(false)}
                         />
                         <Button
                             children={"Save"}
                             style={styles.button}
                             onPress={() => {
-                                ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es'
-                                    ? choiceAlert() : console.log('does not contain')
+                                if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
                             }} />
                     </View>
                 </View>
