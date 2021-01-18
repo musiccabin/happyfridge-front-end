@@ -1,26 +1,28 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import { ProfileLink } from '../components'
-import { Context } from '../context'
-import { useMutation } from '@apollo/client'
-import { useNavigation } from '@react-navigation/native'
+import { auth } from '../firebase'
+import { currentUserQuery } from '../graphql/queries'
+import { useQuery, useMutation } from '@apollo/client'
 import { signOutMutation } from '../graphql/mutations'
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
+  const { client, data, error, loading } = useQuery(currentUserQuery)
   const [signOut] = useMutation(signOutMutation)
-  const { currentUser, setCurrentUser } = useContext(Context)
-  const {navigate} = useNavigation()
 
   const logOut = () => {
-    signOut({variables: {value: {clientMutationId: null}}}).then(({data}) => {
-      if (data) {
-        setCurrentUser(null)
-        navigate('Home')
-      }
-    })
+    signOut({ variables: { value: {} } })
+      .then(() => auth.signOut())
+      .then(() => client.resetStore())
   }
+
+  if (error) return <Text>error</Text>
+  if (loading) return <Text>loading...</Text>
+
+  const { currentUser } = data
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -41,16 +43,38 @@ const Profile = () => {
           <Text style={styles.fullName}>
             {currentUser.firstName} {currentUser.lastName}
           </Text>
-          <Text style={styles.location}>{currentUser.city}, {currentUser.province}</Text>
+          <Text style={styles.location}>
+            {currentUser.city}, {currentUser.province}
+          </Text>
           <Text style={styles.email}>{currentUser.email}</Text>
         </View>
         <View style={styles.options}>
-          <ProfileLink name='About' icon='infocirlceo' onPress={() => navigate('About')} />
-          <ProfileLink name='Preferences' icon='setting' onPress={() => navigate('Preferences')} />
-          <ProfileLink name='Completed meals' icon='check' onPress={() => navigate('Home')} />
-          <ProfileLink name='Dashboard' icon='dashboard' onPress={() => navigate('Dashboard')} />
-          <ProfileLink name='Edit profile' icon='profile' onPress={() => navigate('Home')} />
-          <ProfileLink name='Log Out' icon='logout' onPress={() => logOut()} />
+          <ProfileLink
+            name='About'
+            icon='infocirlceo'
+            onPress={() => navigation.navigate('About')}
+          />
+          <ProfileLink
+            name='Preferences'
+            icon='setting'
+            onPress={() => navigation.navigate('Preferences')}
+          />
+          <ProfileLink
+            name='Completed meals'
+            icon='check'
+            onPress={() => navigation.navigate('Home')}
+          />
+          <ProfileLink
+            name='Dashboard'
+            icon='dashboard'
+            onPress={() => navigation.navigate('Dashboard')}
+          />
+          <ProfileLink
+            name='Edit profile'
+            icon='profile'
+            onPress={() => navigation.navigate('Home')}
+          />
+          <ProfileLink name='Log Out' icon='logout' onPress={logOut} />
         </View>
       </View>
     </SafeAreaView>
