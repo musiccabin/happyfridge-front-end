@@ -2,17 +2,28 @@ import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Pressable, Text, ScrollView } from 'react-native'
 import Card from './Card'
 import { COLORS, globalStyles, windowWidth } from '../styles'
+import { useMutation } from '@apollo/client'
+import { clearAllFromMealplanMutation } from '../graphql/mutations'
 
 const Meals = ({ data, emptyTitle, showClearButton }) => {
 
     let count = 0, marginBottom = 0
+
+    const [ recipes, setData ] = React.useState(data)
+
+    const [clearAll] = useMutation(clearAllFromMealplanMutation)
+    const clear = () => {
+        clearAll({variables: {value: {}}}).then(() => {            
+            setData([])
+          })
+    }
 
     return (
         <View style={styles.mainContainer}>
             <View style={globalStyles.absoluteCenterContainer}>
                 <View style={globalStyles.circle}></View>
             </View>
-            {   data.length == 0 ?
+            {   recipes.length == 0 ?
                 <View style={globalStyles.absoluteCenterContainer}>
                     <Text style={styles.text}>
                         {emptyTitle}
@@ -21,18 +32,18 @@ const Meals = ({ data, emptyTitle, showClearButton }) => {
                 :
                 <View style={styles.cardContainer}>
                     {
-                        data.length != 0 && showClearButton &&
+                        recipes.length != 0 && showClearButton &&
                         <Pressable style={styles.clearBtn}>
-                            <Text style={{ ...globalStyles.titleM, color: 'white' }}>
+                            <Text style={{ ...globalStyles.titleM, color: 'white' }} onPress={() => clear()}>
                                 Clear All
                             </Text>
                         </Pressable>
                     }
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {
-                            data.map((recipe) => {
+                            recipes.map((recipe) => {
                                 count++
-                                if (count == data.length) marginBottom = 25
+                                if (count == recipes.length) marginBottom = 25
                                 return <Card
                                     marginTop={25}
                                     height={218}

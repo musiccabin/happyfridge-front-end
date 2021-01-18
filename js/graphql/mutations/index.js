@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '../../../node_modules/@apollo/client'
 import {UserFragment} from '../fregments'
 
 export const signUpMutation = gql`
@@ -39,6 +39,14 @@ export const NewLeftOverMutation = gql`
     newLeftover(input: $value) {
       clientMutationId
       groceryUpdated
+    }
+  }
+  `
+
+  export const clearAllFromMealplanMutation = gql`
+  mutation clearAllFromMealplan($value: ClearAllFromMealplanMutationInput!) {
+    clearAllFromMealplan(input: $value) {
+      status
     }
   }
 `
