@@ -1,47 +1,31 @@
-import React, { useState, useContext, useEffect } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native'
 import { Button } from '../components'
 import { globalStyles } from '../styles'
 import { signInMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
-import { Context } from '../context'
+import { auth } from '../firebase'
 
-const Login = ({navigation}) => {
-  const { setCurrentUser } = useContext(Context)
-  const [loginInfo, setLoginInfo] = useState()
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [signIn] = useMutation(signInMutation)
-
-  useEffect(()=> {
-    setCurrentUser(loginInfo)
-  },[loginInfo])
-
-  const afterMutation = ({status, user}) => {
-    console.log(status)
-    setLoginInfo(user)
-    if (user) navigation.navigate('Home')
-  }
 
   const login = () => {
     let value = {
       credentials: {
         email: email,
         password: password,
-      }
+      },
     }
-    signIn({variables: {value: value}}).then(({data}) => {
-      if (data.signIn) {
-        afterMutation(data.signIn)
-      }
-    })
+
+    signIn({ variables: { value: value } }).then(() =>
+      auth
+        .signInWithEmailAndPassword(email, password)
+        .catch(error => console.error(error))
+    )
   }
+
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.titleXL, styles.signInTitle]}>Sign in</Text>
@@ -51,8 +35,9 @@ const Login = ({navigation}) => {
           style={globalStyles.input}
           textContentType='emailAddress'
           autoCompleteType='email'
-          value={email}
           autoCapitalize='none'
+          autoCorrect={false}
+          value={email}
           onChangeText={text => setEmail(text)}
         />
         <Text style={[globalStyles.label, styles.spacing]}>Password</Text>
@@ -65,15 +50,17 @@ const Login = ({navigation}) => {
           value={password}
           onChangeText={text => setPassword(text)}
         />
-        <TouchableOpacity>
+        <Pressable>
           <Text style={styles.forgotPassword}>Forgot password?</Text>
-        </TouchableOpacity>
-        <Button style={styles.registerButton} onPress={() => login()}>Let's go!</Button>
+        </Pressable>
+        <Button style={styles.registerButton} onPress={login}>
+          Let's go!
+        </Button>
         <View style={styles.createAccount}>
           <Text style={styles.createAccountText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <Pressable onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.signUp}>Sign Up</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -98,7 +85,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    ...globalStyles.anchorText
+    ...globalStyles.anchorText,
   },
   registerButton: {
     marginLeft: 'auto',
