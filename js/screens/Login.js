@@ -12,18 +12,18 @@ import { signInMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
 import { Context } from '../context'
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const { setCurrentUser } = useContext(Context)
   const [loginInfo, setLoginInfo] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [signIn] = useMutation(signInMutation)
 
-  useEffect(()=> {
+  useEffect(() => {
     setCurrentUser(loginInfo)
-  },[loginInfo])
+  }, [loginInfo])
 
-  const afterMutation = ({status, user}) => {
+  const afterMutation = ({ status, user }) => {
     console.log(status)
     setLoginInfo(user)
     if (user) navigation.navigate('Home')
@@ -34,9 +34,9 @@ const Login = ({navigation}) => {
       credentials: {
         email: email,
         password: password,
-      }
+      },
     }
-    signIn({variables: {value: value}}).then(({data}) => {
+    signIn({ variables: { value: value } }).then(({ data }) => {
       if (data.signIn) {
         afterMutation(data.signIn)
       }
@@ -68,7 +68,9 @@ const Login = ({navigation}) => {
         <TouchableOpacity>
           <Text style={styles.forgotPassword}>Forgot password?</Text>
         </TouchableOpacity>
-        <Button style={styles.registerButton} onPress={() => login()}>Let's go!</Button>
+        <Button style={styles.registerButton} onPress={() => login()}>
+          Let's go!
+        </Button>
         <View style={styles.createAccount}>
           <Text style={styles.createAccountText}>Don't have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 10,
     marginTop: 10,
-    ...globalStyles.anchorText
+    ...globalStyles.anchorText,
   },
   registerButton: {
     marginLeft: 'auto',

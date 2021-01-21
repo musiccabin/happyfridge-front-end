@@ -11,15 +11,17 @@ import { signOutMutation } from '../graphql/mutations'
 const Profile = () => {
   const [signOut] = useMutation(signOutMutation)
   const { currentUser, setCurrentUser } = useContext(Context)
-  const {navigate} = useNavigation()
+  const { navigate } = useNavigation()
 
   const logOut = () => {
-    signOut({variables: {value: {clientMutationId: null}}}).then(({data}) => {
-      if (data) {
-        setCurrentUser(null)
-        navigate('Home')
+    signOut({ variables: { value: { clientMutationId: null } } }).then(
+      ({ data }) => {
+        if (data) {
+          setCurrentUser(null)
+          navigate('Home')
+        }
       }
-    })
+    )
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -41,15 +43,37 @@ const Profile = () => {
           <Text style={styles.fullName}>
             {currentUser.firstName} {currentUser.lastName}
           </Text>
-          <Text style={styles.location}>{currentUser.city}, {currentUser.province}</Text>
+          <Text style={styles.location}>
+            {currentUser.city}, {currentUser.province}
+          </Text>
           <Text style={styles.email}>{currentUser.email}</Text>
         </View>
         <View style={styles.options}>
-          <ProfileLink name='About' icon='infocirlceo' onPress={() => navigate('About')} />
-          <ProfileLink name='Preferences' icon='setting' onPress={() => navigate('Preferences')} />
-          <ProfileLink name='Completed meals' icon='check' onPress={() => navigate('Home')} />
-          <ProfileLink name='Dashboard' icon='dashboard' onPress={() => navigate('Dashboard')} />
-          <ProfileLink name='Edit profile' icon='profile' onPress={() => navigate('Home')} />
+          <ProfileLink
+            name='About'
+            icon='infocirlceo'
+            onPress={() => navigate('About')}
+          />
+          <ProfileLink
+            name='Preferences'
+            icon='setting'
+            onPress={() => navigate('Preferences')}
+          />
+          <ProfileLink
+            name='Completed meals'
+            icon='check'
+            onPress={() => navigate('Home')}
+          />
+          <ProfileLink
+            name='Dashboard'
+            icon='dashboard'
+            onPress={() => navigate('Dashboard')}
+          />
+          <ProfileLink
+            name='Edit profile'
+            icon='profile'
+            onPress={() => navigate('Home')}
+          />
           <ProfileLink name='Log Out' icon='logout' onPress={() => logOut()} />
         </View>
       </View>

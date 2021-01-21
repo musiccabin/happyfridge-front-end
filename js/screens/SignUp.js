@@ -14,8 +14,7 @@ import { signUpMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
 import { Context } from '../context'
 
-
-const SignUp = ({navigation}) => {
+const SignUp = ({ navigation }) => {
   const [firstName, setFirstName] = useState()
   const [lastName, setLastName] = useState()
   const [province, setProvince] = useState()
@@ -26,7 +25,7 @@ const SignUp = ({navigation}) => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
-  
+
   const { setCurrentUser } = useContext(Context)
   const [loginInfo, setLoginInfo] = useState()
   const [signUp] = useMutation(signUpMutation)
@@ -36,11 +35,11 @@ const SignUp = ({navigation}) => {
     setProvince(provinces)
   }, [])
 
-  useEffect(()=> {
+  useEffect(() => {
     setCurrentUser(loginInfo)
-  },[loginInfo])
+  }, [loginInfo])
 
-  const afterMutation = ({status, user}) => {
+  const afterMutation = ({ status, user }) => {
     console.log(status)
     setLoginInfo(user)
     if (user) navigation.navigate('Home')
@@ -57,16 +56,16 @@ const SignUp = ({navigation}) => {
       authProvider: {
         credentials: {
           email: email,
-          password: password
-        }
-      }
+          password: password,
+        },
+      },
     }
-    signUp({variables: {value: value}}).then(({data}) => {
+    signUp({ variables: { value: value } }).then(({ data }) => {
       if (data.signUp) {
         afterMutation(data.signUp)
       }
     })
-  } 
+  }
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.titleXL, styles.signInTitle]}>Sign Up</Text>
@@ -180,8 +179,13 @@ const SignUp = ({navigation}) => {
           </View>
         </View>
 
-        <Button style={styles.registerButton} onPress={() => submit()}>Create account</Button>
-        <TouchableOpacity style={styles.haveAccount} onPress={() => navigation.navigate('Login')}>
+        <Button style={styles.registerButton} onPress={() => submit()}>
+          Create account
+        </Button>
+        <TouchableOpacity
+          style={styles.haveAccount}
+          onPress={() => navigation.navigate('Login')}
+        >
           <Text style={globalStyles.anchorText}>I have an account!</Text>
         </TouchableOpacity>
       </View>

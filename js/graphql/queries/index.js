@@ -1,4 +1,4 @@
-import { gql }  from '@apollo/client'
+import { gql }  from '../../../node_modules/@apollo/client'
 import {MyRecipeFragment, UserFragment} from '../fregments'
 
 export const popularRecipesQuery = gql`
@@ -35,6 +35,15 @@ export const completedRecipesQuery = gql`
     }
   }
   ${MyRecipeFragment}
+  `
+
+  export const recipesInMealplanQuery = gql`
+  query recipesInMealplan {
+    recipesInMealplan {
+      ...Myrecipe
+    }
+  }
+  ${MyRecipeFragment}
 `
 
 export const currentUserQuery = gql`
@@ -44,4 +53,4 @@ export const currentUserQuery = gql`
     }
   }
   ${UserFragment}
-`
+  `
