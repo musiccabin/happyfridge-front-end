@@ -48,3 +48,19 @@ export const NewLeftOverMutation = gql`
     }
   }
 `
+
+export const removeGroceryMutation = gql`
+mutation removeGrocery($value: RemoveGroceryMutationInput!) {
+  removeGrocery(input: $value) {
+    status
+  }
+}
+`
+
+export const completeGroceriesMutation = gql`
+mutation completeGroceries($value: CompleteGroceriesMutationInput!) {
+  completeGroceries(input: $value) {
+    status
+  }
+}
+`

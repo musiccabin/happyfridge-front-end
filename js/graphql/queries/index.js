@@ -1,5 +1,5 @@
 import { gql }  from '../../../node_modules/@apollo/client'
-import {MyRecipeFragment, UserFragment} from '../fregments'
+import {MyRecipeFragment, UserFragment, GroceryFragment} from '../fregments'
 
 export const popularRecipesQuery = gql`
   query popularRecipes {
@@ -45,6 +45,15 @@ export const completedRecipesQuery = gql`
   }
   ${MyRecipeFragment}
 `
+
+export const groceriesQuery = gql`
+  query groceries {
+    groceries {
+      ...Grocery
+    }
+  }
+  ${GroceryFragment}
+  `
 
 export const currentUserQuery = gql`
   query currentUser {

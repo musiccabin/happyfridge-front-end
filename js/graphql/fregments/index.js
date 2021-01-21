@@ -28,3 +28,18 @@ export const UserFragment = gql`
     region
   }
 `
+
+export const GroceryFragment = gql`
+  fragment Grocery on Grocery {
+    id
+    name
+    quantity
+    unit
+    category
+    isCompleted
+    userAdded
+    user {
+      id
+    }
+  }
+`

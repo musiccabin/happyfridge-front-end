@@ -6,6 +6,9 @@ import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
 const GroceryList = () => {
   const [structuredData, setStructuredData] = useState()
+  const { data, error, loading } = useQuery(groceriesQuery)
+  if (loading) return null
+  if (error) console.error(error)
 
   useEffect(() => {
     setStructuredData([
