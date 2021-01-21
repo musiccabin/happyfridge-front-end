@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  Pressable,
+  TouchableOpacity,
   Picker,
 } from 'react-native'
 import { Button } from '../components'
@@ -12,7 +12,7 @@ import { cities, provinces } from '../mock'
 import { globalStyles, COLORS } from '../styles'
 import { signUpMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
-import { auth } from '../firebase'
+import { Context } from '../context'
 
 const SignUp = ({ navigation }) => {
   const [firstName, setFirstName] = useState()
@@ -25,12 +25,25 @@ const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
+
+  const { setCurrentUser } = useContext(Context)
+  const [loginInfo, setLoginInfo] = useState()
   const [signUp] = useMutation(signUpMutation)
 
   useEffect(() => {
     setCity(cities)
     setProvince(provinces)
   }, [])
+
+  useEffect(() => {
+    setCurrentUser(loginInfo)
+  }, [loginInfo])
+
+  const afterMutation = ({ status, user }) => {
+    console.log(status)
+    setLoginInfo(user)
+    if (user) navigation.navigate('Home')
+  }
 
   const submit = () => {
     let value = {
@@ -47,14 +60,12 @@ const SignUp = ({ navigation }) => {
         },
       },
     }
-
-    signUp({ variables: { value: value } }).then(() =>
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .catch(error => console.error(error))
-    )
+    signUp({ variables: { value: value } }).then(({ data }) => {
+      if (data.signUp) {
+        afterMutation(data.signUp)
+      }
+    })
   }
-
   return (
     <View style={styles.container}>
       <Text style={[globalStyles.titleXL, styles.signInTitle]}>Sign Up</Text>
@@ -63,7 +74,7 @@ const SignUp = ({ navigation }) => {
           <View style={globalStyles.half}>
             <Text style={globalStyles.label}>First name</Text>
             <TextInput
-              style={globalStyles.input}
+              style={[globalStyles.input]}
               textContentType='name'
               autoCompleteType='name'
               value={firstName}
@@ -71,9 +82,9 @@ const SignUp = ({ navigation }) => {
             />
           </View>
           <View style={globalStyles.half}>
-            <Text style={globalStyles.label}>Last name</Text>
+            <Text style={[globalStyles.label]}>Last name</Text>
             <TextInput
-              style={globalStyles.input}
+              style={[globalStyles.input]}
               textContentType='name'
               autoCompleteType='name'
               value={lastName}
@@ -134,10 +145,9 @@ const SignUp = ({ navigation }) => {
           <View style={globalStyles.full}>
             <Text style={globalStyles.label}>Email</Text>
             <TextInput
-              style={globalStyles.input}
+              style={[globalStyles.input]}
               textContentType='emailAddress'
-              autoCapitalize='none'
-              autoCorrect={false}
+              autoCompleteType='email'
               value={email}
               onChangeText={text => setEmail(text)}
             />
@@ -152,7 +162,7 @@ const SignUp = ({ navigation }) => {
               textContentType='password'
               autoCompleteType='password'
               secureTextEntry={true}
-              value={password}
+              value={[password]}
               onChangeText={text => setPassword(text)}
             />
           </View>
@@ -169,15 +179,15 @@ const SignUp = ({ navigation }) => {
           </View>
         </View>
 
-        <Button style={styles.registerButton} onPress={submit}>
+        <Button style={styles.registerButton} onPress={() => submit()}>
           Create account
         </Button>
-        <Pressable
+        <TouchableOpacity
           style={styles.haveAccount}
           onPress={() => navigation.navigate('Login')}
         >
           <Text style={globalStyles.anchorText}>I have an account!</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   )
