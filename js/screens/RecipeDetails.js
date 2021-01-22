@@ -14,6 +14,9 @@ import { ingridients } from '../mock'
 import { SimpleLineIcons } from '@expo/vector-icons'
 import {useSpring, animated} from 'react-spring'
 import { PanGestureHandler, Animated, State } from 'react-native-gesture-handler'
+import { useQuery } from '@apollo/client'
+import { recipeInfoQuery } from '../graphql/queries'
+import { useEffect } from 'react/cjs/react.development'
 
 const steps = [
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
@@ -22,7 +25,8 @@ const steps = [
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
 ]
-const RecipeDetails = () => {
+const RecipeDetails = ({route}) => {
+  const {id} = route.params;
   const [mealCompleted, setMealCompleted] = useState(true)
   const [favorite, setFavorite] = useState(false)
   const toogleFavorite = () => setFavorite(!favorite)
@@ -34,6 +38,10 @@ const RecipeDetails = () => {
   })
   const AnimatedView = animated(View)
 
+  const {data, error, loading} = useQuery(recipeInfoQuery, { variables: {id: id} })
+  
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return `Error! ${error.message}`;
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
@@ -42,7 +50,7 @@ const RecipeDetails = () => {
           <TouchableOpacity style={styles.dragger} onPress={() => setDrag(!drag)} />
           <ScrollView>
             <View style={styles.cardHeader}>
-              <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
+              <Text style={globalStyles.titleXL}>{data.recipeInfo.title}</Text>
               <View style={globalStyles.icons}>
                 <MaterialCommunityIcons
                   name='pencil'

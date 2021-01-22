@@ -17,7 +17,7 @@ const CardList = ({ navigation }) => {
           return (
             <Card
               recipe={recipe}
-              onPress={() => navigation.navigate('RecipeDetails')}
+              onPress={() => navigation.navigate('RecipeDetails',{id: recipe.id})}
               marginRight={15}
               height={218}
               width={250}

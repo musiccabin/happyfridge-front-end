@@ -15,8 +15,8 @@ import { Context } from '../context'
 const Login = ({ navigation }) => {
   const { setCurrentUser } = useContext(Context)
   const [loginInfo, setLoginInfo] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [email, setEmail] = useState("antrix@gmail.com")
+  const [password, setPassword] = useState("1234567")
   const [signIn] = useMutation(signInMutation)
 
   useEffect(() => {
@@ -24,9 +24,8 @@ const Login = ({ navigation }) => {
   }, [loginInfo])
 
   const afterMutation = ({ status, user }) => {
-    console.log(status)
-    setLoginInfo(user)
-    if (user) navigation.navigate('Home')
+    setLoginInfo(status)                          // changed user to status as user is null when it redirects to login by command s
+    if (status) navigation.navigate('Home')         // changed user to status as user is null when it redirects to login by command s
   }
 
   const login = () => {
@@ -36,7 +35,8 @@ const Login = ({ navigation }) => {
         password: password,
       },
     }
-    signIn({ variables: { value: value } }).then(({ data }) => {
+    signIn({ variables: { value: value } })
+    .then(({ data }) => {
       if (data.signIn) {
         afterMutation(data.signIn)
       }

@@ -154,6 +154,7 @@ const RegisterScreen = () => {
     <RegisterStack.Navigator initialRouteName='Login' headerMode='none'>
       <RegisterStack.Screen name='SignUp' component={SignUp} />
       <RegisterStack.Screen name='Login' component={Login} />
+      {/* <RegisterStack.Screen name='Home' component={HomeTabs} />  */}
     </RegisterStack.Navigator>
   )
 }

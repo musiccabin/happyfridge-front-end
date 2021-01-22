@@ -54,3 +54,22 @@ export const currentUserQuery = gql`
   }
   ${UserFragment}
   `
+
+export const recipeInfoQuery = gql`
+query recipeInfo ($id: ID!) {
+  recipeInfo (id: $id) {
+    id
+    title
+    cookingTime
+    cookingTimeInMin
+    instructions
+    videoURL
+    avatarContentType
+    avatarFileName
+    user {
+      id
+    }
+  }
+}
+`
+
