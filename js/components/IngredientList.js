@@ -3,11 +3,11 @@ import { View, Text, SectionList, Pressable, StyleSheet } from 'react-native'
 import { globalStyles, COLORS } from '../styles'
 import { useNavigation } from '@react-navigation/native'
 
-const IngredientList = ({ data }) => {
+const IngredientList = ({ data, titles }) => {
   const navigation = useNavigation()
   const listRef = createRef()
 
-  const categories = ['Produce', 'Meat', 'Frozen', 'Dairy', 'Nuts & Seeds']
+  // const categories = ['Produce', 'Meat', 'Frozen', 'Dairy', 'Nuts & Seeds', 'Other']
   const [activeTab, setActiveTab] = useState(0)
 
   const handleCategoryScroll = idx => {
@@ -22,7 +22,7 @@ const IngredientList = ({ data }) => {
   return (
     <>
       <View style={styles.header}>
-        {categories.map((category, idx) => (
+        {titles.map((title, idx) => (
           <Pressable key={idx} onPress={() =>
             handleCategoryScroll(idx)
           }>
@@ -40,7 +40,7 @@ const IngredientList = ({ data }) => {
                     : globalStyles.titleM
                 }
               >
-                {category}
+                {title}
               </Text>
             </View>
           </Pressable>
@@ -51,17 +51,18 @@ const IngredientList = ({ data }) => {
         sections={data}
         style={styles.listWrapper}
         ListEmptyComponent={() => (
-          <Text style={styles.emptyListText}>No leftovers.</Text>
+          <Text style={styles.emptyListText}>Your list is empty.</Text>
         )}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.category}>{title}</Text>
-        )}
+        renderSectionHeader={({ section }) => (
+          section.data.length ?
+          <Text style={styles.category}>{section.title}</Text>
+        : (null))}
         renderItem={({ item }) => (
           <Pressable onPress={() => navigation.navigate('AddEditGrocery')}>
             <View style={styles.list}>
               <Text>{item.name}</Text>
               <Text>
-                {item.quantity}
+                {item.quantity}{" "}
                 {item.unit}
               </Text>
             </View>
