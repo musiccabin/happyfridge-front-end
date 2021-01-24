@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-  View, 
+  View,
   Text,
   StyleSheet,
   SafeAreaView,
@@ -12,42 +12,60 @@ import { Carousel, Button, CardList, FavoriteIcon } from '../components'
 import { globalStyles, COLORS } from '../styles'
 import { ingridients } from '../mock'
 import { SimpleLineIcons } from '@expo/vector-icons'
-import {useSpring, animated} from 'react-spring'
-import { PanGestureHandler, Animated, State } from 'react-native-gesture-handler'
+import { useSpring, animated } from 'react-spring'
+import {
+  PanGestureHandler,
+  Animated,
+  State,
+} from 'react-native-gesture-handler'
 import { useQuery } from '@apollo/client'
 import { recipeInfoQuery } from '../graphql/queries'
 import { useEffect } from 'react/cjs/react.development'
 
-const steps = [
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-]
-const RecipeDetails = ({route}) => {
-  const {id} = route.params;
+// const steps = [
+//   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+//   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+//   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+//   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+//   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
+// ]
+const RecipeDetails = ({ route, navigation }) => {
+  const { id } = route.params
   const [mealCompleted, setMealCompleted] = useState(true)
   const [favorite, setFavorite] = useState(false)
   const toogleFavorite = () => setFavorite(!favorite)
-  const even = (index) => (index + 1) % 2 == 0
+  const even = index => (index + 1) % 2 == 0
   const [drag, setDrag] = useState(false)
   const draggable = useSpring({
-    top: drag ? '0%' : '50%', 
-    height: drag ? '100%' : '50%'
+    top: drag ? '0%' : '50%',
+    height: drag ? '100%' : '50%',
   })
   const AnimatedView = animated(View)
 
-  const {data, error, loading} = useQuery(recipeInfoQuery, { variables: {id: id} })
-  
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return `Error! ${error.message}`;
+  const { data, error, loading } = useQuery(recipeInfoQuery, {
+    variables: { id: id },
+  })
+
+  if (loading) return <Text>Loading...</Text>
+  if (error) return `Error! ${error.message}`
+  const ingrediantArr = data.recipeInfo.myrecipeingredientlinks
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
         <Carousel />
-        <AnimatedView style={[globalStyles.card, globalStyles.content, styles.card, draggable]}>
-          <TouchableOpacity style={styles.dragger} onPress={() => setDrag(!drag)} />
+        <AnimatedView
+          style={[
+            globalStyles.card,
+            globalStyles.content,
+            styles.card,
+            draggable,
+          ]}
+        >
+          <TouchableOpacity
+            style={styles.dragger}
+            onPress={() => setDrag(!drag)}
+          />
           <ScrollView>
             <View style={styles.cardHeader}>
               <Text style={globalStyles.titleXL}>{data.recipeInfo.title}</Text>
@@ -58,14 +76,18 @@ const RecipeDetails = ({route}) => {
                   style={globalStyles.icon}
                   color={COLORS.SECONDARY_FONT}
                 />
-                {mealCompleted && 
-                <SimpleLineIcons
-                  name="badge"
-                  size={30}
-                  style={globalStyles.icon}
-                  color={COLORS.PRIMARY_ICON} 
-                />}
-                <FavoriteIcon favorite={favorite} toogleFavorite={toogleFavorite} />
+                {mealCompleted && (
+                  <SimpleLineIcons
+                    name='badge'
+                    size={30}
+                    style={globalStyles.icon}
+                    color={COLORS.PRIMARY_ICON}
+                  />
+                )}
+                <FavoriteIcon
+                  favorite={favorite}
+                  toogleFavorite={toogleFavorite}
+                />
               </View>
             </View>
             <View style={globalStyles.cardTimer}>
@@ -75,49 +97,68 @@ const RecipeDetails = ({route}) => {
                 size={20}
                 color={COLORS.SECONDARY_FONT}
               />
-              <Text style={globalStyles.titleS}>20 mins</Text>
+              <Text style={globalStyles.titleS}>
+                {data.recipeInfo.cookingTimeInMin} mins
+              </Text>
             </View>
             <TouchableOpacity>
               <Text style={styles.anchorText}>Edit ingridient usages</Text>
             </TouchableOpacity>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingridients</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Ingredients
+              </Text>
               <View style={styles.ingridients}>
-                {ingridients.map((item, index) =>
+                {ingrediantArr.map((item, index) => (
                   <View style={[styles.ingridient, even(index) && styles.even]}>
                     <View style={styles.dot}></View>
                     <Text style={[globalStyles.titleS, styles.ingridientTitle]}>
-                      {item.title}
+                      {item.ingredient.name}
                     </Text>
                     <Text style={[globalStyles.titleS, styles.ingridientSize]}>
-                      {item.size}
+                      {item.quantity} {item.unit}
                     </Text>
                   </View>
+                ))}
+                {(ingridients.length + 1) % 3 == 0 && (
+                  <View style={[styles.ingridient, styles.even]}></View>
                 )}
-                { (ingridients.length + 1) % 3 == 0 && <View style={[styles.ingridient, styles.even]}></View>}
               </View>
             </View>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Intro</Text>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Intro
+              </Text>
               <Text style={globalStyles.titleS}>
                 I first put this recipe up on the blog nearly 3 years ago, and
                 it’s totally stood the test of time!
               </Text>
             </View>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Instructions</Text>
-              {steps.map((step, index) =>
-                <Text style={[globalStyles.titleS, styles.marginBottom]}>{index + 1}. {step}</Text>
-              )}
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>
+                Instructions
+              </Text>
+              {/* {steps.map((step, index) => (
+                <Text style={[globalStyles.titleS, styles.marginBottom]}>
+                  {index + 1}. {step}
+                </Text>
+              ))} */}
+
+              <Text style={[globalStyles.titleS, styles.marginBottom]}>
+                {data.recipeInfo.instructions}
+              </Text>
+
               <View style={styles.buttonWrapper}>
-                <Button onPress={() => setMealCompleted(!mealCompleted)}>Recipe Complete</Button>
+                <Button onPress={() => setMealCompleted(!mealCompleted)}>
+                  Recipe Complete
+                </Button>
               </View>
             </View>
             <View style={styles.wrapper}>
               <Text style={[globalStyles.titleL, styles.marginBottom]}>
                 Similar Recipes
               </Text>
-              <CardList />
+              <CardList navigation={navigation} />
             </View>
           </ScrollView>
         </AnimatedView>
@@ -131,7 +172,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    position: "absolute",
+    position: 'absolute',
     zIndex: 10,
   },
   dragger: {
@@ -146,7 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flexWrap:'wrap',
+    flexWrap: 'wrap',
   },
   ingridient: {
     flex: 1,
@@ -156,7 +197,7 @@ const styles = StyleSheet.create({
     flexBasis: '46%',
   },
   even: {
-    marginLeft: '4%'
+    marginLeft: '4%',
   },
   ingridientTitle: {
     flexBasis: '60%',
@@ -181,7 +222,8 @@ const styles = StyleSheet.create({
   },
   anchorText: {
     ...globalStyles.anchorText,
-    marginTop: 10
-  }})
+    marginTop: 10,
+  },
+})
 
 export default RecipeDetails

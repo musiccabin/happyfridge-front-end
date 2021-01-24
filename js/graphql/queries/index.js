@@ -1,5 +1,5 @@
-import { gql }  from '../../../node_modules/@apollo/client'
-import {MyRecipeFragment, UserFragment} from '../fregments'
+import { gql } from '../../../node_modules/@apollo/client'
+import { MyRecipeFragment, UserFragment } from '../fregments'
 
 export const popularRecipesQuery = gql`
   query popularRecipes {
@@ -35,9 +35,9 @@ export const completedRecipesQuery = gql`
     }
   }
   ${MyRecipeFragment}
-  `
+`
 
-  export const recipesInMealplanQuery = gql`
+export const recipesInMealplanQuery = gql`
   query recipesInMealplan {
     recipesInMealplan {
       ...Myrecipe
@@ -53,23 +53,30 @@ export const currentUserQuery = gql`
     }
   }
   ${UserFragment}
-  `
-
-export const recipeInfoQuery = gql`
-query recipeInfo ($id: ID!) {
-  recipeInfo (id: $id) {
-    id
-    title
-    cookingTime
-    cookingTimeInMin
-    instructions
-    videoURL
-    avatarContentType
-    avatarFileName
-    user {
-      id
-    }
-  }
-}
 `
 
+export const recipeInfoQuery = gql`
+  query recipeInfo($id: ID!) {
+    recipeInfo(id: $id) {
+      id
+      title
+      cookingTime
+      cookingTimeInMin
+      instructions
+      videoURL
+      avatarContentType
+      avatarFileName
+      user {
+        id
+      }
+      myrecipeingredientlinks {
+        id
+        unit
+        quantity
+        ingredient {
+          name
+        }
+      }
+    }
+  }
+`
