@@ -57,9 +57,17 @@ mutation removeGrocery($value: RemoveGroceryMutationInput!) {
 }
 `
 
-export const completeGroceriesMutation = gql`
-mutation completeGroceries($value: CompleteGroceriesMutationInput!) {
-  completeGroceries(input: $value) {
+export const completeGroceryMutation = gql`
+mutation completeGrocery($value: CompleteGroceryMutationInput!) {
+  completeGrocery(input: $value) {
+    status
+  }
+}
+`
+
+export const uncompleteGroceryMutation = gql`
+mutation uncompleteGrocery($value: UncompleteGroceryMutationInput!) {
+  uncompleteGrocery(input: $value) {
     status
   }
 }

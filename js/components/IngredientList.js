@@ -1,30 +1,37 @@
 import React, { useState, createRef } from 'react'
 import { View, Text, SectionList, Pressable, StyleSheet } from 'react-native'
-import {
-  MenuContext,
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu'
+// import {
+//   MenuContext,
+//   Menu,
+//   MenuOptions,
+//   MenuOption,
+//   MenuTrigger,
+// } from 'react-native-popup-menu'
+// import { CheckBox } from 'react-native-elements';
 import Dialog, { DialogTitle, DialogFooter, DialogContent, DialogButton } from 'react-native-popup-dialog'
 import { globalStyles, COLORS } from '../styles'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { removeGroceryMutation } from '../graphql/mutations'
+import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation } from '../graphql/mutations'
 import { useMutation } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import { groceriesQuery } from '../graphql/queries'
 
-const IngredientList = ({ data, titles }) => {
+const IngredientList = ({ data, titles, iconName }) => {
   const navigation = useNavigation()
+  // const { dangerouslyGetState } = useNavigation()
+  // const { index, routes } = dangerouslyGetState()
+  // const screenName = routes[index].name
   const listRef = createRef()
 
   // const categories = ['Produce', 'Meat', 'Frozen', 'Dairy', 'Nuts & Seeds', 'Other']
   const [activeTab, setActiveTab] = useState(0)
   const [visible, setVisibility] = useState(false)
   const [selected, setSelectedItem] = useState(null)
+
   const [deleteGrocery] = useMutation(removeGroceryMutation)
+  const [completeGrocery] = useMutation(completeGroceryMutation)
+  const [uncompleteGrocery] = useMutation(uncompleteGroceryMutation)
 
   const handleCategoryScroll = idx => {
     setActiveTab(idx)
@@ -48,6 +55,25 @@ const IngredientList = ({ data, titles }) => {
         navigation.navigate('GroceryList')
       }
     })
+  }
+
+  const completeOrUncompleteIt = (id) => {
+    const input = {id: id}
+    if (iconName === 'check_box_outline_blank') {
+      completeGrocery({ variables: { value: input } }).then(({ data }) => {
+        if (data.completeGrocery.status) {
+          refetch()
+          navigation.navigate('GroceryList')
+        }
+      })
+    } else {
+      uncompleteGrocery({ variables: { value: input } }).then(({ data }) => {
+        if (data.uncompleteGrocery.status) {
+          refetch()
+          // navigation.navigate('GroceryList')
+        }
+      })
+    }
   }
 
   return (
@@ -85,12 +111,19 @@ const IngredientList = ({ data, titles }) => {
           <Text style={styles.emptyListText}>Your list is empty.</Text>
         )}
         renderSectionHeader={({ section }) => (
-          section.data.length ?
+          section.data.length != 0 ?
           <Text style={styles.category}>{section.title}</Text>
         : (null))}
         renderItem={({ item }) => (
           // <MenuContext style={styles.container}>
-          <View style={styles.list}>            
+          <View style={styles.list}>
+            <MaterialIcons
+                style={globalStyles.clock}
+                name={iconName}
+                size={20}
+                color={COLORS.PRIMARY}
+                onPress={() => completeOrUncompleteIt(item.id)}
+              />       
             <Pressable
             onPress={() => navigation.navigate('AddEditGrocery')}>
               {/* <View > */}
