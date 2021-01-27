@@ -11,6 +11,10 @@ import Dialog, { DialogTitle, DialogFooter, DialogContent, DialogButton } from '
 import { globalStyles, COLORS } from '../styles'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { removeGroceryMutation } from '../graphql/mutations'
+import { useMutation } from '@apollo/client'
+import { useQuery } from '@apollo/client'
+import { groceriesQuery } from '../graphql/queries'
 
 const IngredientList = ({ data, titles }) => {
   const navigation = useNavigation()
@@ -19,6 +23,8 @@ const IngredientList = ({ data, titles }) => {
   // const categories = ['Produce', 'Meat', 'Frozen', 'Dairy', 'Nuts & Seeds', 'Other']
   const [activeTab, setActiveTab] = useState(0)
   const [visible, setVisibility] = useState(false)
+  const [selected, setSelectedItem] = useState(null)
+  const [deleteGrocery] = useMutation(removeGroceryMutation)
 
   const handleCategoryScroll = idx => {
     setActiveTab(idx)
@@ -26,6 +32,21 @@ const IngredientList = ({ data, titles }) => {
       itemIndex: 0,
       sectionIndex: idx,
       viewPosition: 0,
+    })
+  }
+
+  const { refetch } = useQuery(groceriesQuery, {
+    variables: {}
+  });
+
+  const deleteIt = (id) => {
+    const input = {id: id}
+    deleteGrocery({ variables: { value: input } }).then(({ data }) => {
+      if (data.removeGrocery.status) {
+        setVisibility(false)
+        refetch()
+        navigation.navigate('GroceryList')
+      }
     })
   }
 
@@ -94,20 +115,23 @@ const IngredientList = ({ data, titles }) => {
                 name='delete'
                 size={20}
                 color={COLORS.SECONDARY}
-                onPress={() => setVisibility(true)}
+                onPress={() => {
+                  setVisibility(true)
+                  setSelectedItem(item.id)
+                }}
               />
               <Dialog
                 visible={visible}
                 dialogTitle={<DialogTitle title="Really Delete?" />}
                 footer={
                   <DialogFooter>
-                    <DialogButton
+                    {/* <DialogButton
                       text="CANCEL"
                       onPress={() => {}}
-                    />
+                    /> */}
                     <DialogButton
                       text="OK"
-                      onPress={() => {}}
+                      onPress={() => deleteIt(selected)}
                     />
                   </DialogFooter>}
                 onTouchOutside={() => {
