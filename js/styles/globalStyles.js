@@ -154,6 +154,14 @@ const globalStyles = StyleSheet.create({
     color: COLORS.PRIMARY_FONT,
     fontWeight: '300',
   },
+  button: {
+    backgroundColor: COLORS.PRIMARY,
+    paddingVertical: 10,
+    alignItems: 'center',
+    width: 180,
+    marginVertical: 10,
+    borderRadius: 10,
+  }
 })
 
 export { globalStyles, COLORS, windowWidth }

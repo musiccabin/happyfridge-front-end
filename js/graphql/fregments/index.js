@@ -43,3 +43,14 @@ export const GroceryFragment = gql`
     }
   }
 `
+
+export const UsageCountFragment = gql`
+  fragment UsageCount on UsageCount {
+    dairy
+    frozen
+    meat
+    nutsAndSeeds
+    other
+    produce
+  }
+`

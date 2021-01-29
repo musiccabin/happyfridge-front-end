@@ -1,5 +1,5 @@
-import { gql } from '../../../node_modules/@apollo/client'
-import { UserFragment } from '../fregments'
+import { gql } from '@apollo/client'
+import {UserFragment, GroceryFragment} from '../fregments'
 
 export const signUpMutation = gql`
   mutation createUser($value: CreateUserMutationInput!) {
@@ -71,4 +71,18 @@ mutation uncompleteGrocery($value: UncompleteGroceryMutationInput!) {
     status
   }
 }
+`
+
+export const newGroceryMutation = gql`
+  mutation newGrocery($value: NewGroceryMutationInput!) {
+    newGrocery(input: $value) {
+      grocery {
+       ...Grocery
+      }
+      errors {
+        fullMessages
+      }
+    }
+  }
+  ${GroceryFragment}
 `

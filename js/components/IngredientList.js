@@ -17,7 +17,8 @@ import { useMutation } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import { groceriesQuery } from '../graphql/queries'
 
-const IngredientList = ({ data, titles, iconName }) => {
+const IngredientList = ({ data, titles, iconName, componentName }) => {
+
   const navigation = useNavigation()
   // const { dangerouslyGetState } = useNavigation()
   // const { index, routes } = dangerouslyGetState()
@@ -70,7 +71,6 @@ const IngredientList = ({ data, titles, iconName }) => {
       uncompleteGrocery({ variables: { value: input } }).then(({ data }) => {
         if (data.uncompleteGrocery.status) {
           refetch()
-          // navigation.navigate('GroceryList')
         }
       })
     }
@@ -125,7 +125,12 @@ const IngredientList = ({ data, titles, iconName }) => {
                 onPress={() => completeOrUncompleteIt(item.id)}
               />       
             <Pressable
-            onPress={() => navigation.navigate('AddEditGrocery')}>
+            onPress={() => {
+              navigation.navigate(componentName, { 
+                items: item,
+                editIngredient: false   
+              })
+            }}>
               {/* <View > */}
               <Text>{item.name}{": "}
                   {item.quantity}{" "}

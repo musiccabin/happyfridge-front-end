@@ -18,7 +18,10 @@ const MealPlan = () => {
     if (loading) return null
     if (error) console.error(error)
     return (
-        <Meals data={data.recipesInMealplan} emptyTitle={`You don't have any meal plan yet. \n Why not add a recipe?`} showClearButton={true}/>
+        <Meals
+        data={data.recipesInMealplan}
+        emptyTitle={`You don't have any meal plan yet. \n Why not add a recipe?`}
+        showClearButton={true}/>
     )
 
 }

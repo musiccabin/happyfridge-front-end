@@ -2,7 +2,14 @@ import React from 'react'
 import { View } from 'react-native'
 import DropDown from './DropDown'
 
-const CategoryUnit = ({ categoryCallback, unitCallback, categories, units, callbackIngredientHighlight }) => {
+const CategoryUnit = ({ categoryCallback,
+    unitCallback,
+    categories,
+    units,
+    callbackIngredientHighlight,
+    defaultCategorySelection,
+    defaultUnitSelection }) => {
+
     return (
         <View>
             <DropDown
@@ -11,8 +18,9 @@ const CategoryUnit = ({ categoryCallback, unitCallback, categories, units, callb
                 buttonStyle={{ marginTop: 7 }}
                 categories={categories}
                 callback={(value) => categoryCallback(value)}
-                callbackQuantity={()=> {} }
-                callbackIngredientHighlight = { () => callbackIngredientHighlight(false) }
+                callbackQuantity={() => { }}
+                callbackIngredientHighlight={() => callbackIngredientHighlight(false)}
+                defaultSelection={defaultCategorySelection}
             />
             <View style={{ zIndex: -1 }}>
                 <DropDown
@@ -22,8 +30,9 @@ const CategoryUnit = ({ categoryCallback, unitCallback, categories, units, callb
                     inheritStyle={{ marginTop: 40 }}
                     listTop={{ top: 56 }}
                     callback={(value) => unitCallback(value)}
-                    callbackQuantity={()=> {} }
-                    callbackIngredientHighlight = { () => callbackIngredientHighlight(false) }
+                    callbackQuantity={() => { }}
+                    callbackIngredientHighlight={() => callbackIngredientHighlight(false)}
+                    defaultSelection={defaultUnitSelection}
                 />
             </View>
         </View>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { Button, IngredientList } from '../components'
+import { IngredientList } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
+import { FloatingEditButton } from '../components'
 
 const LeftOvers = ({ navigation }) => {
   const [structuredData, setStructuredData] = useState()
@@ -42,7 +43,8 @@ const LeftOvers = ({ navigation }) => {
           <Text style={styles.text}>I used the exact recipe amounts!</Text>
         </Pressable>
       </View>
-      <IngredientList data={structuredData} />
+      <IngredientList data={structuredData} componentName={"UpdateUsage"} />
+      <FloatingEditButton componentName={'UpdateUsage'} />
     </View>
   )
 }

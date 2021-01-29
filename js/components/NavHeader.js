@@ -26,6 +26,7 @@ const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, 
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate(currentUser ? 'Profile' : 'Login')
+                // navigation.navigate('Profile')
               }}
             >
               <ProfileIcon heigth={50} width={50} />

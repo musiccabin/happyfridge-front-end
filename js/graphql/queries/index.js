@@ -1,5 +1,5 @@
-import { gql }  from '../../../node_modules/@apollo/client'
-import {MyRecipeFragment, UserFragment, GroceryFragment} from '../fregments'
+import { gql } from '@apollo/client'
+import { MyRecipeFragment, UserFragment, GroceryFragment, UsageCountFragment } from '../fregments'
 
 export const popularRecipesQuery = gql`
   query popularRecipes {
@@ -62,4 +62,59 @@ export const currentUserQuery = gql`
     }
   }
   ${UserFragment}
-  `
+`
+
+export const dashboardIndStatsLastWeekQuery = gql`
+  query dashboardIndStatsLastWeek { 
+    dashboardIndStatsLastWeek {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardIndStatsLast30DaysQuery = gql`
+  query dashboardIndStatsLast30Days { 
+    dashboardIndStatsLast30Days {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardIndStatsLast90DaysQuery = gql`
+  query dashboardIndStatsLast90Days { 
+    dashboardIndStatsLast90Days {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardIndStatsLast6MonthsQuery = gql`
+  query dashboardIndStatsLast6Months { 
+    dashboardIndStatsLast6Months {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardIndStatsThisYearQuery = gql`
+  query dashboardIndStatsThisYear { 
+    dashboardIndStatsThisYear {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`

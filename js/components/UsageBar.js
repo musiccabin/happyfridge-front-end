@@ -5,7 +5,7 @@ import { globalStyles } from '../styles'
 const UsageBar = ({ categoryTitle, wholeTitle, partTitle, unitTitle }) => {
     return (
         <View style={styles.titleContainer}>
-            <Text style={globalStyles.titleM}>
+            <Text style={[globalStyles.titleM], { textTransform: 'capitalize' }}>
                 {categoryTitle}
             </Text>
             <Text style={globalStyles.titleM}>

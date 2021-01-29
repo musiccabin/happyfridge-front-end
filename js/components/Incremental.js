@@ -9,7 +9,7 @@ const Incremental = ({ inheritStyle, callback, callbackLineColor }) => {
 
     useEffect(() => {
         callback(value)
-      }, [value])
+    }, [value])
 
     return (
         <View style={inheritStyle}>

@@ -14,6 +14,9 @@ import CategoryUnit from './CategoryUnit'
 import Quantity from './Quantity'
 import UsageBar from './UsageBar'
 import FavoriteIcon from './FavoriteIcon'
+import TimeFilter from './TimeFilter'
+import FloatingEditButton from './FloatingEditButton'
+import DemographicFilter from './DemographicFilter'
 
 export {
   Card,
@@ -31,5 +34,8 @@ export {
   CategoryUnit,
   Quantity,
   UsageBar,
-  FavoriteIcon
+  FavoriteIcon,
+  TimeFilter,
+  FloatingEditButton,
+  DemographicFilter
 }
