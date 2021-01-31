@@ -44,6 +44,22 @@ export const GroceryFragment = gql`
   }
 `
 
+export const LeftoverFragment = gql`
+  fragment Leftover on Leftover {
+    id
+    ingredient {
+      id
+      name
+      category
+    }
+    quantity
+    unit
+    user {
+      id
+    }
+  }
+`
+
 export const UsageCountFragment = gql`
   fragment UsageCount on UsageCount {
     dairy

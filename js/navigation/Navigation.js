@@ -6,7 +6,7 @@ import {
   Home,
   ShoppingList,
   Favorites,
-  LeftOvers,
+  Leftovers,
   About,
   RecipeDetails,
   SignUp,
@@ -30,8 +30,8 @@ import {
   FavoriteInActiveIcon,
   MealPlanIcon,
   MealPlanInActiveIcon,
-  LeftOverIcon,
-  LeftOverInActiveIcon,
+  LeftoverIcon,
+  LeftoverInActiveIcon,
 } from '../../assets/menu-icons'
 import { Context } from '../context'
 
@@ -96,11 +96,11 @@ const FavoritesScreen = () => {
   )
 }
 
-const LeftOversStack = createStackNavigator()
+const LeftoversStack = createStackNavigator()
 
-const LeftOversScreen = () => {
+const LeftoversScreen = () => {
   return (
-    <LeftOversStack.Navigator
+    <LeftoversStack.Navigator
       screenOptions={{
         ...navigationStyle,
         header: ({ scene, navigation }) => (
@@ -108,9 +108,9 @@ const LeftOversScreen = () => {
         ),
       }}
     >
-      <LeftOversStack.Screen name='LeftOvers' component={LeftOvers} />
+      <LeftoversStack.Screen name='Leftovers' component={Leftovers} />
       <HomeStack.Screen name='UpdateUsage' component={UpdateUsage} />
-    </LeftOversStack.Navigator>
+    </LeftoversStack.Navigator>
   )
 }
 
@@ -264,11 +264,11 @@ const HomeTabs = () => {
             } else {
               return <MealPlanInActiveIcon />
             }
-          } else if (name === 'LeftOvers') {
+          } else if (name === 'Leftovers') {
             if (focused) {
-              return <LeftOverIcon />
+              return <LeftoverIcon />
             } else {
-              return <LeftOverInActiveIcon />
+              return <LeftoverInActiveIcon />
             }
           }
         },
@@ -279,7 +279,7 @@ const HomeTabs = () => {
       <Tab.Screen name='GroceryList' component={GroceryScreen} />
       <Tab.Screen name='Favorites' component={FavoritesScreen} />
       <Tab.Screen name='MealPlan' component={MealPlanScreen} />
-      <Tab.Screen name='LeftOvers' component={LeftOversScreen} />
+      <Tab.Screen name='Leftovers' component={LeftoversScreen} />
     </Tab.Navigator>
   )
 }

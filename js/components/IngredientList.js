@@ -12,12 +12,16 @@ import Dialog, { DialogTitle, DialogFooter, DialogContent, DialogButton } from '
 import { globalStyles, COLORS } from '../styles'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation } from '../graphql/mutations'
-import { useMutation } from '@apollo/client'
+
 import { useQuery } from '@apollo/client'
 import { groceriesQuery } from '../graphql/queries'
+import { leftoversQuery } from '../graphql/queries'
 
-const IngredientList = ({ data, titles, iconName, componentName }) => {
+import { useMutation } from '@apollo/client'
+import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation } from '../graphql/mutations'
+import { removeLeftoverMutation } from '../graphql/mutations'
+
+const IngredientList = ({ data, page, titles, iconName, componentName }) => {
 
   const navigation = useNavigation()
   // const { dangerouslyGetState } = useNavigation()
@@ -30,9 +34,19 @@ const IngredientList = ({ data, titles, iconName, componentName }) => {
   const [visible, setVisibility] = useState(false)
   const [selected, setSelectedItem] = useState(null)
 
+  const fetchGroceries = useQuery(groceriesQuery, {
+    variables: {}
+  });
+
+  const fetchLeftovers = useQuery(leftoversQuery, {
+    variables: {}
+  });
+
   const [deleteGrocery] = useMutation(removeGroceryMutation)
   const [completeGrocery] = useMutation(completeGroceryMutation)
   const [uncompleteGrocery] = useMutation(uncompleteGroceryMutation)
+
+  const [deleteLeftover] = useMutation(removeLeftoverMutation)
 
   const handleCategoryScroll = idx => {
     setActiveTab(idx)
@@ -43,19 +57,28 @@ const IngredientList = ({ data, titles, iconName, componentName }) => {
     })
   }
 
-  const { refetch } = useQuery(groceriesQuery, {
-    variables: {}
-  });
-
   const deleteIt = (id) => {
     const input = {id: id}
-    deleteGrocery({ variables: { value: input } }).then(({ data }) => {
-      if (data.removeGrocery.status) {
-        setVisibility(false)
-        refetch()
-        navigation.navigate('GroceryList')
-      }
-    })
+
+    if (page === 'Grocery') {
+      deleteGrocery({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeGrocery.status) {
+          setVisibility(false)
+          fetchGroceries.refetch()
+          navigation.navigate('GroceryList')
+        }
+      })
+    } else {
+      deleteLeftover({ variables: { value: input } }).then(({ data }) => {
+        const returnedData = data.removeLeftover
+        if (returnedData.status) {
+          setVisibility(false)
+          fetchLeftovers.refetch()
+          if (returnedData.groceryUpdated) fetchGroceries.refetch()
+          navigation.navigate('Leftovers')
+        }
+      })
+    }
   }
 
   const completeOrUncompleteIt = (id) => {
@@ -117,13 +140,15 @@ const IngredientList = ({ data, titles, iconName, componentName }) => {
         renderItem={({ item }) => (
           // <MenuContext style={styles.container}>
           <View style={styles.list}>
+            { page === 'Grocery' ? 
             <MaterialIcons
                 style={globalStyles.clock}
                 name={iconName}
                 size={20}
                 color={COLORS.PRIMARY}
                 onPress={() => completeOrUncompleteIt(item.id)}
-              />       
+              />  
+              : (null) }    
             <Pressable
             onPress={() => {
               navigation.navigate(componentName, { 
@@ -132,7 +157,7 @@ const IngredientList = ({ data, titles, iconName, componentName }) => {
               })
             }}>
               {/* <View > */}
-              <Text>{item.name}{": "}
+              <Text>{page=== 'Grocery' ? item.name : item.ingredient.name}{": "}
                   {item.quantity}{" "}
                   {item.unit}
                 </Text>

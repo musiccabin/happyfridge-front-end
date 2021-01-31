@@ -1,5 +1,14 @@
 import { gql } from '@apollo/client'
-import { MyRecipeFragment, UserFragment, GroceryFragment, UsageCountFragment } from '../fregments'
+import { MyRecipeFragment, UserFragment, GroceryFragment, LeftoverFragment, UsageCountFragment } from '../fregments'
+
+export const currentUserQuery = gql`
+  query currentUser {
+    currentUser {
+      ...User
+    }
+  }
+  ${UserFragment}
+`
 
 export const popularRecipesQuery = gql`
   query popularRecipes {
@@ -53,16 +62,16 @@ export const groceriesQuery = gql`
     }
   }
   ${GroceryFragment}
-  `
+`
 
-export const currentUserQuery = gql`
-  query currentUser {
-    currentUser {
-      ...User
+export const leftoversQuery = gql`
+  query leftovers {
+    leftovers {
+      ...Leftover
     }
   }
-  ${UserFragment}
-`
+  ${LeftoverFragment}
+  `
 
 export const dashboardIndStatsLastWeekQuery = gql`
   query dashboardIndStatsLastWeek { 

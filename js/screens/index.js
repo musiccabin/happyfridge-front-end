@@ -1,7 +1,7 @@
 import Home from './Home'
 import ShoppingList from './ShoppingList'
 import Favorites from './Favorites'
-import LeftOvers from './LeftOvers'
+import Leftovers from './Leftovers'
 import About from './About'
 import RecipeDetails from './RecipeDetails'
 import SignUp from './SignUp'
@@ -19,7 +19,7 @@ export {
   Home,
   ShoppingList,
   Favorites,
-  LeftOvers,
+  Leftovers,
   About,
   RecipeDetails,
   SignUp,

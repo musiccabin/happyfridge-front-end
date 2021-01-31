@@ -32,14 +32,14 @@ export const signOutMutation = gql`
     }
   }
 `
-export const NewLeftOverMutation = gql`
+export const newLeftoverMutation = gql`
   mutation newLeftover($value: NewLeftoverMutationInput!) {
     newLeftover(input: $value) {
       clientMutationId
       groceryUpdated
     }
   }
-  `
+`
 
   export const clearAllFromMealplanMutation = gql`
   mutation clearAllFromMealplan($value: ClearAllFromMealplanMutationInput!) {
@@ -47,6 +47,20 @@ export const NewLeftOverMutation = gql`
       status
     }
   }
+`
+
+export const newGroceryMutation = gql`
+  mutation newGrocery($value: NewGroceryMutationInput!) {
+    newGrocery(input: $value) {
+      grocery {
+       ...Grocery
+      }
+      errors {
+        fullMessages
+      }
+    }
+  }
+  ${GroceryFragment}
 `
 
 export const removeGroceryMutation = gql`
@@ -73,16 +87,11 @@ mutation uncompleteGrocery($value: UncompleteGroceryMutationInput!) {
 }
 `
 
-export const newGroceryMutation = gql`
-  mutation newGrocery($value: NewGroceryMutationInput!) {
-    newGrocery(input: $value) {
-      grocery {
-       ...Grocery
-      }
-      errors {
-        fullMessages
-      }
-    }
+export const removeLeftoverMutation = gql`
+mutation removeLeftover($value: RemoveLeftoverMutationInput!) {
+  removeLeftover(input: $value) {
+    status
+    groceryUpdated
   }
-  ${GroceryFragment}
+}
 `

@@ -6,8 +6,8 @@ import FavoriteIcon from './favorite.svg'
 import FavoriteInActiveIcon from './favorite-inactive.svg'
 import MealPlanIcon from './mealplan.svg'
 import MealPlanInActiveIcon from './mealplan-inactive.svg'
-import LeftOverIcon from './leftover.svg'
-import LeftOverInActiveIcon from './leftover-inactive.svg'
+import LeftoverIcon from './leftover.svg'
+import LeftoverInActiveIcon from './leftover-inactive.svg'
 
 export {
   HomeIcon,
@@ -18,6 +18,6 @@ export {
   FavoriteInActiveIcon,
   MealPlanIcon,
   MealPlanInActiveIcon,
-  LeftOverIcon,
-  LeftOverInActiveIcon,
+  LeftoverIcon,
+  LeftoverInActiveIcon,
 }
