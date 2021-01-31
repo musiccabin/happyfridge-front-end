@@ -62,7 +62,7 @@ const Profile = () => {
           <ProfileLink
             name='Completed meals'
             icon='check'
-            onPress={() => navigate('Home')}
+            onPress={() => navigate('Completed')}
           />
           <ProfileLink
             name='Dashboard'

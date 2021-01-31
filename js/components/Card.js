@@ -12,8 +12,31 @@ const Card = ({
   height,
   width,
   recipe,
+  mealplanRecipes,
+  favourites,
+  completions
 }) => {
-  const recipeCompleted = false
+  let mealplanRecipe = false
+  let favRecipe = false
+  let completedRecipe = false
+  for (mpRecipe of mealplanRecipes) {
+    if (recipe.id === mpRecipe.id) {
+      mealplanRecipe = true
+      break
+    }
+  }
+  for (fRecipe of favourites) {
+    if (recipe.id === fRecipe.id) {
+      favRecipe = true
+      break
+    }
+  }
+  for (cRecipe of completions) {
+    if (recipe.id === cRecipe.id) {
+      completedRecipe = true
+      break
+    }
+  }
   const styles = StyleSheet.create({
     card: {
       height: height,
@@ -52,7 +75,7 @@ const Card = ({
               <Text style={globalStyles.titleS}>{recipe.cookingTimeInMin}</Text>
             </View>
             <View style={globalStyles.icons}>
-              {recipeCompleted && (
+              {completedRecipe && (
                 <SimpleLineIcons
                   name='badge'
                   style={globalStyles.icon}
@@ -62,13 +85,13 @@ const Card = ({
                 />
               )}
               <MaterialIcons
-                name='remove-circle'
+                name={mealplanRecipe ? 'remove-circle' : 'add-circle'}
                 size={24}
                 style={globalStyles.icon}
                 color={COLORS.PRIMARY_ICON}
               />
               <MaterialIcons
-                name='favorite'
+                name={favRecipe ? 'favorite' : 'favorite-border'}
                 size={24}
                 color={COLORS.SECONDARY_ICON}
               />

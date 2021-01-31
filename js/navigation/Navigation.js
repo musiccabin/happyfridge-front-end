@@ -6,6 +6,7 @@ import {
   Home,
   ShoppingList,
   Favorites,
+  Completed,
   Leftovers,
   About,
   RecipeDetails,
@@ -93,6 +94,23 @@ const FavoritesScreen = () => {
     >
       <FavoritesStack.Screen name='Favorites' component={Favorites} />
     </FavoritesStack.Navigator>
+  )
+}
+
+const CompletionsStack = createStackNavigator()
+
+const CompletionsScreen = () => {
+  return (
+    <CompletionsStack.Navigator
+      screenOptions={{
+        ...navigationStyle,
+        header: ({ scene, navigation }) => (
+          <NavHeader scene={scene} navigation={navigation} />
+        ),
+      }}
+    >
+      <CompletionsStack.Screen name='Completions' component={Completed} />
+    </CompletionsStack.Navigator>
   )
 }
 
@@ -215,6 +233,7 @@ const ProfileScreen = () => {
       <ProfileStack.Screen name='Profile' component={Profile} />
       <ProfileStack.Screen name='About' component={About} />
       <ProfileStack.Screen name='Preferences' component={Preferences} />
+      <ProfileStack.Screen name='Completed' component={Completed} />
       <ProfileStack.Screen name='Dashboard' component={Dashboard} />
     </ProfileStack.Navigator>
   )

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Meals } from '../components'
 import { recipesInMealplanQuery } from '../graphql/queries'
-
 import { useQuery } from '@apollo/client'
 
 

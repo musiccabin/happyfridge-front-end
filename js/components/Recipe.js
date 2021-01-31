@@ -4,8 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
 
-const Recipe = ({ recipe }) => {
-  const recipeCompleted = false
+const Recipe = ({ recipe, mealplanRecipe, favRecipe, completedRecipe }) => {
   return (
     <View style={[styles.card, globalStyles.card]}>
       <View style={styles.cardImageWrapper}>
@@ -31,7 +30,7 @@ const Recipe = ({ recipe }) => {
             <Text style={globalStyles.titleS}>{recipe.cookingTimeInMin}</Text>
           </View>
           <View style={globalStyles.icons}>
-            {recipeCompleted && (
+            {completedRecipe && (
               <SimpleLineIcons
                 name='badge'
                 style={globalStyles.icon}
@@ -41,13 +40,13 @@ const Recipe = ({ recipe }) => {
               />
             )}
             <MaterialIcons
-              name='add-circle'
-              style={globalStyles.icon}
-              size={24}
-              color={COLORS.PRIMARY_ICON}
+                name={mealplanRecipe ? 'remove-circle' : 'add-circle'}
+                size={24}
+                style={globalStyles.icon}
+                color={COLORS.PRIMARY_ICON}
             />
             <MaterialIcons
-              name='favorite-border'
+              name={favRecipe ? 'favorite' : 'favorite-border'}
               size={24}
               color={COLORS.SECONDARY_ICON}
             />

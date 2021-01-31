@@ -3,12 +3,22 @@ import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { useQuery } from '@apollo/client'
-import { popularRecipesQuery } from '../graphql/queries'
+import { popularRecipesQuery, favRecipesQuery, completedRecipesQuery, recipesInMealplanQuery } from '../graphql/queries'
 import { Context } from '../context'
+
 
 const Home = ({ navigation }) => {
   const { currentUser } = useContext(Context)
   const { data, error, loading } = useQuery(popularRecipesQuery)
+
+  const mealplanRecipesInfo = useQuery(recipesInMealplanQuery)
+    if (mealplanRecipesInfo.error) console.error(error)
+
+  const favRecipesInfo = useQuery(favRecipesQuery)
+    if (favRecipesInfo.error) console.error(error)
+
+  const completedRecipesInfo = useQuery(completedRecipesQuery)
+    if (completedRecipesInfo.error) console.error(error)
 
   if (error) return <Text>error</Text>
   if (loading) return <Text>loading...</Text>
@@ -21,7 +31,11 @@ const Home = ({ navigation }) => {
           <Text style={[globalStyles.titleXL, styles.title]}>
             Recommended for you
           </Text>
-          <CardList navigation={navigation} />
+          <CardList
+          navigation={navigation}
+          mealplanRecipes={mealplanRecipesInfo.data.recipesInMealplan}
+          favourites={favRecipesInfo.data.favRecipes}
+          completions={completedRecipesInfo.data.completedRecipes} />
         </View>
       )}
 
@@ -32,7 +46,12 @@ const Home = ({ navigation }) => {
         <ScrollView>
           <View>
             {data?.popularRecipes.map(recipe => (
-              <Recipe key={recipe.id} recipe={recipe} />
+              <Recipe
+              key={recipe.id}
+              recipe={recipe}
+              mealplanRecipe={mealplanRecipesInfo.data.recipesInMealplan.includes(recipe)}
+              favRecipe={favRecipesInfo.data.favRecipes.includes(recipe)}
+              completedRecipe={completedRecipesInfo.data.completedRecipes.includes(recipe)} />
             ))}
           </View>
         </ScrollView>

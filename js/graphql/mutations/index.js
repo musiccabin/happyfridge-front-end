@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import {UserFragment, GroceryFragment} from '../fregments'
+import {UserFragment, GroceryFragment, LeftoverFragment, MyRecipeMealplanLinkFragment, FavFragment, CompletionFragment} from '../fregments'
 
 export const signUpMutation = gql`
   mutation createUser($value: CreateUserMutationInput!) {
@@ -39,14 +39,16 @@ export const newLeftoverMutation = gql`
       groceryUpdated
     }
   }
+  ${LeftoverFragment}
 `
 
-  export const clearAllFromMealplanMutation = gql`
-  mutation clearAllFromMealplan($value: ClearAllFromMealplanMutationInput!) {
-    clearAllFromMealplan(input: $value) {
-      status
-    }
+export const removeLeftoverMutation = gql`
+mutation removeLeftover($value: RemoveLeftoverMutationInput!) {
+  removeLeftover(input: $value) {
+    status
+    groceryUpdated
   }
+}
 `
 
 export const newGroceryMutation = gql`
@@ -87,11 +89,67 @@ mutation uncompleteGrocery($value: UncompleteGroceryMutationInput!) {
 }
 `
 
-export const removeLeftoverMutation = gql`
-mutation removeLeftover($value: RemoveLeftoverMutationInput!) {
-  removeLeftover(input: $value) {
+export const addToMealplanMutation = gql`
+mutation addToMealplan($value: AddToMealplanMutationInput!) {
+  addToMealplan(input: $value) {
+    link {
+      id
+    }
+  }
+}
+${MyRecipeMealplanLinkFragment}
+`
+
+export const removeFromMealplanMutation = gql`
+mutation removeFromMealplan($value: RemoveFromMealplanMutationInput!) {
+  removeFromMealplan(input: $value) {
     status
-    groceryUpdated
+  }
+}
+`
+
+export const clearAllFromMealplanMutation = gql`
+mutation clearAllFromMealplan($value: ClearAllFromMealplanMutationInput!) {
+  clearAllFromMealplan(input: $value) {
+    status
+  }
+}
+`
+
+export const newFavMutation = gql`
+mutation newFav($value: NewFavMutationInput!) {
+  newFav(input: $value) {
+    fav {
+      id
+    }
+  }
+}
+${FavFragment}
+`
+
+export const removeFavMutation = gql`
+mutation removeFav($value: RemoveFavMutationInput!) {
+  removeFav(input: $value) {
+    status
+  }
+}
+`
+
+export const newCompletionMutation = gql`
+mutation newCompletion($value: NewCompletionMutationInput!) {
+  newCompletion(input: $value) {
+    completion {
+      id
+    }
+  }
+}
+${CompletionFragment}
+`
+
+export const removeCompletionMutation = gql`
+mutation removeCompletion($value: RemoveCompletionMutationInput!) {
+  removeCompletion(input: $value) {
+    status
   }
 }
 `

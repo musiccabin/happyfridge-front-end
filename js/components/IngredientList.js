@@ -14,12 +14,10 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { useQuery } from '@apollo/client'
-import { groceriesQuery } from '../graphql/queries'
-import { leftoversQuery } from '../graphql/queries'
+import { groceriesQuery, leftoversQuery } from '../graphql/queries'
 
 import { useMutation } from '@apollo/client'
-import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation } from '../graphql/mutations'
-import { removeLeftoverMutation } from '../graphql/mutations'
+import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation, removeLeftoverMutation } from '../graphql/mutations'
 
 const IngredientList = ({ data, page, titles, iconName, componentName }) => {
 
@@ -86,14 +84,14 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
     if (iconName === 'check_box_outline_blank') {
       completeGrocery({ variables: { value: input } }).then(({ data }) => {
         if (data.completeGrocery.status) {
-          refetch()
+          fetchGroceries.refetch()
           navigation.navigate('GroceryList')
         }
       })
     } else {
       uncompleteGrocery({ variables: { value: input } }).then(({ data }) => {
         if (data.uncompleteGrocery.status) {
-          refetch()
+          fetchGroceries.refetch()
         }
       })
     }

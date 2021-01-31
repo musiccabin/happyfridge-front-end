@@ -31,5 +31,5 @@ export {
   GroceryList,
   Profile,
   AddEditGrocery,
-  Dashboard,
+  Dashboard
 }

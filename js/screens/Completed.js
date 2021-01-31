@@ -8,7 +8,7 @@ const Completed = () => {
     if (loading) return null
     if (error) console.error(error)
     return (
-        <Meals data={data.completedRecipes} emptyTitle={`Looks like you haven't added any favorite recipes.`} />
+        <Meals data={data.completedRecipes} emptyTitle={`Looks like you haven't completed any recipes.`} />
     )
 }
 
