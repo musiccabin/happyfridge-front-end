@@ -13,8 +13,8 @@ const MealPlan = () => {
     //     <Meals data={data} emptyTitle={`You don’t have any meal plan yet.\n Why not add a recipe?`} showClearButton={true} />
     // )
     
-    const { data, error, loading } = useQuery(recipesInMealplanQuery)
-    if (loading) return null
+    const { data, error, loading, networkStatus } = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true })
+    if (loading || networkStatus === 4) return null
     if (error) console.error(error)
     return (
         <Meals

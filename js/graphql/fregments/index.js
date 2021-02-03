@@ -60,23 +60,23 @@ export const LeftoverFragment = gql`
   }
 `
 
-export const FavFragment = gql`
-  fragment Fav on Fav {
-    id
-  }
-`
+// export const FavouriteFragment = gql`
+//   fragment Favourite on Favourite {
+//     id
+//   }
+// `
 
-export const CompletionFragment = gql`
-  fragment Completion on Completion {
-    id
-  }
-`
+// export const CompletionFragment = gql`
+//   fragment Completion on Completion {
+//     id
+//   }
+// `
 
-export const MyRecipeMealplanLinkFragment = gql`
-  fragment Myrecipemealplanlink on Myrecipemealplanlink {
-    id
-  }
-`
+// export const MyRecipeMealplanLinkFragment = gql`
+//   fragment Myrecipemealplanlink on Myrecipemealplanlink {
+//     id
+//   }
+// `
 
 export const UsageCountFragment = gql`
   fragment UsageCount on UsageCount {

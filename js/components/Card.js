@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+
+import { client } from '../apollo'
+import { useQuery } from '@apollo/client'
+import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
+import { useMutation } from '@apollo/client'
+import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
 
 const Card = ({
   onPress,
@@ -16,9 +23,13 @@ const Card = ({
   favourites,
   completions
 }) => {
+
+  const navigation = useNavigation()
+
   let mealplanRecipe = false
   let favRecipe = false
   let completedRecipe = false
+
   for (mpRecipe of mealplanRecipes) {
     if (recipe.id === mpRecipe.id) {
       mealplanRecipe = true
@@ -37,6 +48,86 @@ const Card = ({
       break
     }
   }
+
+  const [inMealplan, setMealplanRecipe] = useState(mealplanRecipe)
+  const [isFav, setFavRecipe] = useState(favRecipe)
+
+  const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true });
+
+  const fetchFavs = useQuery(favRecipesQuery)
+
+  const fetchRecommendations = useQuery(recommendedRecipesQuery)
+
+  const fetchPopularRecipes = useQuery(popularRecipesQuery)
+
+  const refetchAll = (() => {
+    fetchRecipesInMealplan.refetch()
+    fetchFavs.refetch()
+    fetchPopularRecipes.refetch()
+    fetchRecommendations.refetch()
+  })
+
+  const fetchGroceries = useQuery(groceriesQuery, {
+    variables: {}
+  })
+
+  const input = {recipeId: recipe.id}
+
+  const [addToMealplanReturned] = useMutation(addToMealplanMutation)
+  const [removeFromMealplanReturned] = useMutation(removeFromMealplanMutation)
+  const mealplanAction = () => {
+    if (mealplanRecipe) {
+      removeFromMealplanReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeFromMealplanstatus) {
+          refetchAll()
+          fetchGroceries.refetch()
+          navigation.navigate('MealPlan')
+        }
+      })
+    } else {
+      addToMealplanReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.addToMealplan.link) {
+          // refetchAll()
+          // fetchGroceries.refetch()
+          console.log('in else block')
+          const data = client.readQuery({ recipesInMealplanQuery })
+          console.log('data from read query is: ', client.readQuery({ recipesInMealplanQuery }))
+          // client.writeQuery({
+          //   query,
+          //   data: {
+          //     recipesInMealplan: [...data.recipesInMealplan, recipe],
+          //   },
+          // })
+          // mutate({
+          //   refetchQueries: [
+          //     { query: recipesInMealplanQuery }, { query: groceriesQuery }
+          //   ],
+          // })
+          console.log('nvgt')
+          navigation.navigate('MealPlan')
+        }
+      })
+    }        
+  }
+
+  const [newFavReturned] = useMutation(newFavMutation)
+  const [removeFavReturned] = useMutation(removeFavMutation)
+  const favAction = () => {
+    if (favRecipe) {
+      removeFavReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeFav.status) refetchAll()
+      })
+    } else {
+      newFavReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.newFav.favourite) {
+          refetchAll()
+          console.log('ready to go to favourites page')
+          navigation.navigate('Home')
+        }
+      })
+    }        
+  }
+
   const styles = StyleSheet.create({
     card: {
       height: height,
@@ -85,15 +176,23 @@ const Card = ({
                 />
               )}
               <MaterialIcons
-                name={mealplanRecipe ? 'remove-circle' : 'add-circle'}
+                name={inMealplan ? 'remove-circle' : 'add-circle'}
                 size={24}
                 style={globalStyles.icon}
                 color={COLORS.PRIMARY_ICON}
+                onPress={() =>  {
+                  setMealplanRecipe(!inMealplan)
+                  mealplanAction()
+                }}
               />
               <MaterialIcons
-                name={favRecipe ? 'favorite' : 'favorite-border'}
+                name={isFav ? 'favorite' : 'favorite-border'}
                 size={24}
                 color={COLORS.SECONDARY_ICON}
+                onPress={() =>  {
+                  setFavRecipe(!isFav)
+                  favAction()
+                }}
               />
             </View>
           </View>

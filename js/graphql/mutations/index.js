@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import {UserFragment, GroceryFragment, LeftoverFragment, MyRecipeMealplanLinkFragment, FavFragment, CompletionFragment} from '../fregments'
+import {UserFragment, GroceryFragment, LeftoverFragment} from '../fregments'
 
 export const signUpMutation = gql`
   mutation createUser($value: CreateUserMutationInput!) {
@@ -97,7 +97,6 @@ mutation addToMealplan($value: AddToMealplanMutationInput!) {
     }
   }
 }
-${MyRecipeMealplanLinkFragment}
 `
 
 export const removeFromMealplanMutation = gql`
@@ -119,12 +118,11 @@ mutation clearAllFromMealplan($value: ClearAllFromMealplanMutationInput!) {
 export const newFavMutation = gql`
 mutation newFav($value: NewFavMutationInput!) {
   newFav(input: $value) {
-    fav {
+    favourite {
       id
     }
   }
 }
-${FavFragment}
 `
 
 export const removeFavMutation = gql`
@@ -143,7 +141,6 @@ mutation newCompletion($value: NewCompletionMutationInput!) {
     }
   }
 }
-${CompletionFragment}
 `
 
 export const removeCompletionMutation = gql`
