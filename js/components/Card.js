@@ -28,8 +28,8 @@ const Card = ({
 }) => {
 
   const navigation = useNavigation()
-  const { refreshMealplanContext } = useContext(Context)
-  const [refreshMealplan, setRefreshMealplan] = refreshMealplanContext
+  const { refreshPageContext } = useContext(Context)
+  const [refreshPage, setRefreshPage] = refreshPageContext
 
   let mealplanRecipe = false
   let favRecipe = false
@@ -85,7 +85,7 @@ const Card = ({
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
-    setRefreshMealplan(refresh)
+    setRefreshPage(refresh)
   }, [refresh])
 
   const mealplanAction = () => {
@@ -127,17 +127,32 @@ const Card = ({
   const favAction = () => {
     if (favRecipe) {
       removeFavReturned({ variables: { value: input } }).then(({ data }) => {
-        if (data.removeFav.status) refetchAll()
+        if (data.removeFav.status) {
+          refetchAll()
+          const data = client.readQuery({ query: favRecipesQuery })
+          client.writeQuery({
+            query: favRecipesQuery,
+            data: {
+              favRecipes: data.favRecipes.filter((e) => { e !== recipe }),
+            },
+          })
+        }
       })
     } else {
       newFavReturned({ variables: { value: input } }).then(({ data }) => {
         if (data.newFav.favourite) {
           refetchAll()
-          console.log('ready to go to favourites page')
-          navigation.navigate('Home')
+          const data = client.readQuery({ query: favRecipesQuery })
+          client.writeQuery({
+            query: favRecipesQuery,
+            data: {
+              favRecipes: [...data.favRecipes, recipe],
+            },
+          })
         }
       })
-    }        
+    }
+    setRefresh(true)        
   }
 
   const styles = StyleSheet.create({
