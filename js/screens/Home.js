@@ -8,8 +8,9 @@ import { Context } from '../context'
 
 
 const Home = ({ navigation }) => {
-  const { currentUserContext } = useContext(Context)
+  const { currentUserContext, refreshPageContext } = useContext(Context)
   const [currentUser, setCurrentUser] = currentUserContext
+  const [refreshPage, setRefreshPage] = refreshPageContext
   const { data, error, loading } = useQuery(popularRecipesQuery)
 
   const mealplanRecipesInfo = useQuery(recipesInMealplanQuery)
@@ -23,6 +24,11 @@ const Home = ({ navigation }) => {
 
   if (error) return <Text>error</Text>
   if (loading) return <Text>loading...</Text>
+
+//   if (refreshPage) {
+//     refetch()
+//     setRefreshPage(false)
+// }
 
   return (
     <SafeAreaView style={styles.container}>

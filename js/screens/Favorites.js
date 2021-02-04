@@ -9,7 +9,7 @@ const FavoriteMeals = () => {
     const [refreshPage, setRefreshPage] = refreshPageContext
 
     const { data, error, loading, refetch, networkStatus } = useQuery(favRecipesQuery, { notifyOnNetworkStatusChange: true })
-    if (loading) return null
+    if (loading || networkStatus === 4) return null
     if (error) console.error(error)
 
     if (refreshPage) {
