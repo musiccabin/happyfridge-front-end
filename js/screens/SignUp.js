@@ -26,7 +26,8 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState()
   const [confirmPassword, setConfirmPassword] = useState()
 
-  const { setCurrentUser } = useContext(Context)
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
   const [loginInfo, setLoginInfo] = useState()
   const [signUp] = useMutation(signUpMutation)
 

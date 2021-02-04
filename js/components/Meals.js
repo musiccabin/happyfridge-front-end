@@ -29,6 +29,7 @@ const Meals = ({ data, emptyTitle, showClearButton }) => {
           })
     }
 
+
     return (
         <View style={styles.mainContainer}>
             <View style={globalStyles.absoluteCenterContainer}>

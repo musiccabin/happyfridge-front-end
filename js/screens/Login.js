@@ -13,7 +13,8 @@ import { useMutation } from '@apollo/client'
 import { Context } from '../context'
 
 const Login = ({ navigation }) => {
-  const { setCurrentUser } = useContext(Context)
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
   const [loginInfo, setLoginInfo] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
@@ -26,7 +27,6 @@ const Login = ({ navigation }) => {
   const afterMutation = ({ status, user }) => {
     console.log(status)
     setLoginInfo(user)
-    if (user) navigation.navigate('Home')
   }
 
   const login = () => {

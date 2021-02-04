@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
@@ -6,10 +6,13 @@ import { SimpleLineIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { client } from '../apollo'
+import { MealPlan } from '../screens/MealPlan'
 import { useQuery } from '@apollo/client'
 import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
 import { useMutation } from '@apollo/client'
 import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
+import { Context } from '../context'
+// import GLOBAL from '../Global'
 
 const Card = ({
   onPress,
@@ -25,24 +28,26 @@ const Card = ({
 }) => {
 
   const navigation = useNavigation()
+  const { refreshMealplanContext } = useContext(Context)
+  const [refreshMealplan, setRefreshMealplan] = refreshMealplanContext
 
   let mealplanRecipe = false
   let favRecipe = false
   let completedRecipe = false
 
-  for (mpRecipe of mealplanRecipes) {
+  for (let mpRecipe of mealplanRecipes) {
     if (recipe.id === mpRecipe.id) {
       mealplanRecipe = true
       break
     }
   }
-  for (fRecipe of favourites) {
+  for (let fRecipe of favourites) {
     if (recipe.id === fRecipe.id) {
       favRecipe = true
       break
     }
   }
-  for (cRecipe of completions) {
+  for (let cRecipe of completions) {
     if (recipe.id === cRecipe.id) {
       completedRecipe = true
       break
@@ -73,41 +78,48 @@ const Card = ({
 
   const input = {recipeId: recipe.id}
 
+
   const [addToMealplanReturned] = useMutation(addToMealplanMutation)
   const [removeFromMealplanReturned] = useMutation(removeFromMealplanMutation)
+
+  const [refresh, setRefresh] = useState(false)
+
+  useEffect(() => {
+    setRefreshMealplan(refresh)
+  }, [refresh])
+
   const mealplanAction = () => {
     if (mealplanRecipe) {
       removeFromMealplanReturned({ variables: { value: input } }).then(({ data }) => {
         if (data.removeFromMealplanstatus) {
           refetchAll()
           fetchGroceries.refetch()
-          navigation.navigate('MealPlan')
+          const data = client.readQuery({ query: recipesInMealplanQuery })
+          client.writeQuery({
+            query: recipesInMealplanQuery,
+            data: {
+              recipesInMealplan: data.recipesInMealplan.filter((e) => { e !== recipe }),
+            },
+          })
         }
       })
     } else {
       addToMealplanReturned({ variables: { value: input } }).then(({ data }) => {
         if (data.addToMealplan.link) {
-          // refetchAll()
-          // fetchGroceries.refetch()
-          console.log('in else block')
-          const data = client.readQuery({ recipesInMealplanQuery })
-          console.log('data from read query is: ', client.readQuery({ recipesInMealplanQuery }))
-          // client.writeQuery({
-          //   query,
-          //   data: {
-          //     recipesInMealplan: [...data.recipesInMealplan, recipe],
-          //   },
-          // })
-          // mutate({
-          //   refetchQueries: [
-          //     { query: recipesInMealplanQuery }, { query: groceriesQuery }
-          //   ],
-          // })
-          console.log('nvgt')
-          navigation.navigate('MealPlan')
+          refetchAll()
+          fetchGroceries.refetch()         
+          const data = client.readQuery({ query: recipesInMealplanQuery })
+          client.writeQuery({
+            query: recipesInMealplanQuery,
+            data: {
+              recipesInMealplan: [...data.recipesInMealplan, recipe],
+            },
+          })
         }
       })
-    }        
+    }
+    setRefresh(true)
+    // console.log('in cards, after setting: ', refreshMealplan)        
   }
 
   const [newFavReturned] = useMutation(newFavMutation)

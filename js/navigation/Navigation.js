@@ -304,7 +304,8 @@ const HomeTabs = () => {
 }
 
 const Navigation = () => {
-  const { currentUser } = useContext(Context)
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
 
   return (
     <NavigationContainer>

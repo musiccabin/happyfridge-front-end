@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
@@ -8,7 +8,8 @@ import { Context } from '../context'
 
 
 const Home = ({ navigation }) => {
-  const { currentUser } = useContext(Context)
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
   const { data, error, loading } = useQuery(popularRecipesQuery)
 
   const mealplanRecipesInfo = useQuery(recipesInMealplanQuery)

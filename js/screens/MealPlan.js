@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, forceUpdate } from 'react'
 import { Meals } from '../components'
 import { recipesInMealplanQuery } from '../graphql/queries'
 import { useQuery } from '@apollo/client'
+import { Context } from '../context'
 
+
+if (Context.refreshMealplan) {
+    this.render()
+    Context.refreshMealplan = false
+}
 
 const MealPlan = () => {
 
@@ -12,10 +18,24 @@ const MealPlan = () => {
     // return (
     //     <Meals data={data} emptyTitle={`You don’t have any meal plan yet.\n Why not add a recipe?`} showClearButton={true} />
     // )
+
+    const { refreshMealplanContext } = useContext(Context)
+    const [refreshMealplan, setRefreshMealplan] = refreshMealplanContext
+    // console.log('in mealplan, refreshMealplan from context is: ', refreshMealplan)
+
     
-    const { data, error, loading, networkStatus } = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true })
+    const { data, error, loading, networkStatus, refetch } = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true })
     if (loading || networkStatus === 4) return null
     if (error) console.error(error)
+
+    if (refreshMealplan) {
+        refetch()
+        setRefreshMealplan(false)
+    }
+
+    // console.log('recipes in mealplan are: ', data.recipesInMealplan)
+    // console.log('how many?', data.recipesInMealplan.length)
+
     return (
         <Meals
         data={data.recipesInMealplan}

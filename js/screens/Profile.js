@@ -10,7 +10,8 @@ import { signOutMutation } from '../graphql/mutations'
 
 const Profile = () => {
   const [signOut] = useMutation(signOutMutation)
-  const { currentUser, setCurrentUser } = useContext(Context)
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
   const { navigate } = useNavigation()
 
   const logOut = () => {
