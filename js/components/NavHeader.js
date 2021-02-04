@@ -12,7 +12,8 @@ import { Context } from '../context'
 
 
 const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, children }) => {
-  const { currentUser } = useContext(Context)
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
   const { options } = scene?.descriptor
   const title = renderTitle && (options.headerTitle || options.title || scene.route.name)
 
@@ -25,6 +26,7 @@ const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, 
           {profileIcon && (
             <TouchableOpacity
               onPress={() => {
+                console.log('current user is: ', currentUser)
                 navigation.navigate(currentUser ? 'Profile' : 'Login')
                 // navigation.navigate('Profile')
               }}

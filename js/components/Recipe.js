@@ -69,7 +69,6 @@ const Recipe = ({ recipe,   mealplanRecipes, favourites, completions }) => {
 
   useEffect(() => {
     setRefreshPage(refresh)
-    console.log('in useEffect, after setting, refreshPage is: ', refreshPage)
   }, [refresh])
 
   const mealplanAction = () => {
