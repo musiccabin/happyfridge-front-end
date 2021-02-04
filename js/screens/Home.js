@@ -11,7 +11,7 @@ const Home = ({ navigation }) => {
   const { currentUserContext, refreshPageContext } = useContext(Context)
   const [currentUser, setCurrentUser] = currentUserContext
   const [refreshPage, setRefreshPage] = refreshPageContext
-  const { data, error, loading } = useQuery(popularRecipesQuery)
+  const { data, error, loading, networkStatus, refetch } = useQuery(popularRecipesQuery)
 
   const mealplanRecipesInfo = useQuery(recipesInMealplanQuery)
     if (mealplanRecipesInfo.error) console.error(error)
@@ -23,12 +23,12 @@ const Home = ({ navigation }) => {
     if (completedRecipesInfo.error) console.error(error)
 
   if (error) return <Text>error</Text>
-  if (loading) return <Text>loading...</Text>
+  if (loading || networkStatus === 4) return <Text>loading...</Text>
 
-//   if (refreshPage) {
-//     refetch()
-//     setRefreshPage(false)
-// }
+  if (refreshPage) {
+    refetch()
+    setRefreshPage(false)
+}
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,9 +56,9 @@ const Home = ({ navigation }) => {
               <Recipe
               key={recipe.id}
               recipe={recipe}
-              mealplanRecipe={mealplanRecipesInfo.data.recipesInMealplan.includes(recipe)}
-              favRecipe={favRecipesInfo.data.favRecipes.includes(recipe)}
-              completedRecipe={completedRecipesInfo.data.completedRecipes.includes(recipe)} />
+              mealplanRecipes={mealplanRecipesInfo.data.recipesInMealplan}
+              favourites={favRecipesInfo.data.favRecipes}
+              completions={completedRecipesInfo.data.completedRecipes} />
             ))}
           </View>
         </ScrollView>

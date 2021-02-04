@@ -6,13 +6,12 @@ import { SimpleLineIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { client } from '../apollo'
-import { MealPlan } from '../screens/MealPlan'
+// import { MealPlan } from '../screens/MealPlan'
 import { useQuery } from '@apollo/client'
 import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
 import { useMutation } from '@apollo/client'
 import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
 import { Context } from '../context'
-// import GLOBAL from '../Global'
 
 const Card = ({
   onPress,
@@ -27,7 +26,7 @@ const Card = ({
   completions
 }) => {
 
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
   const { refreshPageContext } = useContext(Context)
   const [refreshPage, setRefreshPage] = refreshPageContext
 
@@ -86,6 +85,7 @@ const Card = ({
 
   useEffect(() => {
     setRefreshPage(refresh)
+    console.log('in useEffect, after setting, refreshPage is: ', refreshPage)
   }, [refresh])
 
   const mealplanAction = () => {

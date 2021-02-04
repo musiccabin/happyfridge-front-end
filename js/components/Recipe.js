@@ -1,10 +1,146 @@
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
+import { Context } from '../context'
 
-const Recipe = ({ recipe, mealplanRecipe, favRecipe, completedRecipe }) => {
+import { useQuery } from '@apollo/client'
+import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
+import { useMutation } from '@apollo/client'
+import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
+
+const Recipe = ({ recipe,   mealplanRecipes, favourites, completions }) => {
+  const { refreshPageContext } = useContext(Context)
+  const [refreshPage, setRefreshPage] = refreshPageContext
+
+  let mealplanRecipe = false
+  let favRecipe = false
+  let completedRecipe = false
+
+  for (let mpRecipe of mealplanRecipes) {
+    if (recipe.id === mpRecipe.id) {
+      mealplanRecipe = true
+      break
+    }
+  }
+  for (let fRecipe of favourites) {
+    if (recipe.id === fRecipe.id) {
+      favRecipe = true
+      break
+    }
+  }
+  for (let cRecipe of completions) {
+    if (recipe.id === cRecipe.id) {
+      completedRecipe = true
+      break
+    }
+  }
+
+  const [inMealplan, setMealplanRecipe] = useState(mealplanRecipe)
+  const [isFav, setFavRecipe] = useState(favRecipe)
+
+  const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true });
+
+  const fetchFavs = useQuery(favRecipesQuery)
+
+  const fetchRecommendations = useQuery(recommendedRecipesQuery)
+
+  const fetchPopularRecipes = useQuery(popularRecipesQuery)
+
+  const refetchAll = (() => {
+    fetchRecipesInMealplan.refetch()
+    fetchFavs.refetch()
+    fetchPopularRecipes.refetch()
+    fetchRecommendations.refetch()
+  })
+
+  const fetchGroceries = useQuery(groceriesQuery, {
+    variables: {}
+  })
+
+  const input = {recipeId: recipe.id}
+
+
+  const [addToMealplanReturned] = useMutation(addToMealplanMutation)
+  const [removeFromMealplanReturned] = useMutation(removeFromMealplanMutation)
+
+  const [refresh, setRefresh] = useState(false)
+
+  useEffect(() => {
+    setRefreshPage(refresh)
+    console.log('in useEffect, after setting, refreshPage is: ', refreshPage)
+  }, [refresh])
+
+  const mealplanAction = () => {
+    if (mealplanRecipe) {
+      removeFromMealplanReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeFromMealplanstatus) {
+          refetchAll()
+          fetchGroceries.refetch()
+          const data = client.readQuery({ query: recipesInMealplanQuery })
+          client.writeQuery({
+            query: recipesInMealplanQuery,
+            data: {
+              recipesInMealplan: data.recipesInMealplan.filter((e) => { e !== recipe }),
+            },
+          })
+        }
+      })
+    } else {
+      addToMealplanReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.addToMealplan.link) {
+          refetchAll()
+          fetchGroceries.refetch()         
+          const data = client.readQuery({ query: recipesInMealplanQuery })
+          client.writeQuery({
+            query: recipesInMealplanQuery,
+            data: {
+              recipesInMealplan: [...data.recipesInMealplan, recipe],
+            },
+          })
+        }
+      })
+    }
+    setRefresh(true)
+    setRefreshPage(true)
+    // console.log('in cards, after setting: ', refreshMealplan)        
+  }
+
+  const [newFavReturned] = useMutation(newFavMutation)
+  const [removeFavReturned] = useMutation(removeFavMutation)
+  const favAction = () => {
+    if (favRecipe) {
+      removeFavReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeFav.status) {
+          refetchAll()
+          const data = client.readQuery({ query: favRecipesQuery })
+          client.writeQuery({
+            query: favRecipesQuery,
+            data: {
+              favRecipes: data.favRecipes.filter((e) => { e !== recipe }),
+            },
+          })
+        }
+      })
+    } else {
+      newFavReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.newFav.favourite) {
+          refetchAll()
+          const data = client.readQuery({ query: favRecipesQuery })
+          client.writeQuery({
+            query: favRecipesQuery,
+            data: {
+              favRecipes: [...data.favRecipes, recipe],
+            },
+          })
+        }
+      })
+    }
+    setRefresh(true)
+    setRefreshPage(true)      
+  }
+
   return (
     <View style={[styles.card, globalStyles.card]}>
       <View style={styles.cardImageWrapper}>
@@ -44,11 +180,19 @@ const Recipe = ({ recipe, mealplanRecipe, favRecipe, completedRecipe }) => {
                 size={24}
                 style={globalStyles.icon}
                 color={COLORS.PRIMARY_ICON}
+                onPress={() =>  {
+                  setMealplanRecipe(!inMealplan)
+                  mealplanAction()
+                }}
             />
             <MaterialIcons
               name={favRecipe ? 'favorite' : 'favorite-border'}
               size={24}
               color={COLORS.SECONDARY_ICON}
+              onPress={() =>  {
+                setFavRecipe(!isFav)
+                favAction()
+              }}
             />
           </View>
         </View>
