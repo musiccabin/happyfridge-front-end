@@ -150,3 +150,19 @@ mutation removeCompletion($value: RemoveCompletionMutationInput!) {
   }
 }
 `
+
+export const removeUsagesMutation = gql`
+mutation removeUsages($value: RemoveUsagesMutationInput!) {
+  removeUsages(input: $value) {
+    status
+  }
+}
+`
+
+export const usedRecipeAmountsMutation = gql`
+mutation usedRecipeAmounts($value: UsedRecipeAmountsMutationInput!) {
+  usedRecipeAmounts(input: $value) {
+    status
+  }
+}
+`

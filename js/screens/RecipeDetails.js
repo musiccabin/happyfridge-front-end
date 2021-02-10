@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {
   View, 
   Text,
@@ -7,25 +7,25 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
+import Dialog, { DialogTitle, DialogFooter, DialogContent, DialogButton } from 'react-native-popup-dialog'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
-import { Carousel, Button, CardList, FavoriteIcon } from '../components'
+import { Carousel, Button, ButtonInactive, CardList, FavoriteIcon } from '../components'
 import { globalStyles, COLORS } from '../styles'
-import { ingridients } from '../mock'
+// import { ingridients } from '../mock'
 import { SimpleLineIcons } from '@expo/vector-icons'
 import {useSpring, animated} from 'react-spring'
 import { PanGestureHandler, Animated, State } from 'react-native-gesture-handler'
+import { Context } from '../context'
 
-const steps = [
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet tenetur necessitatibus asperiores porro, obcaecati, repellendus aliquid corrupti accusantium iste, aperiam nisi. Libero nesciunt harum vitae natus, qui aliquid earum magni?',
-]
-const RecipeDetails = () => {
-  const [mealCompleted, setMealCompleted] = useState(true)
-  const [favorite, setFavorite] = useState(false)
-  const toogleFavorite = () => setFavorite(!favorite)
+import { client } from '../apollo'
+import { useQuery, useMutation } from '@apollo/client'
+import { recipeInfoQuery, ingredientListQuery, recipesInMealplanQuery, favRecipesQuery, completedRecipesQuery, completedInMealplanQuery, groceriesQuery, recommendedRecipesQuery, popularRecipesQuery, ingredientUsagesQuery } from '../graphql/queries'
+import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation, newCompletionMutation, removeCompletionMutation, removeUsagesMutation } from '../graphql/mutations'
+import { Navigation } from '../navigation'
+
+const RecipeDetails = ({ route, navigation }) => {
+  // const [favorite, setFavorite] = useState(false)
+  // const toogleFavorite = () => setFavorite(!favorite)
   const even = (index) => (index + 1) % 2 == 0
   const [drag, setDrag] = useState(false)
   const draggable = useSpring({
@@ -33,6 +33,261 @@ const RecipeDetails = () => {
     height: drag ? '100%' : '50%'
   })
   const AnimatedView = animated(View)
+
+  const { id } = route.params
+
+  const { refreshPageContext } = useContext(Context)
+  const [refreshPage, setRefreshPage] = refreshPageContext
+
+  const [visible, setVisibility] = useState(false)
+  const [recipeCompleted, setRecipeCompleted] = useState(false)
+
+  const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+
+  const fetchFavs = useQuery(favRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+  
+  const fetchCompletions = useQuery(completedRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+
+  const mealplanCompletions = useQuery(completedInMealplanQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+  
+  const fetchRecommendations = useQuery(recommendedRecipesQuery)
+
+  const fetchPopularRecipes = useQuery(popularRecipesQuery)
+
+  const recipeInfo = useQuery(recipeInfoQuery, {
+    variables: { id: id },
+  })
+
+  const ingredientUsages = useQuery(ingredientUsagesQuery,  {
+    variables: {id: id}
+  })
+
+  const { data, loading, error } = useQuery(ingredientListQuery, {
+    variables: { id: id },
+  })
+
+  const refetchAll = (() => {
+    fetchRecipesInMealplan.refetch()
+    fetchFavs.refetch()
+    fetchCompletions.refetch()
+    mealplanCompletions.refetch()
+    fetchPopularRecipes.refetch()
+    fetchRecommendations.refetch()
+  })
+
+  const fetchGroceries = useQuery(groceriesQuery, {
+    variables: {}
+  })
+  
+  const [refresh, setRefresh] = useState(false)
+
+  // console.log('refreshPage is: ', refreshPage)
+
+  if (!refresh) {
+    refetchAll()
+    // console.log('refetched all')
+    setRefresh(true)
+}
+
+  const favourites = client.readQuery({ query: favRecipesQuery })
+  const completions = client.readQuery({ query: completedRecipesQuery })
+  // const mealplanCompletions = client.readQuery({ query: completedInMealplanQuery })
+  const mealplanRecipes = client.readQuery({ query: recipesInMealplanQuery })
+
+  let isFav = false
+  for (recipe of favourites.favRecipes) {
+    if (recipe.id === id) {
+      isFav = true
+      break
+    }
+  }
+
+  let isCompleted = false
+  for (recipe of completions.completedRecipes) {
+    if (recipe.id === id) {
+      isCompleted = true
+      break
+    }
+  }
+
+  let inMealplan = false
+  for (recipe of mealplanRecipes.recipesInMealplan) {
+    if (recipe.id === id) {
+      inMealplan = true
+      break
+    }
+  }
+
+  // console.log('mealplanCompletions.completedInMealplan is: ', mealplanCompletions.data.completedInMealplan)
+
+  // let completedInMealplan = false
+  // for (recipe of mealplanCompletions.completedInMealplan) {
+  //   if (recipe.id === id) {
+  //     completedInMealplan = true
+  //     break
+  //   }
+  // }
+
+
+  // const [completedInMealplan, setMealCompleted] = useState(false)
+  // const [updatedInMealplan, setMealplanRecipe] = useState(inMealplan)
+  // const [updatedIsFav, setFavRecipe] = useState(isFav)
+
+
+  const input = {recipeId: id}
+
+
+  const [addToMealplanReturned] = useMutation(addToMealplanMutation)
+  const [removeFromMealplanReturned] = useMutation(removeFromMealplanMutation)
+
+
+  useEffect(() => {
+    setRefreshPage(refresh)
+  }, [refresh])
+
+  const mealplanAction = () => {
+    if (inMealplan) {
+      removeFromMealplanReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeFromMealplanstatus) {
+          refetchAll()
+          fetchGroceries.refetch()
+          const data = client.readQuery({ query: recipesInMealplanQuery })
+          client.writeQuery({
+            query: recipesInMealplanQuery,
+            data: {
+              recipesInMealplan: data.recipesInMealplan.filter((e) => { e !== recipe }),
+            },
+          })
+        }
+      })
+    } else {
+      addToMealplanReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.addToMealplan.link) {
+          refetchAll()
+          fetchGroceries.refetch()         
+          const data = client.readQuery({ query: recipesInMealplanQuery })
+          client.writeQuery({
+            query: recipesInMealplanQuery,
+            data: {
+              recipesInMealplan: [...data.recipesInMealplan, recipe],
+            },
+          })
+        }
+      })
+    }
+    setRefresh(true)
+    setRefreshPage(true)
+    // console.log('in cards, after setting: ', refreshMealplan)        
+  }
+
+  const [newFavReturned] = useMutation(newFavMutation)
+  const [removeFavReturned] = useMutation(removeFavMutation)
+  const favAction = () => {
+    if (isFav) {
+      removeFavReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeFav.status) {
+          refetchAll()
+          const data = client.readQuery({ query: favRecipesQuery })
+          client.writeQuery({
+            query: favRecipesQuery,
+            data: {
+              favRecipes: data.favRecipes.filter((e) => { e !== recipe }),
+            },
+          })
+        }
+      })
+    } else {
+      newFavReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.newFav.favourite) {
+          refetchAll()
+          const data = client.readQuery({ query: favRecipesQuery })
+          client.writeQuery({
+            query: favRecipesQuery,
+            data: {
+              favRecipes: [...data.favRecipes, recipe],
+            },
+          })
+        }
+      })
+    }
+    setRefresh(true)   
+    setRefreshPage(true)   
+  }
+  
+  const [newCompletionReturned] = useMutation(newCompletionMutation)
+  const [removeCompletionReturned] = useMutation(removeCompletionMutation)
+  const [removeUsagesReturned] = useMutation(removeUsagesMutation)
+
+  const completionAction = (action) => {
+    if (action === 'uncomplete') {
+      setRecipeCompleted(false)
+      const existingUsages = client.readQuery({ query: ingredientUsagesQuery,
+        variables: {id: id}
+      })
+
+      if (existingUsages?.ingredientUsages?.length > 0) {
+        removeUsagesReturned({ variables: { value: input } }).then(({ data }) => {
+          if (data.status) {
+            ingredientUsages.refetch()
+            client.writeQuery({
+              query: ingredientUsagesQuery,
+              data: {
+                ingredientUsages: [],
+              },
+            })
+          }
+        })
+      }
+      removeCompletionReturned({ variables: { value: input } }).then(({ data }) => {
+        if (data.removeCompletion.status) {
+          refetchAll()
+          const data = client.readQuery({ query: completedRecipesQuery })
+          client.writeQuery({
+            query: completedRecipesQuery,
+            data: {
+              completedRecipes: data.completedRecipes.filter((e) => { e !== recipe }),
+            },
+          })
+        }
+      })
+    } else {
+      newCompletionReturned({ variables: { value: input } }).then(({ data }) => {
+        setRecipeCompleted(true)
+        const first_time_completion = data.newCompletion.completion
+        const existing_completion = data.newCompletion.status
+        if (first_time_completion || existing_completion) {
+          refetchAll()
+          const data = client.readQuery({ query: completedInMealplanQuery })
+          client.writeQuery({
+            query: completedInMealplanQuery,
+            data: {
+              completedInMealplan: [...data.completedInMealplan, recipe],
+            },
+          })
+          if (first_time_completion) {
+            const data = client.readQuery({ query: completedRecipesQuery })
+            client.writeQuery({
+              query: completedRecipesQuery,
+              data: {
+                completedRecipes: [...data.completedRecipes, recipe],
+              },
+            })
+          }
+        }
+      })
+    }
+    setRefresh(true)   
+    setRefreshPage(true)   
+  }
+
+  if (recipeInfo.loading) return null
+  if (recipeInfo.error) console.error(recipeInfo.error)
+
+  if (loading) return null
+  if (error) console.error(error)
+
+  // console.log('ingredientList is: ', ingredientList)
+
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -42,22 +297,39 @@ const RecipeDetails = () => {
           <TouchableOpacity style={styles.dragger} onPress={() => setDrag(!drag)} />
           <ScrollView>
             <View style={styles.cardHeader}>
-              <Text style={globalStyles.titleXL}>Crock Pot Butter Chicken</Text>
+              <Text style={globalStyles.titleXL}>{recipeInfo.data.recipeInfo.title}</Text>
               <View style={globalStyles.icons}>
-                <MaterialCommunityIcons
+                {/* <MaterialCommunityIcons
                   name='pencil'
                   size={32}
                   style={globalStyles.icon}
                   color={COLORS.SECONDARY_FONT}
-                />
-                {mealCompleted && 
+                /> */}
+                {isCompleted && 
                 <SimpleLineIcons
                   name="badge"
                   size={30}
                   style={globalStyles.icon}
                   color={COLORS.PRIMARY_ICON} 
                 />}
-                <FavoriteIcon favorite={favorite} toogleFavorite={toogleFavorite} />
+                <MaterialIcons
+                  name={inMealplan ? 'remove-circle' : 'add-circle'}
+                  size={32}
+                  style={globalStyles.icon}
+                  color={COLORS.PRIMARY_ICON}
+                  onPress={() =>  {
+                    mealplanAction()
+                    // setMealplanRecipe(!updatedInMealplan)
+                  }}
+                />
+                <MaterialIcons
+                  name={isFav ? 'favorite' : 'favorite-border'}
+                  size={32}
+                  color={COLORS.SECONDARY_ICON}
+                  onPress={() =>  {
+                    favAction()
+                    // setFavRecipe(!updatedIsFav)
+                  }}/>
               </View>
             </View>
             <View style={globalStyles.cardTimer}>
@@ -67,53 +339,100 @@ const RecipeDetails = () => {
                 size={20}
                 color={COLORS.SECONDARY_FONT}
               />
-              <Text style={globalStyles.titleS}>20 mins</Text>
+              <Text style={globalStyles.titleS}>{recipeInfo.data.recipeInfo.cookingTime}</Text>
             </View>
             <TouchableOpacity>
-              <Text style={styles.anchorText}>Edit ingridient usages</Text>
+              <Text
+              style={styles.anchorText}
+              onPress={() => {
+                let usages = ingredientUsages.data.ingredientUsages
+                if (usages.length == 0) usages = data.ingredientList
+                navigation.navigate('EditUsages', { ingredientUsages: usages, id: id })}
+              }
+              >Edit ingredient usages</Text>
             </TouchableOpacity>
             <View style={styles.wrapper}>
-              <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingridients</Text>
-              <View style={styles.ingridients}>
-                {ingridients.map((item, index) =>
-                  <View style={[styles.ingridient, even(index) && styles.even]}>
+              <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingredients</Text>
+              <View style={styles.ingredients}>
+                {data.ingredientList.map((item, index) =>
+                  <View style={[styles.ingredient, even(index) && styles.even]}>
                     <View style={styles.dot}></View>
-                    <Text style={[globalStyles.titleS, styles.ingridientTitle]}>
-                      {item.title}
+                    <Text style={[globalStyles.titleS, styles.ingredientTitle]}>
+                      {item.ingredient.name}
                     </Text>
-                    <Text style={[globalStyles.titleS, styles.ingridientSize]}>
-                      {item.size}
+                    <Text style={[globalStyles.titleS, styles.ingredientSize]}>
+                      {item.quantity}{" "}{item.unit}
                     </Text>
                   </View>
                 )}
-                { (ingridients.length + 1) % 3 == 0 && <View style={[styles.ingridient, styles.even]}></View>}
+                {/* { (data.ingredientList.length + 1) % 3 == 0 && <View style={[styles.ingredient, styles.even]}></View>} */}
               </View>
             </View>
-            <View style={styles.wrapper}>
+            {/* <View style={styles.wrapper}>
               <Text style={[globalStyles.titleL, styles.marginBottom]}>Intro</Text>
               <Text style={globalStyles.titleS}>
                 I first put this recipe up on the blog nearly 3 years ago, and
                 it’s totally stood the test of time!
               </Text>
-            </View>
+            </View> */}
             <View style={styles.wrapper}>
               <Text style={[globalStyles.titleL, styles.marginBottom]}>Instructions</Text>
-              {steps.map((step, index) =>
+              {recipeInfo.data.recipeInfo.instructions.split('\r\n\r\n').map((step, index) =>
                 <Text style={[globalStyles.titleS, styles.marginBottom]}>{index + 1}. {step}</Text>
               )}
               <View style={styles.buttonWrapper}>
-                <Button onPress={() => setMealCompleted(!mealCompleted)}>Recipe Complete</Button>
+                {inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id == id).length == 0 &&
+                <Button onPress={() => {
+                  completionAction('complete')
+                  navigation.navigate('EditUsages', {ingredientUsages: data.ingredientList, id: id})}}
+                  >Recipe Complete</Button>}
+                {recipeCompleted || inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id === id).length > 0 &&
+                <ButtonInactive onPress={() => {
+                  if (ingredientUsages.data.ingredientUsages.length > 0) {
+                    setVisibility(true)
+                  } else {
+                    completionAction('uncomplete')
+                  }
+                }}
+                  >Recipe Completed</ButtonInactive>}
               </View>
             </View>
-            <View style={styles.wrapper}>
+
+            {/* <View style={styles.wrapper}>
               <Text style={[globalStyles.titleL, styles.marginBottom]}>
                 Similar Recipes
               </Text>
               <CardList />
-            </View>
+            </View> */}
           </ScrollView>
         </AnimatedView>
       </View>
+      <Dialog
+                visible={visible}
+                dialogTitle={<DialogTitle title="Did you make the recipe already?" />}
+                footer={
+                  <DialogFooter>
+                    <DialogButton
+                      text="Yes"
+                      onPress={() => {
+                        setVisibility(false)
+                        navigation.navigate('RecipeDetails', { id: id })
+                      }}
+                    />
+                    <DialogButton
+                      text="No, delete my ingredient usages."
+                      onPress={() => {
+                        completionAction('uncomplete')
+                        setVisibility(false)
+                        navigation.navigate('RecipeDetails', { id: id })
+                      }}
+                    />
+                  </DialogFooter>}
+                onTouchOutside={() => {
+                  setVisibility(false)                  
+                }}
+              >
+              </Dialog>
     </SafeAreaView>
   )
 }
@@ -133,27 +452,27 @@ const styles = StyleSheet.create({
     ...globalStyles.row,
     flexWrap: 'wrap',
   },
-  ingridients: {
+  ingredients: {
     width: '100%',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap:'wrap',
   },
-  ingridient: {
-    flex: 1,
+  ingredient: {
+    // flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 7,
     flexBasis: '46%',
   },
   even: {
-    marginLeft: '4%'
+    marginLeft: '4%',
   },
-  ingridientTitle: {
+  ingredientTitle: {
     flexBasis: '60%',
   },
-  ingridientSize: {
+  ingredientSize: {
     flexBasis: '30%',
     textAlign: 'right',
   },

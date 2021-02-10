@@ -7,9 +7,8 @@ import { useNavigation } from '@react-navigation/native'
 
 import { client } from '../apollo'
 // import { MealPlan } from '../screens/MealPlan'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
-import { useMutation } from '@apollo/client'
 import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
 import { Context } from '../context'
 
@@ -26,7 +25,7 @@ const Card = ({
   completions
 }) => {
 
-  // const navigation = useNavigation()
+  const navigation = useNavigation()
   const { refreshPageContext } = useContext(Context)
   const [refreshPage, setRefreshPage] = refreshPageContext
 
@@ -118,6 +117,8 @@ const Card = ({
       })
     }
     setRefresh(true)
+    setRefreshPage(true) 
+    console.log('in card, after setting, refreshPage is: ', refreshPage)
     // console.log('in cards, after setting: ', refreshMealplan)        
   }
 
@@ -151,7 +152,8 @@ const Card = ({
         }
       })
     }
-    setRefresh(true)        
+    setRefresh(true)  
+    setRefreshPage(true)       
   }
 
   const styles = StyleSheet.create({
@@ -171,7 +173,11 @@ const Card = ({
   })
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity 
+    onPress={() => navigation.navigate('RecipeDetails', { id: recipe.id })}
+    isFav={isFav}
+    inMealplan={inMealplan}
+    >
       <View style={[styles.card, globalStyles.card]}>
         <Image
           style={[styles.cardImage, globalStyles.cardImage]}

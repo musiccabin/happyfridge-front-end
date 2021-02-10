@@ -7,8 +7,8 @@ import { useQuery } from '@apollo/client'
 import { leftoversQuery } from '../graphql/queries'
 
 const Leftovers = ({ navigation }) => {
+
   const { data, error, loading } = useQuery(leftoversQuery)
-  // console.log("returned data is: ", data)
   
   if (loading) return null
   if (error) console.error(error)
@@ -40,8 +40,8 @@ const Leftovers = ({ navigation }) => {
   ]
 
   for (leftover of data.leftovers) {
-    console.log('leftover is: ', leftover)
-    console.log('leftover category is: ', leftover.ingredient.category)
+    // console.log('leftover is: ', leftover)
+    // console.log('leftover category is: ', leftover.ingredient.category)
     switch (leftover.ingredient.category) {
     case "produce":
       leftoverIngredients[0]['data'].push(leftover)
@@ -68,13 +68,12 @@ const Leftovers = ({ navigation }) => {
   for (let i = 0; i < 6; i++) {
     if (leftoverIngredients[i]['data'].length > 0) leftoversTitles.push(leftoverIngredients[i]['title'])
   }
-
-  return (
-    <SafeAreaView style={globalStyles.container}>
-      <IngredientList data={leftoverIngredients} page={'Leftovers'} titles={leftoversTitles} componentName={"AddEditGrocery"} />
-      <FloatingEditButton componentName={'AddEditGrocery'} />
-    </SafeAreaView>
-  )
+    return (
+      <SafeAreaView style={globalStyles.container}>
+        <IngredientList data={leftoverIngredients} page={'Leftovers'} titles={leftoversTitles} componentName={"AddEditGrocery"} />
+        <FloatingEditButton componentName={'AddEditGrocery'} />
+      </SafeAreaView>
+    )
 
 //   const [structuredData, setStructuredData] = useState()
 
@@ -102,21 +101,6 @@ const Leftovers = ({ navigation }) => {
 //       },
 //     ])
 //   }, [])
-
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.separator}>
-//         <Text style={styles.title}>
-//           How much of each ingredient {'\n'} did you use?
-//         </Text>
-//         <Pressable onPress={() => navigation.navigate('Home')}>
-//           <Text style={styles.text}>I used the exact recipe amounts!</Text>
-//         </Pressable>
-//       </View>
-//       <IngredientList data={structuredData} componentName={"UpdateUsage"} />
-//       <FloatingEditButton componentName={'UpdateUsage'} />
-//     </View>
-//   )
 }
 
 const styles = StyleSheet.create({

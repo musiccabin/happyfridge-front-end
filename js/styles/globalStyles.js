@@ -161,6 +161,14 @@ const globalStyles = StyleSheet.create({
     width: 180,
     marginVertical: 10,
     borderRadius: 10,
+  },
+  buttonInactive: {
+    backgroundColor: COLORS.BACKGROUND,
+    paddingVertical: 10,
+    alignItems: 'center',
+    width: 180,
+    marginVertical: 10,
+    borderRadius: 10,
   }
 })
 

@@ -54,29 +54,21 @@ export const LeftoverFragment = gql`
     }
     quantity
     unit
-    user {
-      id
-    }
   }
 `
 
-// export const FavouriteFragment = gql`
-//   fragment Favourite on Favourite {
-//     id
-//   }
-// `
-
-// export const CompletionFragment = gql`
-//   fragment Completion on Completion {
-//     id
-//   }
-// `
-
-// export const MyRecipeMealplanLinkFragment = gql`
-//   fragment Myrecipemealplanlink on Myrecipemealplanlink {
-//     id
-//   }
-// `
+export const LeftoverUsageFragment = gql`
+  fragment LeftoverUsage on LeftoverUsage {
+    id
+    ingredient {
+      id
+      name
+      category
+    }
+    quantity
+    unit
+  }
+`
 
 export const UsageCountFragment = gql`
   fragment UsageCount on UsageCount {

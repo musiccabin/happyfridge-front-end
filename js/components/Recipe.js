@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
@@ -10,7 +10,7 @@ import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommend
 import { useMutation } from '@apollo/client'
 import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
 
-const Recipe = ({ recipe,   mealplanRecipes, favourites, completions }) => {
+const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }) => {
   const { refreshPageContext } = useContext(Context)
   const [refreshPage, setRefreshPage] = refreshPageContext
 
@@ -141,62 +141,69 @@ const Recipe = ({ recipe,   mealplanRecipes, favourites, completions }) => {
   }
 
   return (
-    <View style={[styles.card, globalStyles.card]}>
-      <View style={styles.cardImageWrapper}>
-        <Image
-          style={[styles.cardImage, globalStyles.cardImage]}
-          source={{
-            uri: '' + recipe.avatarFileName,
-          }}
-        />
-      </View>
-      <View style={[styles.cardInfo, globalStyles.cardInfo]}>
-        <Text style={[styles.cardTitle, globalStyles.titleM]}>
-          {recipe.title}
-        </Text>
-        <View style={globalStyles.row}>
-          <View style={globalStyles.cardTimer}>
-            <MaterialIcons
-              style={globalStyles.clock}
-              name='access-time'
-              size={20}
-              color={COLORS.SECONDARY_FONT}
-            />
-            <Text style={globalStyles.titleS}>{recipe.cookingTimeInMin}</Text>
-          </View>
-          <View style={globalStyles.icons}>
-            {completedRecipe && (
-              <SimpleLineIcons
-                name='badge'
-                style={globalStyles.icon}
-                size={24}
-                color='black'
-                color={COLORS.PRIMARY_ICON}
+    <TouchableOpacity
+      onPress={() => navigation.navigate('RecipeDetails', { id: recipe.id })}
+      // isFav={favourites}
+      // inMealplan={inMealplan}
+      // isCompleted={completedRecipe}
+      >
+      <View style={[styles.card, globalStyles.card]}>
+        <View style={styles.cardImageWrapper}>
+          <Image
+            style={[styles.cardImage, globalStyles.cardImage]}
+            source={{
+              uri: '' + recipe.avatarFileName,
+            }}
+          />
+        </View>
+        <View style={[styles.cardInfo, globalStyles.cardInfo]}>
+          <Text style={[styles.cardTitle, globalStyles.titleM]}>
+            {recipe.title}
+          </Text>
+          <View style={globalStyles.row}>
+            <View style={globalStyles.cardTimer}>
+              <MaterialIcons
+                style={globalStyles.clock}
+                name='access-time'
+                size={20}
+                color={COLORS.SECONDARY_FONT}
               />
-            )}
-            <MaterialIcons
-                name={mealplanRecipe ? 'remove-circle' : 'add-circle'}
+              <Text style={globalStyles.titleS}>{recipe.cookingTimeInMin}</Text>
+            </View>
+            <View style={globalStyles.icons}>
+              {completedRecipe && (
+                <SimpleLineIcons
+                  name='badge'
+                  style={globalStyles.icon}
+                  size={24}
+                  color='black'
+                  color={COLORS.PRIMARY_ICON}
+                />
+              )}
+              <MaterialIcons
+                  name={mealplanRecipe ? 'remove-circle' : 'add-circle'}
+                  size={24}
+                  style={globalStyles.icon}
+                  color={COLORS.PRIMARY_ICON}
+                  onPress={() =>  {
+                    setMealplanRecipe(!inMealplan)
+                    mealplanAction()
+                  }}
+              />
+              <MaterialIcons
+                name={favRecipe ? 'favorite' : 'favorite-border'}
                 size={24}
-                style={globalStyles.icon}
-                color={COLORS.PRIMARY_ICON}
+                color={COLORS.SECONDARY_ICON}
                 onPress={() =>  {
-                  setMealplanRecipe(!inMealplan)
-                  mealplanAction()
+                  setFavRecipe(!isFav)
+                  favAction()
                 }}
-            />
-            <MaterialIcons
-              name={favRecipe ? 'favorite' : 'favorite-border'}
-              size={24}
-              color={COLORS.SECONDARY_ICON}
-              onPress={() =>  {
-                setFavRecipe(!isFav)
-                favAction()
-              }}
-            />
+              />
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

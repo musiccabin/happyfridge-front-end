@@ -28,7 +28,6 @@ const CardList = ({ navigation, mealplanRecipes, favourites, completions }) => {
               mealplanRecipes={mealplanRecipes}
               favourites={favourites}
               completions={completions}
-              onPress={() => navigation.navigate('RecipeDetails')}
               marginRight={15}
               height={218}
               width={250}

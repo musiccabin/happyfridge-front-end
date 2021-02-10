@@ -66,7 +66,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
           navigation.navigate('GroceryList')
         }
       })
-    } else {
+    } else if (page === 'Leftovers') {
       deleteLeftover({ variables: { value: input } }).then(({ data }) => {
         const returnedData = data.removeLeftover
         if (returnedData.status) {
@@ -155,7 +155,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
               })
             }}>
               {/* <View > */}
-              <Text>{page=== 'Grocery' ? item.name : item.ingredient.name}{": "}
+              <Text>{page === 'Grocery' ? item.name : item.ingredient.name}{": "}
                   {item.quantity}{" "}
                   {item.unit}
                 </Text>
@@ -199,7 +199,6 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
                   setVisibility(false)                  
                 }}
               >
-              {/* <DialogContent><Text>Really Delete?</Text></DialogContent> */}
               </Dialog>
             {/* </MenuTrigger>
 

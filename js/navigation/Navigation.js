@@ -10,6 +10,7 @@ import {
   Leftovers,
   About,
   RecipeDetails,
+  // EditUsages,
   SignUp,
   Login,
   MealPlan,
@@ -18,8 +19,9 @@ import {
   GroceryList,
   Profile,
   AddEditGrocery,
-  Dashboard,
+  Dashboard
 } from '../screens'
+import EditUsages from '../screens/EditUsages.js'
 import { globalStyles } from '../styles'
 import { NavHeader } from '../components'
 import {
@@ -59,9 +61,32 @@ const HomeStackScreen = () => {
     >
       <HomeStack.Screen name='Home' component={Home} />
       <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
+      <HomeStack.Screen name='EditUsages' component={EditUsages} />
     </HomeStack.Navigator>
   )
 }
+
+// const EditUsagesStack = createStackNavigator()
+
+// const EditUsagesStackScreen = () => {
+//   return (
+//     <EditUsagesStack.Navigator
+//       screenOptions={{
+//         ...navigationStyle,
+//         header: ({ scene, navigation }) => (
+//           <NavHeader
+//             scene={scene}
+//             navigation={navigation}
+//             renderTitle={false}
+//           />
+//         ),
+//       }}
+//     >
+//       <EditUsagesStack.Screen name='EditUsages' component={EditUsages}/>
+//       {/* <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} /> */}
+//     </EditUsagesStack.Navigator>
+//   )
+// }
 
 const ShoppingListStack = createStackNavigator()
 
@@ -298,7 +323,7 @@ const HomeTabs = () => {
       <Tab.Screen name='GroceryList' component={GroceryScreen} />
       <Tab.Screen name='Favorites' component={FavoritesScreen} />
       <Tab.Screen name='MealPlan' component={MealPlanScreen} />
-      <Tab.Screen name='Leftovers' component={LeftoversScreen} />
+      <Tab.Screen name='Leftovers' component={LeftoversScreen} page={'Leftovers'} />
     </Tab.Navigator>
   )
 }

@@ -3,6 +3,7 @@ import CardList from './CardList'
 import Recipe from './Recipe'
 import Carousel from './Carousel'
 import Button from './Button'
+import ButtonInactive from './ButtonInactive'
 import IngredientList from './IngredientList'
 import Meals from './Meals'
 import CheckList from './CheckList'
@@ -23,6 +24,7 @@ export {
   Recipe,
   Carousel,
   Button,
+  ButtonInactive,
   CardList,
   Meals,
   CheckList,

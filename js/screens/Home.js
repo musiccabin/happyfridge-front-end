@@ -55,6 +55,7 @@ const Home = ({ navigation }) => {
             {data?.popularRecipes.map(recipe => (
               <Recipe
               key={recipe.id}
+              navigation={navigation}
               recipe={recipe}
               mealplanRecipes={mealplanRecipesInfo.data.recipesInMealplan}
               favourites={favRecipesInfo.data.favRecipes}

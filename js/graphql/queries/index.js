@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { MyRecipeFragment, UserFragment, GroceryFragment, LeftoverFragment, UsageCountFragment } from '../fregments'
+import { MyRecipeFragment, UserFragment, GroceryFragment, LeftoverFragment, LeftoverUsageFragment, UsageCountFragment } from '../fregments'
 
 export const currentUserQuery = gql`
   query currentUser {
@@ -28,9 +28,68 @@ export const recommendedRecipesQuery = gql`
   ${MyRecipeFragment}
 `
 
+export const recipeInfoQuery = gql`
+query recipeInfo($id: ID!) {
+  recipeInfo(id: $id) {
+    id
+    title
+    cookingTime
+    cookingTimeInMin
+    instructions
+    videoURL
+    avatarContentType
+    avatarFileName
+    user {
+      id
+    }
+    myrecipeingredientlinks {
+      id
+      unit
+      quantity
+      ingredient {
+        name
+      }
+    }
+  }
+}
+`
+
+export const ingredientListQuery = gql`
+query ingredientList($id: ID!) {
+  ingredientList(id: $id) {
+    id
+    ingredient {
+      id
+      name
+      category
+    }
+    quantity
+    unit
+  }
+}
+`
+
+export const ingredientUsagesQuery = gql`
+query ingredientUsages($id: ID!) {
+  ingredientUsages(id: $id) {
+    ...LeftoverUsage
+  }
+}
+${LeftoverUsageFragment}
+`
+
 export const favRecipesQuery = gql`
   query favRecipes {
     favRecipes {
+      ...Myrecipe
+    }
+  }
+  ${MyRecipeFragment}
+`
+
+export const completedInMealplanQuery = gql`
+  query completedInMealplan {
+    completedInMealplan {
       ...Myrecipe
     }
   }
