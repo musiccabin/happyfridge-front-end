@@ -1,8 +1,10 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
 import ViewPager from '@react-native-community/viewpager'
+import { images } from '../images'
 
-const Carousel = () => {
+const Carousel = ({ id }) => {
+
   return (
     <ViewPager
       style={styles.viewPager}
@@ -12,18 +14,15 @@ const Carousel = () => {
       <View style={styles.page} key='1'>
         <Image
           style={styles.image}
-          source={{
-            uri:
-              'https://dinnerthendessert.com/wp-content/uploads/2016/12/Slow-Cooker-Indian-Butter-Chicken.jpg',
-          }}
+          source={{ uri: images[id] }}
         />
       </View>
-      <View style={styles.page} key='2'>
+      {/* <View style={styles.page} key='2'>
         <Image
           style={styles.image}
           source={{
             uri:
-              'https://www.wellplated.com/wp-content/uploads/2019/07/Authentic-Indian-Butter-Chicken-recipe-600x900.jpg',
+              'https://dinnerthendessert.com/wp-content/uploads/2016/12/Slow-Cooker-Indian-Butter-Chicken.jpg',
           }}
         />
       </View>
@@ -32,10 +31,19 @@ const Carousel = () => {
           style={styles.image}
           source={{
             uri:
-              'https://ifoodreal.com/wp-content/uploads/2014/02/far-crock-pot-butter-chicken-recipe.jpg',
+              'https://www.wellplated.com/wp-content/uploads/2019/07/Authentic-Indian-Butter-Chicken-recipe-600x900.jpg',
           }}
         />
       </View>
+      <View style={styles.page} key='4'>
+        <Image
+          style={styles.image}
+          source={{
+            uri:
+              'https://ifoodreal.com/wp-content/uploads/2014/02/far-crock-pot-butter-chicken-recipe.jpg',
+          }}
+        />
+      </View> */}
     </ViewPager>
   )
 }

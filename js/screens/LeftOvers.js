@@ -39,7 +39,7 @@ const Leftovers = ({ navigation }) => {
   },
   ]
 
-  for (leftover of data.leftovers) {
+  for (leftover of data?.leftovers) {
     // console.log('leftover is: ', leftover)
     // console.log('leftover category is: ', leftover.ingredient.category)
     switch (leftover.ingredient.category) {

@@ -292,7 +292,7 @@ const RecipeDetails = ({ route, navigation }) => {
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={globalStyles.container}>
-        <Carousel />
+        <Carousel id={id} />
         <AnimatedView style={[globalStyles.card, globalStyles.content, styles.card, draggable]}>
           <TouchableOpacity style={styles.dragger} onPress={() => setDrag(!drag)} />
           <ScrollView>

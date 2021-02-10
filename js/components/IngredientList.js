@@ -21,6 +21,8 @@ import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutati
 
 const IngredientList = ({ data, page, titles, iconName, componentName }) => {
 
+  console.log('data is: ', data)
+
   const navigation = useNavigation()
   // const { dangerouslyGetState } = useNavigation()
   // const { index, routes } = dangerouslyGetState()
@@ -81,7 +83,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
 
   const completeOrUncompleteIt = (id) => {
     const input = {id: id}
-    if (iconName === 'check_box_outline_blank') {
+    if (iconName === 'check') {
       completeGrocery({ variables: { value: input } }).then(({ data }) => {
         if (data.completeGrocery.status) {
           fetchGroceries.refetch()

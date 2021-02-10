@@ -1,0 +1,20 @@
+export const images = {
+    1: 'https://i.imgur.com/M87Vjwz.jpg',
+    2: 'https://i.imgur.com/eXoqT09.jpg',
+    3: 'https://i.imgur.com/jm1NnYy.jpg',
+    4: 'https://i.imgur.com/XVJBJpx.jpg',
+    5: 'https://i.imgur.com/ZHQkBdc.jpg',
+    6: 'https://i.imgur.com/M25lPiQ.jpg',
+    7: 'https://i.imgur.com/JgiZf10.jpg',
+    8: 'https://i.imgur.com/YN199Nq.jpg',
+    9: 'https://i.imgur.com/ickd7It.jpg',
+    15: 'https://i.imgur.com/78fl3xY.jpg',
+    16: 'https://i.imgur.com/duOX2gN.jpg',
+    17: 'https://i.imgur.com/mv6mwY9.jpg',
+    18: 'https://i.imgur.com/TTeMy3x.jpg',
+    19: 'https://i.imgur.com/f9CvaVI.png',
+    20: 'https://i.imgur.com/u1pCjRM.png',
+    21: 'https://i.imgur.com/HbNjyr4.jpg',
+    22: 'https://i.imgur.com/J8ybJ57.png',
+    23: 'https://i.imgur.com/3cWqY7y.jpg'
+}

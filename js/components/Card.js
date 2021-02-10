@@ -11,6 +11,8 @@ import { useQuery, useMutation } from '@apollo/client'
 import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
 import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'
 import { Context } from '../context'
+import { images } from '../images'
+
 
 const Card = ({
   onPress,
@@ -181,9 +183,7 @@ const Card = ({
       <View style={[styles.card, globalStyles.card]}>
         <Image
           style={[styles.cardImage, globalStyles.cardImage]}
-          source={{
-            uri: '' + recipe.avatarFileName,
-          }}
+          source={{ uri: images[recipe.id] }}
         />
         <View style={[styles.cardInfo, globalStyles.cardInfo]}>
           <Text style={globalStyles.titleL}>{recipe.title}</Text>

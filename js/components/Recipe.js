@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { SimpleLineIcons } from '@expo/vector-icons'
 import { Context } from '../context'
+import { images } from '../images'
 
 import { useQuery } from '@apollo/client'
 import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
@@ -151,9 +152,7 @@ const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }
         <View style={styles.cardImageWrapper}>
           <Image
             style={[styles.cardImage, globalStyles.cardImage]}
-            source={{
-              uri: '' + recipe.avatarFileName,
-            }}
+            source={{ uri: images[recipe.id] }}
           />
         </View>
         <View style={[styles.cardInfo, globalStyles.cardInfo]}>
