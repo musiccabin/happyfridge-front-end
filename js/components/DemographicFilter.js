@@ -1,13 +1,57 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight, FlatList, Pressable } from 'react-native'
+import RNPickerSelect from 'react-native-picker-select'
 import { COLORS, globalStyles } from '../styles'
 import { Ionicons } from '@expo/vector-icons'
 
+import { useQuery } from '@apollo/client'
+import {
+    currentUserQuery,
+    // dashboardIndStatsLastWeekQuery,
+    // dashboardIndStatsLast30DaysQuery,
+    // dashboardIndStatsLast6MonthsQuery,
+    // dashboardIndStatsLast90DaysQuery,
+    // dashboardIndStatsThisYearQuery,
+    // dashboardIndStatsAllHistoryQuery,
+    // dashboardComStatsLastWeekByCityQuery,
+    // dashboardComStatsLastWeekByRegionQuery,
+    // dashboardComStatsLastWeekByProvinceQuery,
+    // dashboardComStatsLast30DaysByCityQuery,
+    // dashboardComStatsLast30DaysByRegionQuery,
+    // dashboardComStatsLast30DaysByProvinceQuery,
+    // dashboardComStatsLast90DaysByCityQuery,
+    // dashboardComStatsLast90DaysByRegionQuery,
+    // dashboardComStatsLast90DaysByProvinceQuery,
+    // dashboardComStatsLast6MonthsByCityQuery,
+    // dashboardComStatsLast6MonthsByRegionQuery,
+    // dashboardComStatsLast6MonthsByProvinceQuery,
+    // dashboardComStatsThisYearByCityQuery,
+    // dashboardComStatsThisYearByRegionQuery,
+    // dashboardComStatsThisYearByProvinceQuery,
+    dashboardComStatsAllHistoryByCityQuery,
+    // dashboardComStatsAllHistoryByRegionQuery,
+    // dashboardComStatsAllHistoryByProvinceQuery
+  } from '../graphql/queries'
+
+import { Context } from '../context'
+
 const DemographicFilter = ({ categories, inheritStyle, listZIndex,
-    callback, buttonStyle, listTop }) => {
+    callback, buttonStyle, listTop, data, provAndCities, provField, updateCities, initVal, keepSelectedCity, keepSelectedProv }) => {
+
+        console.log('data is: ', data)
+    const items = []
+    for (let item of data) {
+        items.push({
+            label: item,
+            value: item
+        })
+    }
 
     const [pickerVisibility, setPickerVisibility] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState(categories[0])
+    const [selectedVal, setSelectedVal] = useState(initVal)
+    // const [cities, setCities] = useState(data['prov'])
+    // const [selectedCategory, setSelectedCategory] = useState(categories[0])
+    
     const [icon, setIcon] = useState('ios-arrow-up')
     const [highlightStyling, setHighlightStyling] = useState(false)
 
@@ -57,7 +101,20 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
             <Pressable style={buttonStyle} onPress={() => {
                 toggle()
             }}>
-                <Text style={styles.text}>{selectedCategory}</Text>
+            <RNPickerSelect
+                value={selectedVal}
+                onValueChange={(value) => {
+                    if (provField) {
+                        updateCities(provAndCities[value])
+                        keepSelectedProv(value)
+                    } else {
+                        keepSelectedCity(value)
+                    }
+                    setSelectedVal(value)
+                }}
+                items={items}
+            />
+                {/* <Text style={styles.text}>{selectedCategory}</Text> */}
                 <Ionicons
                     style={styles.icon}
                     size={globalStyles.iconSize}
@@ -68,7 +125,7 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
             {pickerVisibility &&
                 <FlatList
                     style={styles.list}
-                    data={categories}
+                    // data={categories}
                     ItemSeparatorComponent={Separator}
                     keyExtractor={(_, index) => index.toString()}
                     renderItem={
@@ -76,7 +133,7 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
                             <TouchableHighlight
                                 onPress={() => {
                                     callback(item)
-                                    setSelectedCategory(item)
+                                    // setSelectedCategory(item)
                                     toggle()
                                 }}
                                 activeOpacity={0.1}

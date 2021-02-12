@@ -1,16 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { SafeAreaView, ScrollView, Text, StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
 import { VictoryPie } from 'victory-native'
 import { COLORS, globalStyles } from '../styles'
 import { TimeFilter, DemographicFilter } from '../components'
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import {
+  allProvsQuery,
   dashboardIndStatsLastWeekQuery,
   dashboardIndStatsLast30DaysQuery,
   dashboardIndStatsLast6MonthsQuery,
   dashboardIndStatsLast90DaysQuery,
-  dashboardIndStatsThisYearQuery
+  dashboardIndStatsThisYearQuery,
+  dashboardIndStatsAllHistoryQuery,
+  dashboardComStatsLastWeekByCityQuery,
+  dashboardComStatsLastWeekByRegionQuery,
+  dashboardComStatsLastWeekByProvinceQuery,
+  dashboardComStatsLast30DaysByCityQuery,
+  dashboardComStatsLast30DaysByRegionQuery,
+  dashboardComStatsLast30DaysByProvinceQuery,
+  dashboardComStatsLast90DaysByCityQuery,
+  dashboardComStatsLast90DaysByRegionQuery,
+  dashboardComStatsLast90DaysByProvinceQuery,
+  dashboardComStatsLast6MonthsByCityQuery,
+  dashboardComStatsLast6MonthsByRegionQuery,
+  dashboardComStatsLast6MonthsByProvinceQuery,
+  dashboardComStatsThisYearByCityQuery,
+  dashboardComStatsThisYearByRegionQuery,
+  dashboardComStatsThisYearByProvinceQuery,
+  dashboardComStatsAllHistoryByCityQuery,
+  dashboardComStatsAllHistoryByRegionQuery,
+  dashboardComStatsAllHistoryByProvinceQuery
 } from '../graphql/queries'
+import { Context } from '../context'
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar'
 
 const Dashboard = () => {
 
@@ -41,39 +63,100 @@ const Dashboard = () => {
       query: dashboardIndStatsThisYearQuery
     },
   ]
-  const demography = {
-    province: ["BC", "AB"],
-    city: ["Vancouver", "Langley", "Surrey"],
-    region: ["Fraser Valley", "Delta Creek", "South Surrey"]
-  }
+
+  // const { data, error, loading } = useQuery(favRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+
+
+
+  // const allLocations = {
+  //   province: ["BC", "AB"],
+  //   city: ["Vancouver", "Langley", "Surrey"],
+  //   region: ["Fraser Valley", "Delta Creek", "South Surrey"]
+  // }
+
+  // const mock = { bc: ['vancouver'], ab: ['calgary'] }
+
+  const allProvs = useQuery(allProvsQuery)
+
+  const { currentUserContext } = useContext(Context)
+  const [currentUser, setCurrentUser] = currentUserContext
 
   const [timeFilterNumber, setTimeFilterNumber] = useState(1)
   const [graphData, setGraphData] = useState([])
   const [timeQuery, setTimeQuery] = useState(dashboardIndStatsLastWeekQuery)
+
   const [updateGraph, { lazyLoading, data }] = useLazyQuery(timeQuery)
+  const allHistoryComCity = useQuery(dashboardComStatsAllHistoryByCityQuery)
+
+  const [meOrAll, setMeOrAll] = useState('Only Me')
+
+  const [cities, setCities] = useState()
+  const updateCities = (cities) => {
+    setCities(cities)
+  }
+
+  const [selectedCity, setSelectedCity] = useState(currentUser.city)
+  const keepSelectedCity = (newCity) => {
+    setSelectedCity(newCity)
+  }
+  const [selectedProv, setSelectedProv] = useState(currentUser.province)
+  const keepSelectedProv = (newProv) => {
+    setSelectedProv(newProv)
+  }
 
   useEffect(() => {
     updateGraph()
     //TODO! using useLazyQuery on first load is causing glitch, may use useQuery for first time load 
   }, [])
 
-  const loadDemographyList = () => {
-    var rows = []
-    for (var key in demography) {
-      rows.push(
-        <DemographicFilter
-          categories={demography[key]}
-          callback={() => console.log('')}
-          inheritStyle={styles.inheritStyle}
-          buttonStyle={styles.buttonStyle}
-          listTop={{ marginTop: 25 }}
-        />
-      )
+  const loadDemographyList = (provs) => {
+    const data = {}
+    for (let provData of provs) {
+      data[provData.prov] = provData.cities
     }
+
+    const rows = [
+      <DemographicFilter
+      // categories={'province'}
+      callback={() => console.log('')}
+      inheritStyle={styles.inheritStyle}
+      buttonStyle={styles.buttonStyle}
+      listTop={{ marginTop: 25 }}
+      data={Object.keys(data)}
+      provAndCities={data}
+      provField={true}
+      updateCities={updateCities}
+      initVal={selectedProv}
+      keepSelectedProv={keepSelectedProv}
+    />,
+    <DemographicFilter
+      // categories={'city'}
+      callback={() => console.log('')}
+      inheritStyle={styles.inheritStyle}
+      buttonStyle={styles.buttonStyle}
+      listTop={{ marginTop: 25 }}
+      data={cities}
+      initVal={selectedCity}
+      keepSelectedCity={keepSelectedCity}
+        />
+    ]
+    // for (let key in allLocations) {
+      // rows.push(
+      //   <DemographicFilter
+      //     categories={allLocations[key]}
+      //     callback={() => console.log('')}
+      //     inheritStyle={styles.inheritStyle}
+      //     buttonStyle={styles.buttonStyle}
+      //     listTop={{ marginTop: 25 }}
+      //     data={mockCity}
+        // />
+      // )
+    // }
     return rows
   }
 
   useEffect(() => {
+    const curMonth = new Date().getMonth()
     if (lazyLoading) return console.log('lazyLoading ...')
     if (!lazyLoading && data) {
       let count = []
@@ -81,11 +164,12 @@ const Dashboard = () => {
       else if (timeFilterNumber == 2) count = data.dashboardIndStatsLast30Days.count
       else if (timeFilterNumber == 3) count = data.dashboardIndStatsLast90Days.count
       else if (timeFilterNumber == 4) count = data.dashboardIndStatsLast6Months.count
-      else if (timeFilterNumber == 5) count = data.dashboardIndStatsThisYear.count
+      else if (timeFilterNumber == 5 && curMonth > 5) count = data.dashboardIndStatsThisYear.count
+      else count = data.dashboardIndStatsAllHistory.count
       const gd = []
-      for (var key in count) {
+      for (let key in count) {
         key != '__typename' ? gd.push(
-          { x: key, y: 25, z: count[key] + ' kgs' }
+          { x: key, y: 25, z: count[key] + '' }
         ) : null
       }
       setGraphData(gd)
@@ -102,12 +186,18 @@ const Dashboard = () => {
         >
           <TouchableOpacity
             onPress={() => {
+              if (meOrAll === 'Only Me') {
+                setMeOrAll('All')
+                if (!cities) setCities(allProvs.data.allProvs.find(provData => provData.prov === currentUser.province).cities)
+              } else {
+                setMeOrAll('Only Me')
+              }
             }}
             style={[globalStyles.button, { width: 70, paddingVertical: 6, marginTop: 0 }]}>
-            <Text style={globalStyles.titleM}>All</Text>
+            <Text style={globalStyles.titleM}>{meOrAll}</Text>
           </TouchableOpacity>
           {
-            loadDemographyList()
+            meOrAll === 'All' ? loadDemographyList(allProvs.data.allProvs) : null
           }
         </ScrollView>
         <View>
@@ -141,7 +231,7 @@ const Dashboard = () => {
         />
       </View>
       <ScrollView style={globalStyles.content}>
-        <Text style={styles.title}>Top 10 meat ingridients used</Text>
+        <Text style={styles.title}>Top 10 meat ingredients used</Text>
 
         <View style={styles.ingridient}>
           <Text style={globalStyles.titleL}>Chicken (x5)</Text>
@@ -179,6 +269,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     borderColor: COLORS.PRIMARY,
     marginStart: 20,
+    position: 'absolute',
     backgroundColor: 'red'
   },
   inheritStyle: {
@@ -192,7 +283,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 10,
-    marginBottom: 5
+    marginBottom: 5,
   }
 })
 

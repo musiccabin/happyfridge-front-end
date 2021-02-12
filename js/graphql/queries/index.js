@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { MyRecipeFragment, UserFragment, GroceryFragment, LeftoverFragment, LeftoverUsageFragment, UsageCountFragment } from '../fregments'
+import { MyRecipeFragment, UserFragment, GroceryFragment, LeftoverFragment, LeftoverUsageFragment, UsageCountFragment, TopTenUsagesFragment } from '../fregments'
 
 export const currentUserQuery = gql`
   query currentUser {
@@ -130,7 +130,16 @@ export const leftoversQuery = gql`
     }
   }
   ${LeftoverFragment}
-  `
+`
+
+export const allProvsQuery = gql`
+  query allProvs {
+    allProvs {
+      prov
+      cities
+    }
+  }
+`
 
 export const dashboardIndStatsLastWeekQuery = gql`
   query dashboardIndStatsLastWeek { 
@@ -179,6 +188,228 @@ export const dashboardIndStatsLast6MonthsQuery = gql`
 export const dashboardIndStatsThisYearQuery = gql`
   query dashboardIndStatsThisYear { 
     dashboardIndStatsThisYear {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardIndStatsAllHistoryQuery = gql`
+  query dashboardIndStatsAllHistory { 
+    dashboardIndStatsAllHistory {
+      count {
+        ...UsageCount
+      }
+      usages {
+        ...TopTenUsages
+      }
+    }
+  }
+  ${UsageCountFragment}
+  ${TopTenUsagesFragment}
+`
+
+export const dashboardComStatsLastWeekByCityQuery = gql`
+  query dashboardComStatsLastWeekByCity { 
+    dashboardComStatsLastWeekByCity {
+      count {
+        ...UsageCount
+      }
+      city
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLastWeekByRegionQuery = gql`
+  query dashboardComStatsLastWeekByRegion { 
+    dashboardComStatsLastWeekByRegion {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLastWeekByProvinceQuery = gql`
+  query dashboardComStatsLastWeekByProvince { 
+    dashboardComStatsLastWeekByProvince {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast30DaysByCityQuery = gql`
+  query dashboardComStatsLast30DaysByCity { 
+    dashboardComStatsLast30DaysByCity {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast30DaysByRegionQuery = gql`
+  query dashboardComStatsLast30DaysByRegion { 
+    dashboardComStatsLast30DaysByRegion {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast30DaysByProvinceQuery = gql`
+  query dashboardComStatsLast30DaysByProvince { 
+    dashboardComStatsLast30DaysByProvince {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast90DaysByCityQuery = gql`
+  query dashboardComStatsLast90DaysByCity { 
+    dashboardComStatsLast90DaysByCity {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast90DaysByRegionQuery = gql`
+  query dashboardComStatsLast90DaysByRegio { 
+    dashboardComStatsLast90DaysByRegio {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast90DaysByProvinceQuery = gql`
+  query dashboardComStatsLast90DaysByProvince { 
+    dashboardComStatsLast90DaysByProvince {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast6MonthsByCityQuery = gql`
+  query dashboardComStatsLast6MonthsByCity { 
+    dashboardComStatsLast6MonthsByCity {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast6MonthsByRegionQuery = gql`
+  query dashboardComStatsLast6MonthsByRegion { 
+    dashboardComStatsLast6MonthsByRegion {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsLast6MonthsByProvinceQuery = gql`
+  query dashboardComStatsLast6MonthsByProvince { 
+    dashboardComStatsLast6MonthsByProvince {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsThisYearByCityQuery = gql`
+  query dashboardComStatsThisYearByCity { 
+    dashboardComStatsThisYearByCity {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsThisYearByRegionQuery = gql`
+  query dashboardComStatsThisYearByRegion { 
+    dashboardComStatsThisYearByRegion {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsThisYearByProvinceQuery = gql`
+  query dashboardComStatsThisYearByProvince { 
+    dashboardComStatsThisYearByProvince {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsAllHistoryByCityQuery = gql`
+  query dashboardComStatsAllHistoryByCity { 
+    dashboardComStatsAllHistoryByCity {
+      city
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }
+      }
+    }
+  }
+  ${TopTenUsagesFragment}
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsAllHistoryByRegionQuery = gql`
+  query dashboardComStatsAllHistoryByRegion { 
+    dashboardComStatsAllHistoryByRegion {
+      count {
+        ...UsageCount
+      }
+    }
+  }
+  ${UsageCountFragment}
+`
+
+export const dashboardComStatsAllHistoryByProvinceQuery = gql`
+  query dashboardComStatsAllHistoryByProvince { 
+    dashboardComStatsAllHistoryByProvince {
       count {
         ...UsageCount
       }

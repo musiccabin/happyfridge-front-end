@@ -72,11 +72,76 @@ export const LeftoverUsageFragment = gql`
 
 export const UsageCountFragment = gql`
   fragment UsageCount on UsageCount {
+    produce
     dairy
     frozen
     meat
     nutsAndSeeds
     other
-    produce
+  }
+`
+
+export const TopTenUsagesFragment = gql`
+  fragment TopTenUsages on TopTenUsages {
+    produce {
+      count
+      ingredient {
+        id
+        category
+        name
+      }
+      quantity
+      unit
+    }
+    dairy {
+      count
+      ingredient {
+        id
+        category
+        name
+      }
+      quantity
+      unit
+    }
+    frozen {
+      count
+      ingredient {
+        id
+        category
+        name
+      }
+      quantity
+      unit
+    }
+    meat {
+      count
+      ingredient {
+        id
+        category
+        name
+      }
+      quantity
+      unit
+    }
+    nutsAndSeeds {
+      count
+      ingredient {
+        id
+        category
+        name
+      }
+      quantity
+      unit
+    }
+    other {
+      count
+      ingredient {
+        id
+        category
+        name
+      }
+      quantity
+      unit
+    }
   }
 `
