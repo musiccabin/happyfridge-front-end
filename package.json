@@ -38,6 +38,7 @@
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.7",
     "react-spring": "^8.0.27",
+    "toggle-switch-react-native": "^2.3.0",
     "victory-native": "^35.3.1"
   },
   "devDependencies": {

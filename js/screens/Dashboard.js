@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { SafeAreaView, ScrollView, Text, StyleSheet, View, TouchableOpacity, FlatList } from 'react-native'
-import { VictoryPie } from 'victory-native'
+import { SafeAreaView, ScrollView, Text, StyleSheet, View, TouchableOpacity, FlatList, SnapshotViewIOSComponent } from 'react-native'
+import { VictoryPie, Slice } from 'victory-native'
+import ToggleSwitch from 'toggle-switch-react-native'
 import { COLORS, globalStyles } from '../styles'
 import { TimeFilter, DemographicFilter } from '../components'
 import { useLazyQuery, useQuery } from '@apollo/client'
@@ -36,45 +37,11 @@ import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar'
 
 const Dashboard = () => {
 
-  const timeFilter = [
-    {
-      id: "1",
-      title: "7 days",
-      query: dashboardIndStatsLastWeekQuery
-    },
-    {
-      id: "2",
-      title: "30 days",
-      query: dashboardIndStatsLast30DaysQuery
-    },
-    {
-      id: "3",
-      title: "3 months",
-      query: dashboardIndStatsLast90DaysQuery
-    },
-    {
-      id: "4",
-      title: "6 months",
-      query: dashboardIndStatsLast6MonthsQuery
-    },
-    {
-      id: "5",
-      title: "this year",
-      query: dashboardIndStatsThisYearQuery
-    },
-  ]
+  const curMonth = new Date().getMonth()
+  // const [refresh, setRefresh] = useState()
+  // const refreshPage = (refresh) => setRefresh(!refresh)
 
   // const { data, error, loading } = useQuery(favRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
-
-
-
-  // const allLocations = {
-  //   province: ["BC", "AB"],
-  //   city: ["Vancouver", "Langley", "Surrey"],
-  //   region: ["Fraser Valley", "Delta Creek", "South Surrey"]
-  // }
-
-  // const mock = { bc: ['vancouver'], ab: ['calgary'] }
 
   const allProvs = useQuery(allProvsQuery)
 
@@ -82,13 +49,107 @@ const Dashboard = () => {
   const [currentUser, setCurrentUser] = currentUserContext
 
   const [timeFilterNumber, setTimeFilterNumber] = useState(1)
+  const resetTimeFilter = () => setTimeFilterNumber(1)
+  console.log('filter number is: ', timeFilterNumber)
+
+  const [selectedButton, setSelectedButton] = useState(1)
+  const resetButton = () => setSelectedButton(1)
+  const setSelectedFromTimeFilter = (id) => setSelectedButton(id)
+
   const [graphData, setGraphData] = useState([])
+
   const [timeQuery, setTimeQuery] = useState(dashboardIndStatsLastWeekQuery)
+  const setTimeQueryFromDem = () => setTimeQuery(timeFilter[0].query)
+
+  const [showAll, setShowAll] = useState(false)
+  const indQuery = [
+    dashboardIndStatsLastWeekQuery,
+    dashboardIndStatsLast30DaysQuery,
+    dashboardIndStatsLast90DaysQuery,
+    dashboardIndStatsLast6MonthsQuery,
+    dashboardIndStatsThisYearQuery,
+    dashboardIndStatsAllHistoryQuery].includes(timeQuery)
+  if (showAll && indQuery) setTimeQuery(dashboardComStatsLastWeekByCityQuery)
+  
+  const [query1, setQuery1] = useState(dashboardIndStatsLastWeekQuery)
+  const [query2, setQuery2] = useState(dashboardIndStatsLast30DaysQuery)
+  const [query3, setQuery3] = useState(dashboardIndStatsLast90DaysQuery)
+  const [query4, setQuery4] = useState(dashboardIndStatsLast6MonthsQuery)
+  const [query5, setQuery5] = useState(dashboardIndStatsThisYearQuery)
+  const [query6, setQuery6] = useState(dashboardIndStatsAllHistoryQuery)
+
+  const resetQueries = () => {
+    if (showAll) {
+      if (selectedCity === 'All Cities') {
+        setQuery1(dashboardComStatsLastWeekByProvinceQuery)
+        setQuery2(dashboardComStatsLast30DaysByProvinceQuery)
+        setQuery3(dashboardComStatsLast90DaysByProvinceQuery)
+        setQuery4 (dashboardComStatsLast6MonthsByProvinceQuery)
+        setQuery5(dashboardComStatsThisYearByProvinceQuery)
+        setQuery6(dashboardComStatsAllHistoryByProvinceQuery)
+      } else if (selectedCity) {
+        setQuery1(dashboardComStatsLastWeekByCityQuery)
+        setQuery2(dashboardComStatsLast30DaysByCityQuery)
+        setQuery3(dashboardComStatsLast90DaysByCityQuery)
+        setQuery4 (dashboardComStatsLast6MonthsByCityQuery)
+        setQuery5(dashboardComStatsThisYearByCityQuery)
+        setQuery6(dashboardComStatsAllHistoryByCityQuery)
+      }
+    } else {
+      setQuery1(dashboardIndStatsLastWeekQuery)
+      setQuery2(dashboardIndStatsLast30DaysQuery)
+      setQuery3(dashboardIndStatsLast90DaysQuery)
+      setQuery4(dashboardIndStatsLast6MonthsQuery)
+      setQuery5(dashboardIndStatsThisYearQuery)
+      setQuery6(dashboardIndStatsAllHistoryQuery)
+      console.log('did reset queries')
+    }
+  }
+
+  if (!showAll && !indQuery) {
+    setTimeQuery(dashboardIndStatsLastWeekQuery)
+    resetQueries()
+  }
+
+  const timeFilter = [
+    {
+      id: "1",
+      title: "7 days",
+      query: query1
+    },
+    {
+      id: "2",
+      title: "30 days",
+      query: query2
+    },
+    {
+      id: "3",
+      title: "3 months",
+      query: query3
+    },
+    {
+      id: "4",
+      title: "6 months",
+      query: query4
+    },
+  ]
+
+  if (curMonth > 5) {
+    timeFilter.push({
+        id: "5",
+        title: "This year",
+        query: query5
+    })
+  } else {
+    timeFilter.push({
+        id: "5",
+        title: "All history",
+        query: query6
+      })
+  }
 
   const [updateGraph, { lazyLoading, data }] = useLazyQuery(timeQuery)
-  const allHistoryComCity = useQuery(dashboardComStatsAllHistoryByCityQuery)
-
-  const [meOrAll, setMeOrAll] = useState('Only Me')
+  const refreshPage = () => updateGraph()
 
   const [cities, setCities] = useState()
   const updateCities = (cities) => {
@@ -98,11 +159,16 @@ const Dashboard = () => {
   const [selectedCity, setSelectedCity] = useState(currentUser.city)
   const keepSelectedCity = (newCity) => {
     setSelectedCity(newCity)
+    resetQueries()
   }
   const [selectedProv, setSelectedProv] = useState(currentUser.province)
   const keepSelectedProv = (newProv) => {
     setSelectedProv(newProv)
+    resetQueries()
   }
+
+  const [selectedCat, setSelectedCat] = useState()
+  const [usages, setUsages] = useState([])
 
   useEffect(() => {
     updateGraph()
@@ -114,6 +180,8 @@ const Dashboard = () => {
     for (let provData of provs) {
       data[provData.prov] = provData.cities
     }
+
+    if (!cities) setCities(data[selectedProv])
 
     const rows = [
       <DemographicFilter
@@ -127,7 +195,12 @@ const Dashboard = () => {
       provField={true}
       updateCities={updateCities}
       initVal={selectedProv}
+      resetQueries={resetQueries}
       keepSelectedProv={keepSelectedProv}
+      resetTimeFilter={resetTimeFilter}
+      updateGraph={updateGraph}
+      resetButton={resetButton}
+      setTimeQueryFromDem={setTimeQueryFromDem}
     />,
     <DemographicFilter
       // categories={'city'}
@@ -137,8 +210,13 @@ const Dashboard = () => {
       listTop={{ marginTop: 25 }}
       data={cities}
       initVal={selectedCity}
+      resetQueries={resetQueries}
       keepSelectedCity={keepSelectedCity}
-        />
+      resetTimeFilter={resetTimeFilter}
+      updateGraph={updateGraph}
+      resetButton={resetButton}
+      setTimeQueryFromDem={setTimeQueryFromDem}
+    />
     ]
     // for (let key in allLocations) {
       // rows.push(
@@ -155,21 +233,93 @@ const Dashboard = () => {
     return rows
   }
 
+  const showTop10Ingredients = (category) => {
+    if (category === 'nuts &\n seeds') category = 'nuts / seeds'
+      console.log('cat clicked on is: ', category)
+      setSelectedCat(category)
+      let usagesCurTimeFrame
+      const city = selectedCity.toLowerCase()
+      const prov = selectedProv.toLowerCase()
+      if (showAll) {
+        if (selectedCity === 'All Cities') {
+        if (timeFilterNumber == 1) usagesCurTimeFrame = data.dashboardComStatsLastWeekByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (timeFilterNumber == 2) usagesCurTimeFrame = data.dashboardComStatsLast30DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (timeFilterNumber == 3) usagesCurTimeFrame = data.dashboardComStatsLast90DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (timeFilterNumber == 4) usagesCurTimeFrame = data.dashboardComStatsLast6MonthsByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (curMonth > 5 && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardComStatsThisYearByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else usagesCurTimeFrame = data.dashboardComStatsAllHistoryByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+      } else if (selectedCity) {
+        if (timeFilterNumber == 1) usagesCurTimeFrame = data.dashboardComStatsLastWeekByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (timeFilterNumber == 2) usagesCurTimeFrame = data.dashboardComStatsLast30DaysByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (timeFilterNumber == 3) usagesCurTimeFrame = data.dashboardComStatsLast90DaysByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (timeFilterNumber == 4) usagesCurTimeFrame = data.dashboardComStatsLast6MonthsByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (curMonth > 5 && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardComStatsThisYearByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else usagesCurTimeFrame = data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+      }
+    } else {
+      if (timeFilterNumber == 1) usagesCurTimeFrame = data.dashboardIndStatsLastWeek.usages
+      else if (timeFilterNumber == 2) usagesCurTimeFrame = data.dashboardIndStatsLast30Days.usages
+      else if (timeFilterNumber == 3) usagesCurTimeFrame = data.dashboardIndStatsLast90Days.usages
+      else if (timeFilterNumber == 4) usagesCurTimeFrame = data.dashboardIndStatsLast6Months.usages
+      else if (curMonth > 5 && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardIndStatsThisYear.usages
+      else usagesCurTimeFrame = data.dashboardIndStatsAllHistory.usages
+    }
+    if (usagesCurTimeFrame) {
+      if (category === 'nuts / seeds') {
+        setUsages(usagesCurTimeFrame['nutsAndSeeds'])
+      } else {
+        setUsages(usagesCurTimeFrame[category])
+      }
+    }
+  }
+
   useEffect(() => {
-    const curMonth = new Date().getMonth()
     if (lazyLoading) return console.log('lazyLoading ...')
     if (!lazyLoading && data) {
       let count = []
-      if (timeFilterNumber == 1) count = data.dashboardIndStatsLastWeek.count
-      else if (timeFilterNumber == 2) count = data.dashboardIndStatsLast30Days.count
-      else if (timeFilterNumber == 3) count = data.dashboardIndStatsLast90Days.count
-      else if (timeFilterNumber == 4) count = data.dashboardIndStatsLast6Months.count
-      else if (timeFilterNumber == 5 && curMonth > 5) count = data.dashboardIndStatsThisYear.count
-      else count = data.dashboardIndStatsAllHistory.count
+      // console.log('selected city is: ', selectedCity)
+      // console.log('data is: ', data.dashboardComStatsLastWeekByCity.find(stat => stat.city === city))
+      city = selectedCity.toLowerCase()
+      prov = selectedProv.toLowerCase()
+      if (showAll) {
+        if (selectedCity == 'All Cities') {
+          if (timeFilterNumber == 1) count = data.dashboardComStatsLastWeekByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+          else if (timeFilterNumber == 2) count = data.dashboardComStatsLast30DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+          else if (timeFilterNumber == 3) count = data.dashboardComStatsLast90DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+          else if (timeFilterNumber == 4) count = data.dashboardComStatsLast6MonthsByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+          else if (curMonth > 5 && timeFilterNumber == 5) count = data.dashboardComStatsThisYearByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+          else count = data.dashboardComStatsAllHistoryByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+        } else if (selectedCity) {
+          if (timeFilterNumber == 1) count = data.dashboardComStatsLastWeekByCity?.find(stat => stat.city === city)?.geoUsage?.count
+          else if (timeFilterNumber == 2) count = data.dashboardComStatsLast30DaysByCity?.find(stat => stat.city === city)?.geoUsage?.count
+          else if (timeFilterNumber == 3) count = data.dashboardComStatsLast90DaysByCity?.find(stat => stat.city === city)?.geoUsage?.count
+          else if (timeFilterNumber == 4) count = data.dashboardComStatsLast6MonthsByCity?.find(stat => stat.city === city)?.geoUsage?.count
+          else if (curMonth > 5 && timeFilterNumber == 5) count = data.dashboardComStatsThisYearByCity?.find(stat => stat.city === city)?.geoUsage?.count
+          else count = data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.count
+        }
+      } else {
+        console.log('data is: ', data)
+        if (timeFilterNumber == 1) count = data.dashboardIndStatsLastWeek.count
+        else if (timeFilterNumber == 2) count = data.dashboardIndStatsLast30Days.count
+        else if (timeFilterNumber == 3) count = data.dashboardIndStatsLast90Days.count
+        else if (timeFilterNumber == 4) count = data.dashboardIndStatsLast6Months.count
+        else if (curMonth > 5 && timeFilterNumber == 5) count = data.dashboardIndStatsThisYear.count
+        else count = data.dashboardIndStatsAllHistory.count
+      }
       const gd = []
+      if (!count) count = {
+        produce: 0,
+        dairy: 0,
+        meat: 0,
+        frozen: 0,
+        nutsAndSeeds: 0,
+        other: 0
+      }
       for (let key in count) {
+        let category = key
+        if (key === 'nutsAndSeeds') category = 'nuts &\n seeds'
         key != '__typename' ? gd.push(
-          { x: key, y: 25, z: count[key] + '' }
+          { x: category, y: 25, z: count[key] + '' }
         ) : null
       }
       setGraphData(gd)
@@ -184,7 +334,26 @@ const Dashboard = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingTop: 10, paddingStart: 20, paddingEnd: 20, paddingEnd: 10 }}
         >
-          <TouchableOpacity
+          <ToggleSwitch
+            isOn={showAll}
+            onColor={COLORS.PRIMARY}
+            offColor={COLORS.BACKGROUND}
+            label="All Users"
+            labelStyle={globalStyles.titleM}
+            // labelStyle={{ color: "black", fontWeight: "900" }}
+            size="large"
+            onToggle={(isOn) => {
+              setShowAll(isOn)
+              setSelectedCat(null)
+              setSelectedButton(1)
+              setTimeFilterNumber(1)
+              setTimeQuery(timeFilter[0].query)
+              resetQueries()
+              updateGraph()
+              setUsages(null)
+            }}
+          />
+          {/* <TouchableOpacity
             onPress={() => {
               if (meOrAll === 'Only Me') {
                 setMeOrAll('All')
@@ -195,27 +364,50 @@ const Dashboard = () => {
             }}
             style={[globalStyles.button, { width: 70, paddingVertical: 6, marginTop: 0 }]}>
             <Text style={globalStyles.titleM}>{meOrAll}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {
-            meOrAll === 'All' ? loadDemographyList(allProvs.data.allProvs) : null
+            showAll ? loadDemographyList(allProvs.data.allProvs) : null
           }
         </ScrollView>
         <View>
           <TimeFilter
+            curVal={timeFilterNumber}
+            selectedButton={selectedButton}
+            setSelectedFromTimeFilter={setSelectedFromTimeFilter}
             filter={timeFilter}
             timeFilterCallback={(value) => {
               setTimeFilterNumber(parseInt(value))
               setTimeQuery(timeFilter[parseInt(value) - 1].query)
+              resetQueries()
               updateGraph()
+              setUsages(null)
             }}
           />
         </View>
       </View>
       <View style={styles.chart}>
-        <VictoryPie
-          animate={{ duration: 2000 }}
+        {selectedCity && <VictoryPie
+          // animate={{ duration: 2000 }}
           cornerRadius={5}
           data={graphData}
+          events={[
+            {
+              target: "data",
+              eventHandlers: {
+                onPressIn: () => {
+                  return [{
+                    target: "labels",
+                    mutation: (props) => showTop10Ingredients(props.datum.x, data)
+                  }]
+                }
+              }
+            }
+          ]}
+        //   dataComponent={
+        //   <Slice events={{ onPressIn: (e) => {
+        //     showTop10Ingredients(e.currentTarget)
+        //   } }}/>
+        // }
           padding={{ top: 100, bottom: 50 }}
           colorScale={[
             '#ec6762',
@@ -228,15 +420,16 @@ const Dashboard = () => {
           labels={({ datum }) => `${datum.x}\n${datum.z}`}
           innerRadius={65}
           padAngle={2}
-        />
+        />}
       </View>
       <ScrollView style={globalStyles.content}>
-        <Text style={styles.title}>Top 10 meat ingredients used</Text>
-
-        <View style={styles.ingridient}>
-          <Text style={globalStyles.titleL}>Chicken (x5)</Text>
-          <Text style={globalStyles.titleL}>10lb</Text>
-        </View>
+        {usages?.length > 0 && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
+        {usages?.length > 0 && selectedCat ?
+        usages.map(usage => 
+        <View style={styles.ingredient}>
+          <Text style={globalStyles.titleL}>{usage.ingredient.name} {'(x'}{usage.count}{')'}</Text>
+          <Text style={globalStyles.titleL}>{usage.quantity} {usage.unit}</Text>
+        </View>) : null}
       </ScrollView>
     </SafeAreaView>
   )
@@ -260,7 +453,7 @@ const styles = StyleSheet.create({
     ...globalStyles.titleXL,
     marginVertical: 20,
   },
-  ingridient: {
+  ingredient: {
     ...globalStyles.row,
     paddingVertical: 10,
   },
@@ -284,6 +477,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     marginBottom: 5,
+    marginTop: 10,
   }
 })
 

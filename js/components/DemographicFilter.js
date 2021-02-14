@@ -36,16 +36,18 @@ import {
 import { Context } from '../context'
 
 const DemographicFilter = ({ categories, inheritStyle, listZIndex,
-    callback, buttonStyle, listTop, data, provAndCities, provField, updateCities, initVal, keepSelectedCity, keepSelectedProv }) => {
+    callback, buttonStyle, listTop, data, provAndCities, provField, updateCities, initVal, keepSelectedCity, keepSelectedProv, resetQueries, resetTimeFilter, resetButton, updateGraph, setTimeQueryFromDem }) => {
 
-        console.log('data is: ', data)
     const items = []
-    for (let item of data) {
-        items.push({
-            label: item,
-            value: item
-        })
+    if (data) {
+        for (let item of data) {
+            items.push({
+                label: item,
+                value: item
+            })
+        }
     }
+
 
     const [pickerVisibility, setPickerVisibility] = useState(false)
     const [selectedVal, setSelectedVal] = useState(initVal)
@@ -111,6 +113,12 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
                         keepSelectedCity(value)
                     }
                     setSelectedVal(value)
+                    resetQueries()
+                    resetButton()
+                    resetTimeFilter()
+                    updateGraph()
+                    setTimeQueryFromDem()
+                    // setUsages(null)
                 }}
                 items={items}
             />

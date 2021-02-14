@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 
-const TimeFilter = ({ filter, timeFilterCallback }) => {
+const TimeFilter = ({ curVal, filter, timeFilterCallback, selectedButton, setSelectedFromTimeFilter }) => {
 
-    const [selectedButton, setSelectedButton] = useState(1)
+    console.log('cur val is: ', curVal)
+    // const [selected, setSelectedButton] = useState(selectedButton)
 
     const styles = StyleSheet.create({
         timeButton: {
@@ -26,6 +27,7 @@ const TimeFilter = ({ filter, timeFilterCallback }) => {
     return (
         <FlatList
             data={filter}
+            value={curVal}
             horizontal
             style={{ paddingStart: 20 }}
             showsHorizontalScrollIndicator={false}
@@ -33,7 +35,7 @@ const TimeFilter = ({ filter, timeFilterCallback }) => {
             renderItem={item =>
                 <TouchableOpacity
                     onPress={() => {
-                        setSelectedButton(item.item.id)
+                        setSelectedFromTimeFilter(item.item.id)
                         timeFilterCallback(item.item.id)
                     }}
                     style={[globalStyles.button,

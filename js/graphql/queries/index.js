@@ -147,9 +147,13 @@ export const dashboardIndStatsLastWeekQuery = gql`
       count {
         ...UsageCount
       }
+      usages {
+        ...TopTenUsages
+      }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardIndStatsLast30DaysQuery = gql`
@@ -158,9 +162,13 @@ export const dashboardIndStatsLast30DaysQuery = gql`
       count {
         ...UsageCount
       }
+      usages {
+        ...TopTenUsages
+      }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardIndStatsLast90DaysQuery = gql`
@@ -169,9 +177,13 @@ export const dashboardIndStatsLast90DaysQuery = gql`
       count {
         ...UsageCount
       }
+      usages {
+        ...TopTenUsages
+      }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardIndStatsLast6MonthsQuery = gql`
@@ -180,9 +192,13 @@ export const dashboardIndStatsLast6MonthsQuery = gql`
       count {
         ...UsageCount
       }
+      usages {
+        ...TopTenUsages
+      }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardIndStatsThisYearQuery = gql`
@@ -191,9 +207,13 @@ export const dashboardIndStatsThisYearQuery = gql`
       count {
         ...UsageCount
       }
+      usages {
+        ...TopTenUsages
+      }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardIndStatsAllHistoryQuery = gql`
@@ -214,167 +234,271 @@ export const dashboardIndStatsAllHistoryQuery = gql`
 export const dashboardComStatsLastWeekByCityQuery = gql`
   query dashboardComStatsLastWeekByCity { 
     dashboardComStatsLastWeekByCity {
-      count {
-        ...UsageCount
-      }
       city
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
+      }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLastWeekByRegionQuery = gql`
   query dashboardComStatsLastWeekByRegion { 
     dashboardComStatsLastWeekByRegion {
-      count {
-        ...UsageCount
+      region
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLastWeekByProvinceQuery = gql`
   query dashboardComStatsLastWeekByProvince { 
     dashboardComStatsLastWeekByProvince {
-      count {
-        ...UsageCount
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast30DaysByCityQuery = gql`
   query dashboardComStatsLast30DaysByCity { 
     dashboardComStatsLast30DaysByCity {
-      count {
-        ...UsageCount
+      city
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast30DaysByRegionQuery = gql`
   query dashboardComStatsLast30DaysByRegion { 
     dashboardComStatsLast30DaysByRegion {
-      count {
-        ...UsageCount
+      region
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast30DaysByProvinceQuery = gql`
   query dashboardComStatsLast30DaysByProvince { 
     dashboardComStatsLast30DaysByProvince {
-      count {
-        ...UsageCount
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast90DaysByCityQuery = gql`
   query dashboardComStatsLast90DaysByCity { 
     dashboardComStatsLast90DaysByCity {
-      count {
-        ...UsageCount
+      city
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast90DaysByRegionQuery = gql`
-  query dashboardComStatsLast90DaysByRegio { 
-    dashboardComStatsLast90DaysByRegio {
-      count {
-        ...UsageCount
+  query dashboardComStatsLast90DaysByRegion { 
+    dashboardComStatsLast90DaysByRegion {
+      region
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast90DaysByProvinceQuery = gql`
   query dashboardComStatsLast90DaysByProvince { 
     dashboardComStatsLast90DaysByProvince {
-      count {
-        ...UsageCount
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast6MonthsByCityQuery = gql`
   query dashboardComStatsLast6MonthsByCity { 
     dashboardComStatsLast6MonthsByCity {
-      count {
-        ...UsageCount
+      city
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast6MonthsByRegionQuery = gql`
   query dashboardComStatsLast6MonthsByRegion { 
     dashboardComStatsLast6MonthsByRegion {
-      count {
-        ...UsageCount
+      region
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsLast6MonthsByProvinceQuery = gql`
   query dashboardComStatsLast6MonthsByProvince { 
     dashboardComStatsLast6MonthsByProvince {
-      count {
-        ...UsageCount
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsThisYearByCityQuery = gql`
   query dashboardComStatsThisYearByCity { 
     dashboardComStatsThisYearByCity {
-      count {
-        ...UsageCount
+      city
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsThisYearByRegionQuery = gql`
   query dashboardComStatsThisYearByRegion { 
     dashboardComStatsThisYearByRegion {
-      count {
-        ...UsageCount
+      region
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsThisYearByProvinceQuery = gql`
   query dashboardComStatsThisYearByProvince { 
     dashboardComStatsThisYearByProvince {
-      count {
-        ...UsageCount
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsAllHistoryByCityQuery = gql`
@@ -399,21 +523,35 @@ export const dashboardComStatsAllHistoryByCityQuery = gql`
 export const dashboardComStatsAllHistoryByRegionQuery = gql`
   query dashboardComStatsAllHistoryByRegion { 
     dashboardComStatsAllHistoryByRegion {
-      count {
-        ...UsageCount
+      region
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
 
 export const dashboardComStatsAllHistoryByProvinceQuery = gql`
   query dashboardComStatsAllHistoryByProvince { 
     dashboardComStatsAllHistoryByProvince {
-      count {
-        ...UsageCount
+      province
+      geoUsage {
+        count {
+          ...UsageCount
+        }
+        usages {
+          ...TopTenUsages
+        }        
       }
     }
   }
   ${UsageCountFragment}
+  ${TopTenUsagesFragment}
 `
