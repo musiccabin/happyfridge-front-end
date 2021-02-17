@@ -69,6 +69,14 @@ query ingredientList($id: ID!) {
 }
 `
 
+export const ingredientInfoQuery = gql`
+query ingredientCategory($name: NAME!) {
+  ingredientCategory(name: $name) {
+    category
+  }
+}
+`
+
 export const ingredientUsagesQuery = gql`
 query ingredientUsages($id: ID!) {
   ingredientUsages(id: $id) {

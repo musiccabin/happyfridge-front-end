@@ -173,7 +173,7 @@ const AddEditGroceryScreen = () => {
   return (
     <AddEditGroceryStack.Navigator>
       <AddEditGroceryStack.Screen
-        name='AddEditGrocery'
+        name=''
         component={AddEditGrocery}
       />
     </AddEditGroceryStack.Navigator>

@@ -12,26 +12,44 @@ import {
 } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
-import { useMutation } from '@apollo/client';
-import { newGroceryMutation } from '../graphql/mutations'
+import { useMutation, useQuery } from '@apollo/client'
+import { groceriesQuery } from '../graphql/queries'
+import { newGroceryMutation, updateGroceryMutation } from '../graphql/mutations'
 
 const AddEditGrocery = ({route}) => {
+
+    const { item, editIngredient } = route.params
+
+    let wholeInit = 0
+    let partInit = '0'
+    if (!editIngredient) {
+      const quantitySplit = item.quantity.split(' ')
+      let firstPart = quantitySplit[0]
+      if (!firstPart.includes('/')) {
+        wholeInit = parseInt(firstPart)
+        quantitySplit.shift()
+      }
+      if (quantitySplit.length > 0) partInit = quantitySplit[0]
+    }
 
     const category = ["Dairy", "Nuts & Seeds", "Meat", "Produce", "Frozen"]
     const ingredientArray = ["Apple", "Mango", "Carrot", "Spice", "Orange", "Cajun"]
     const parts = ["1/4", "1/3", "1/3", "2/3", "0"]
     const units = ["kg", "lb"]
     const [categoryTitle, setCategoryTitle] = useState(category[0])
-    const [wholeTitle, setWholeTitle] = useState("1")
-    const [partTitle, setPartTitle] = useState(parts[0])
+    const [wholeTitle, setWholeTitle] = useState(wholeInit)
+    const [partTitle, setPartTitle] = useState(partInit)
     const [unitTitle, setUnitTitle] = useState(units[0])
     const [ingredientValue, setIngredientValue] = useState('')
     const [ingredients, setIngredients] = useState(ingredientArray)
     const [isUserTyping, setIsUserTyping] = useState(false)
     const [failedStyling, setFailedStyling] = useState(false)
     const [highlightStyling, setHighlightStyling] = useState(false)
+
     const [newGrocery] = useMutation(newGroceryMutation)
-    const { items, editIngredient } = route.params
+    const [updateGrocery] = useMutation(updateGroceryMutation)
+
+    const { refetch } = useQuery(groceriesQuery)
 
     const styles = StyleSheet.create({
         container: {
@@ -57,7 +75,7 @@ const AddEditGrocery = ({route}) => {
             marginTop: 20,
             paddingBottom: 4,
             paddingHorizontal: 4,
-            color: items.name ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
+            color: item.name ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
         },
         ingredientText: {
             color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
@@ -88,9 +106,9 @@ const AddEditGrocery = ({route}) => {
     })
 
     useEffect(() => {
-        items.name && setIngredientValue(items.name)
-        items.category && setCategoryTitle(items.category)
-        items.unit && setUnitTitle(items.unit)
+        item.name && setIngredientValue(item.name)
+        item.category && setCategoryTitle(item.category)
+        item.unit && setUnitTitle(item.unit)
     }, [])
 
     const createNewGrocery = async () => {
@@ -127,6 +145,40 @@ const AddEditGrocery = ({route}) => {
             )
         }
     }
+
+    const updateExistingGrocery = async (id) => {
+      const data = await updateGrocery({
+          variables: {
+              value: {
+                  id: id,
+                  attributes: {
+                      quantity: wholeTitle + " " + partTitle,
+                      unit: unitTitle,
+                  }
+              }
+          }
+      })
+
+      if (data.data.updatedGrocery.grocery) {
+        Alert.alert(
+            "Ingredient Updated",
+            "",
+            [
+                { text: "OK", onPress: () => { setIngredientValue('') } }
+            ],
+            { cancelable: false }
+        )
+    } else {
+        Alert.alert(
+            data.data.updateGrocery.errors.fullMessages[0],
+            "",
+            [
+                { text: "OK", onPress: () => { } }
+            ],
+            { cancelable: false }
+        )
+    }
+  }
 
     const Separator = () => {
         return <View style={styles.separatorLine}></View>
@@ -167,17 +219,16 @@ const AddEditGrocery = ({route}) => {
     >
       <View style={styles.container}>
         <UsageBar
-          categoryTitle={categoryTitle}
-          wholeTitle={wholeTitle}
-          partTitle={partTitle}
-          unitTitle={unitTitle}
+          name={editIngredient ? ingredientValue : item.name}
+          quantity={editIngredient ? wholeTitle + " " + partTitle : item.quantity}
+          unit={editIngredient ? unitTitle : item.unit}
         />
         <View style={styles.inputContainer}>
           <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Ingredient</Text>
-            <TextInput
+            {editIngredient && <Text style={styles.ingredientText}>Ingredient</Text>}
+            {editIngredient && <TextInput
               style={styles.input}
-              editable={editIngredient}
+              // editable={editIngredient}
               onChangeText={value => {
                 setIngredientValue(value)
                 setIsUserTyping(true)
@@ -188,7 +239,7 @@ const AddEditGrocery = ({route}) => {
               }}
               value={ingredientValue}
               maxLength={50}
-            />
+            />}
             {isUserTyping && (
               <FlatList
                 style={styles.list}
@@ -212,21 +263,23 @@ const AddEditGrocery = ({route}) => {
             )}
             <View style={{ marginTop: 30 }}>
               <Quantity
+                whole={wholeTitle}
+                part={partTitle}
                 wholeCallback={value => setWholeTitle(value)}
                 partCallback={value => setPartTitle(value)}
                 parts={parts}
               />
             </View>
             <View style={styles.rightContainer}>
-              <CategoryUnit
+              {/* <CategoryUnit
                   categories={category}
                   units={units}
                   categoryCallback={(value) => setCategoryTitle(value)}
                   unitCallback={(value) => setUnitTitle(value)}
                   callbackIngredientHighlight={() => setHighlightStyling(false)}
-                  defaultCategorySelection={items.category}
-                  defaultUnitSelection={items.unit}
-              />
+                  defaultCategorySelection={item.category}
+                  defaultUnitSelection={item.unit}
+              /> */}
               <Button
                   children={"Save"}
                   style={styles.button}
@@ -234,7 +287,7 @@ const AddEditGrocery = ({route}) => {
                       setHighlightStyling(false)
                       setFailedStyling(false)
                       if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
-                      else createNewGrocery()
+                      else editIngredient ? createNewGrocery() : updateExistingGrocery(item.id)
                   }} />
           </View>
         </View>

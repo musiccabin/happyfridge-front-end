@@ -3,9 +3,10 @@ import { View, StyleSheet, TextInput, Pressable } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 import { Feather } from '@expo/vector-icons';
 
-const Incremental = ({ inheritStyle, callback, callbackLineColor }) => {
+const Incremental = ({ inheritStyle, callback, callbackLineColor, initVal }) => {
 
-    const [value, setValue] = useState(1)
+    console.log('initVal is: ', initVal)
+    const [value, setValue] = useState(initVal)
 
     useEffect(() => {
         callback(value)

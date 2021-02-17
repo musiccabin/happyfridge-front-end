@@ -10,7 +10,7 @@ const FloatingEditButton = ({ componentName }) => {
     return (
         <View style={{ position: 'absolute', bottom: 25, right: 30 }}>
             <Pressable onPress={() => navigation.navigate(componentName, {
-                items: {},
+                item: {},
                 editIngredient: true
             })}>
                 <AntDesign name="pluscircle" size={32} color={COLORS.PRIMARY} />

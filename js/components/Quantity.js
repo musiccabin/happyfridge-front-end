@@ -4,7 +4,7 @@ import DropDown from './DropDown'
 import Incremental from './Incremental'
 import { COLORS } from '../styles'
 
-const Quantity = ({ wholeCallback, partCallback, parts }) => {
+const Quantity = ({ wholeCallback, partCallback, parts, whole, part }) => {
 
     const [highlightStyling, setHighlightStyling] = useState(false)
     const [temp, setTemp] = useState(false)
@@ -39,6 +39,7 @@ const Quantity = ({ wholeCallback, partCallback, parts }) => {
             </View>
             <View style={styles.quantityContainer}>
                 <Incremental
+                    initVal={whole}
                     inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
                     callback={(value) => wholeCallback(value)}
                     callbackLineColor={value => {
@@ -48,6 +49,7 @@ const Quantity = ({ wholeCallback, partCallback, parts }) => {
                 />
                 <DropDown
                     categories={parts}
+                    defaultSelection={part}
                     listTop={{ marginTop: 32 }}
                     inheritStyle={{ flexBasis: '45%', paddingTop: 7 }}
                     callback={(value) => partCallback(value)}

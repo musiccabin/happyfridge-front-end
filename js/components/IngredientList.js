@@ -152,9 +152,10 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
             <Pressable
             onPress={() => {
               navigation.navigate(componentName, { 
-                items: item,
+                item: item,
                 editIngredient: false   
               })
+              console.log('item is: ', item)
             }}>
               {/* <View > */}
               <Text>{page === 'Grocery' ? item.name : item.ingredient.name}{": "}

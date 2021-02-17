@@ -42,6 +42,16 @@ export const newLeftoverMutation = gql`
   ${LeftoverFragment}
 `
 
+export const updateLeftoverMutation = gql`
+  mutation updateLeftover($value: UpdateLeftoverMutationInput!) {
+    updateLeftover(input: $value) {
+      clientMutationId
+      groceryUpdated
+    }
+  }
+  ${LeftoverFragment}
+`
+
 export const removeLeftoverMutation = gql`
 mutation removeLeftover($value: RemoveLeftoverMutationInput!) {
   removeLeftover(input: $value) {
@@ -58,11 +68,25 @@ export const newGroceryMutation = gql`
        ...Grocery
       }
       errors {
-        fullMessages
+        ...fullMessages
       }
     }
   }
-  ${GroceryFragment}
+${GroceryFragment}
+`
+
+export const updateGroceryMutation = gql`
+  mutation updateGrocery($value: UpdateGroceryMutationInput!) {
+    updateGrocery(input: $value) {
+      grocery {
+       ...Grocery
+      }
+      errors {
+        ...fullMessages
+      }
+    }
+  }
+${GroceryFragment}
 `
 
 export const removeGroceryMutation = gql`
