@@ -70,8 +70,8 @@ const Leftovers = ({ navigation }) => {
   }
     return (
       <SafeAreaView style={globalStyles.container}>
-        <IngredientList data={leftoverIngredients} page={'Leftovers'} titles={leftoversTitles} componentName={"AddEditGrocery"} />
-        <FloatingEditButton componentName={'AddEditGrocery'} />
+        <IngredientList data={leftoverIngredients} page={'Leftovers'} titles={leftoversTitles} componentName={"Leftover Details"} />
+        <FloatingEditButton componentName={'Leftover Details'} />
       </SafeAreaView>
     )
 

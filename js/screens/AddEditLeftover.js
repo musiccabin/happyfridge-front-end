@@ -14,14 +14,16 @@ import { useNavigation } from '@react-navigation/native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
 import { useMutation, useQuery } from '@apollo/client'
-import { groceriesQuery } from '../graphql/queries'
-import { newGroceryMutation, updateGroceryMutation } from '../graphql/mutations'
+import { leftoversQuery, groceriesQuery } from '../graphql/queries'
+import { newLeftoverMutation, updateLeftoverMutation } from '../graphql/mutations'
 
-const AddEditGrocery = ({route}) => {
+const AddEditLeftover = ({route}) => {
 
   const navigation = useNavigation()
 
     const { item, editIngredient } = route.params
+    const ingredientName = item?.ingredient?.name
+    const ingredientCat = item?.ingredient?.category
 
     const category = ["Produce", "Dairy", "Meat", "Frozen", "Nuts & Seeds", "Other"]
     // const ingredientArray = ["Apple", "Mango", "Carrot", "Spice", "Orange", "Cajun"]
@@ -50,10 +52,10 @@ const AddEditGrocery = ({route}) => {
     const [failedStyling, setFailedStyling] = useState(false)
     const [highlightStyling, setHighlightStyling] = useState(false)
 
-    const [newGrocery] = useMutation(newGroceryMutation, {refetchQueries: [{query: groceriesQuery}]}, { awaitRefetchQueries: true })
-    const [updateGrocery] = useMutation(updateGroceryMutation, {refetchQueries: [{query: groceriesQuery}]}, { awaitRefetchQueries: true })
+    const [newLeftover] = useMutation(newLeftoverMutation, {refetchQueries: [{query: leftoversQuery}]}, { awaitRefetchQueries: true })
+    const [updateLeftover] = useMutation(updateLeftoverMutation, {refetchQueries: [{query: leftoversQuery}]}, { awaitRefetchQueries: true })
 
-    // const { refetch } = useQuery(groceriesQuery)
+    const { refetch } = useQuery(groceriesQuery)
 
     const filteredIngredientArray = value => {
       let tempArray = ingredientArray.filter(item => {
@@ -87,7 +89,7 @@ const AddEditGrocery = ({route}) => {
             marginTop: 20,
             paddingBottom: 4,
             paddingHorizontal: 4,
-            color: item.name ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
+            color: ingredientName ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
         },
         ingredientText: {
             color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
@@ -118,17 +120,17 @@ const AddEditGrocery = ({route}) => {
     })
 
     useEffect(() => {
-        item.name && setIngredientValue(item.name)
-        item.category && setCategoryTitle(item.category)
+        ingredientName && setIngredientValue(ingredientName)
+        ingredientCat && setCategoryTitle(ingredientCat)
         item.unit && setUnitTitle(item.unit)
     }, [])
 
-    const createNewGrocery = async () => {
+    const createNewLeftover = async () => {
         console.log('it hit me!')
         let quantity = wholeTitle + " " + partTitle
         if (partTitle === parts[0]) quantity = wholeTitle.toString()
         if (wholeTitle == 0) quantity = partTitle
-        const data = await newGrocery({
+        const data = await newLeftover({
             variables: {
                 value: {
                     attributes: {
@@ -140,21 +142,22 @@ const AddEditGrocery = ({route}) => {
                 }
             }
         })
-        if (data.data.newGrocery.grocery) {
+        const dataReturned = data?.data?.newLeftover
+        if (dataReturned?.groceryUpdated) refetch()
+        if (dataReturned?.leftover) {
             Alert.alert(
                 "Ingredient Added",
                 "",
                 [
-                    { text: "OK", onPress: () => {
-                      // refetch()
-                    } }
+                    { text: "OK", onPress: () => { } }
                 ],
                 // { cancelable: false }
             )
         } else {
-          console.log(data.data.newGrocery.errors.fullMessages)
+          const errors = dataReturned?.errors?.fullMessages
+          console.log(errors)
             Alert.alert(
-                data.data.newGrocery.errors.fullMessages[0],
+                errors[0],
                 "",
                 [
                     { text: "OK", onPress: () => { } }
@@ -164,41 +167,40 @@ const AddEditGrocery = ({route}) => {
         }
     }
 
-    const updateExistingGrocery = async (id) => {
+    const updateExistingLeftover = async (id) => {
       let quantity = wholeTitle + " " + partTitle
       if (partTitle === parts[0]) quantity = wholeTitle
       if (wholeTitle == 0) quantity = partTitle
-      const data = await updateGrocery({
+      const data = await updateLeftover({
           variables: {
               value: {
                   id: id,
                   attributes: {
-                      ingredientName: item.name,
+                      ingredientName: ingredientName,
                       quantity: quantity,
                       unit: unitTitle,
-                      category: item.category
+                      category: ingredientCat
                   }
               }
           }
       })
-
-      console.log(data.data)
-
-      if (data.data.updateGrocery.grocery) {
+      const dataReturned = data?.data?.updateLeftover
+      if (dataReturned.groceryUpdated) refetch()
+      if (dataReturned.leftover) {
         Alert.alert(
             "Ingredient Updated",
             "",
             [
                 { text: "OK", onPress: () => {
                   // setIngredientValue('')
-                  // refetch()
                 } }
             ],
-            { cancelable: false }
+            // { cancelable: false }
         )
     } else {
+        const errors = dataReturned?.errors?.fullMessages
         Alert.alert(
-            data.data.updateGrocery.errors.fullMessages[0],
+            errors[0],
             "",
             [
                 { text: "OK", onPress: () => { } }
@@ -247,7 +249,7 @@ const AddEditGrocery = ({route}) => {
     >
       <View style={styles.container}>
         <UsageBar
-          name={editIngredient ? ingredientValue : item.name}
+          name={editIngredient ? ingredientValue : ingredientName}
           quantity={(wholeTitle == 0 ? '' : wholeTitle) + (partTitle.includes('/') ? " " + partTitle : "")}
           unit={unitTitle}
         />
@@ -315,7 +317,7 @@ const AddEditGrocery = ({route}) => {
                       setHighlightStyling(false)
                       setFailedStyling(false)
                       if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
-                      else editIngredient ? createNewGrocery() : updateExistingGrocery(item.id)
+                      else editIngredient ? createNewLeftover() : updateExistingLeftover(item.id)
                       navigation.goBack()
                   }} />
           </View>
@@ -404,4 +406,4 @@ const AddEditGrocery = ({route}) => {
   )
 }
 
-export default AddEditGrocery
+export default AddEditLeftover

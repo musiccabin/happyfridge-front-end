@@ -70,8 +70,8 @@ query ingredientList($id: ID!) {
 `
 
 export const ingredientInfoQuery = gql`
-query ingredientCategory($name: NAME!) {
-  ingredientCategory(name: $name) {
+query ingredientInfo($name: String!) {
+  ingredientInfo(name: $name) {
     category
   }
 }

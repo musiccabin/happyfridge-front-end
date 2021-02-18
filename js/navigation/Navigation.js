@@ -19,6 +19,7 @@ import {
   GroceryList,
   Profile,
   AddEditGrocery,
+  AddEditLeftover,
   Dashboard
 } from '../screens'
 import EditUsages from '../screens/EditUsages.js'
@@ -139,6 +140,19 @@ const CompletionsScreen = () => {
   )
 }
 
+const AddEditLeftoverStack = createStackNavigator()
+
+const AddEditLeftoverScreen = () => {
+  return (
+    <AddEditLeftoverStack.Navigator>
+      <AddEditLeftoverStack.Screen
+        name=''
+        component={AddEditLeftover}
+      />
+    </AddEditLeftoverStack.Navigator>
+  )
+}
+
 const LeftoversStack = createStackNavigator()
 
 const LeftoversScreen = () => {
@@ -152,7 +166,8 @@ const LeftoversScreen = () => {
       }}
     >
       <LeftoversStack.Screen name='Leftovers' component={Leftovers} />
-      <HomeStack.Screen name='UpdateUsage' component={UpdateUsage} />
+      <HomeStack.Screen name='Leftover Details' component={AddEditLeftover} />
+      {/* <HomeStack.Screen name='Update Usage' component={UpdateUsage} /> */}
     </LeftoversStack.Navigator>
   )
 }
@@ -232,7 +247,7 @@ const GroceryScreen = () => {
     >
       <GroceryListStack.Screen name='Grocery List' component={GroceryList} />
       <GroceryListStack.Screen
-        name='AddEditGrocery'
+        name='Grocery Details'
         component={AddEditGrocery}
       />
     </GroceryListStack.Navigator>

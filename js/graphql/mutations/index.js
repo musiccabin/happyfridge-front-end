@@ -35,7 +35,12 @@ export const signOutMutation = gql`
 export const newLeftoverMutation = gql`
   mutation newLeftover($value: NewLeftoverMutationInput!) {
     newLeftover(input: $value) {
-      clientMutationId
+      leftover {
+        ...Leftover
+      }
+      errors {
+        fullMessages
+      }
       groceryUpdated
     }
   }
@@ -45,7 +50,12 @@ export const newLeftoverMutation = gql`
 export const updateLeftoverMutation = gql`
   mutation updateLeftover($value: UpdateLeftoverMutationInput!) {
     updateLeftover(input: $value) {
-      clientMutationId
+      leftover {
+        ...Leftover
+      }
+      errors {
+        fullMessages
+      }
       groceryUpdated
     }
   }
@@ -68,7 +78,7 @@ export const newGroceryMutation = gql`
        ...Grocery
       }
       errors {
-        ...fullMessages
+        fullMessages
       }
     }
   }
@@ -82,7 +92,7 @@ export const updateGroceryMutation = gql`
        ...Grocery
       }
       errors {
-        ...fullMessages
+        fullMessages
       }
     }
   }

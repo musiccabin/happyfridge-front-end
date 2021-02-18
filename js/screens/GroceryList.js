@@ -15,7 +15,7 @@ const GroceryList = () => {
   return (
     <SafeAreaView style={globalStyles.container}>
       <GroceryListTabs data={data.groceries} />
-      <FloatingEditButton componentName={'AddEditGrocery'} />
+      <FloatingEditButton componentName={'Grocery Details'} />
     </SafeAreaView>
   )
 }

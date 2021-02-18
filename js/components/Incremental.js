@@ -43,7 +43,7 @@ const Incremental = ({ inheritStyle, callback, callbackLineColor, initVal }) => 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
     },
     icon: {
         top: 3,

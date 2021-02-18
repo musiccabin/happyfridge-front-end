@@ -137,10 +137,10 @@ const GroceryListTabs = ({ data }) => {
       }}
     >
       <Tab.Screen name='To Buy'>
-        {() => <IngredientList data={toBuy} componentName={"AddEditGrocery"} page={'Grocery'} titles={toBuyTitles} iconName='check' />}
+        {() => <IngredientList data={toBuy} componentName={"Grocery Details"} page={'Grocery'} titles={toBuyTitles} iconName='check' />}
       </Tab.Screen>
       <Tab.Screen name='Completed'>
-        {() => <IngredientList data={completed} componentName={"AddEditGrocery"} page={'Grocery'} titles={completedTitles} iconName='add' />}
+        {() => <IngredientList data={completed} componentName={"Grocery Details"} page={'Grocery'} titles={completedTitles} iconName='add' />}
       </Tab.Screen>
     </Tab.Navigator>
   )
