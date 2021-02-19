@@ -133,7 +133,7 @@ const AddEditGrocery = ({route}) => {
                 value: {
                     attributes: {
                         ingredientName: ingredientValue.toLowerCase(),
-                        quantity: quantity,
+                        quantity: quantity.toString(),
                         unit: unitTitle,
                         category: categoryTitle.toLowerCase()
                     }
@@ -174,7 +174,7 @@ const AddEditGrocery = ({route}) => {
                   id: id,
                   attributes: {
                       ingredientName: item.name,
-                      quantity: quantity,
+                      quantity: quantity.toString(),
                       unit: unitTitle,
                       category: item.category
                   }

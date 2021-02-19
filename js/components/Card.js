@@ -120,7 +120,7 @@ const Card = ({
     }
     setRefresh(true)
     setRefreshPage(true) 
-    console.log('in card, after setting, refreshPage is: ', refreshPage)
+    // console.log('in card, after setting, refreshPage is: ', refreshPage)
     // console.log('in cards, after setting: ', refreshMealplan)        
   }
 

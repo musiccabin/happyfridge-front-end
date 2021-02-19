@@ -10,7 +10,12 @@ import { usedRecipeAmountsMutation } from '../graphql/mutations'
 const EditUsages = ({ navigation, route }) => {
   const { ingredientUsages, id } = route.params
 
-  const usages = [{
+  const [usedRecipeAmountsReturned] = useMutation(usedRecipeAmountsMutation)
+  const { data } = useQuery(ingredientUsagesQuery,  {
+    variables: {id: id}, fetchPolicy: 'cache-and-network'
+  })
+
+  let usages = [{
     title: 'Produce',
     data: [],
   },
@@ -36,28 +41,34 @@ const EditUsages = ({ navigation, route }) => {
   },
   ]
 
-  for (link of ingredientUsages) {
-    // console.log('ingredient is: ', ingredient)
-    switch (link.ingredient.category) {
-    case "produce":
-      usages[0]['data'].push(link)
-      break
-    case "meat":
-      usages[1]['data'].push(link)
-      break
-    case "frozen":
-      usages[2]['data'].push(link)
-      break
-    case "dairy":
-      usages[3]['data'].push(link)
-      break
-    case "nuts & seeds":
-      usages[4]['data'].push(link) 
-      break
-    default:
-      usages[5]['data'].push(link)
-      break
+  const createUsages = (ingredientUsages) => {  
+    for (link of ingredientUsages) {
+      // console.log('ingredient is: ', ingredient)
+      switch (link.ingredient.category) {
+      case "produce":
+        usages[0]['data'].push(link)
+        break
+      case "meat":
+        usages[1]['data'].push(link)
+        break
+      case "frozen":
+        usages[2]['data'].push(link)
+        break
+      case "dairy":
+        usages[3]['data'].push(link)
+        break
+      case "nuts & seeds":
+        usages[4]['data'].push(link) 
+        break
+      default:
+        usages[5]['data'].push(link)
+        break
+      }
     }
+
+    // console.log('usages: ', usages)
+
+    return usages
   }
 
   const usagesTitles = []
@@ -67,11 +78,6 @@ const EditUsages = ({ navigation, route }) => {
 
   // console.log('usages is: ', usages)
   // console.log('usagesTitles are: ', usagesTitles)
-
-  const [usedRecipeAmountsReturned] = useMutation(usedRecipeAmountsMutation)
-  const usagesFromQuery = useQuery(ingredientUsagesQuery,  {
-    variables: {id: id}
-  })
 
   return (
     <View style={styles.container}>
@@ -89,8 +95,8 @@ const EditUsages = ({ navigation, route }) => {
           <Text style={styles.text}>I used the exact recipe amounts!</Text>
         </Pressable>
       </View>
-      <IngredientList data={usages} page={'EditUsages'} titles={usagesTitles} componentName={"UpdateUsage"} />
-      <FloatingEditButton componentName={'UpdateUsage'} />
+      <IngredientList data={data.ingredientUsages.length > 0 ? createUsages(data.ingredientUsages) : createUsages(ingredientUsages)} page={'Edit Usages'} titles={usagesTitles} componentName={'Update Usage'} recipeId={id} />
+      <FloatingEditButton componentName={'Update Usage'} />
     </View>
     )
 }

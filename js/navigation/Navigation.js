@@ -62,7 +62,8 @@ const HomeStackScreen = () => {
     >
       <HomeStack.Screen name='Home' component={Home} />
       <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
-      <HomeStack.Screen name='EditUsages' component={EditUsages} />
+      <HomeStack.Screen name='Edit Usages' component={EditUsages} />
+      <HomeStack.Screen name='Update Usage' component={UpdateUsage} />
     </HomeStack.Navigator>
   )
 }
@@ -167,7 +168,6 @@ const LeftoversScreen = () => {
     >
       <LeftoversStack.Screen name='Leftovers' component={Leftovers} />
       <HomeStack.Screen name='Leftover Details' component={AddEditLeftover} />
-      {/* <HomeStack.Screen name='Update Usage' component={UpdateUsage} /> */}
     </LeftoversStack.Navigator>
   )
 }

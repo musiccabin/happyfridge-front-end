@@ -5,7 +5,7 @@ import { Feather } from '@expo/vector-icons';
 
 const Incremental = ({ inheritStyle, callback, callbackLineColor, initVal }) => {
 
-    console.log('initVal is: ', initVal)
+    // console.log('initVal is: ', initVal)
     const [value, setValue] = useState(initVal)
 
     useEffect(() => {

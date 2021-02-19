@@ -298,7 +298,7 @@ const Dashboard = () => {
           else count = data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.count
         }
       } else {
-        console.log('data is: ', data)
+        // console.log('data is: ', data)
         if (timeFilterNumber == 1) count = data.dashboardIndStatsLastWeek.count
         else if (timeFilterNumber == 2) count = data.dashboardIndStatsLast30Days.count
         else if (timeFilterNumber == 3) count = data.dashboardIndStatsLast90Days.count

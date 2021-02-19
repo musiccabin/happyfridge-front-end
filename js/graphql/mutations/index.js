@@ -123,6 +123,25 @@ mutation uncompleteGrocery($value: UncompleteGroceryMutationInput!) {
 }
 `
 
+export const updateUsageMutation = gql`
+mutation updateUsage($value: UpdateUsageMutationInput!) {
+  updateUsage(input: $value) {
+    status
+    errors {
+      fullMessages
+    }
+  }
+}
+`
+
+export const removeUsageMutation = gql`
+mutation removeUsage($value: RemoveUsageMutationInput!) {
+  removeUsage(input: $value) {
+    status
+  }
+}
+`
+
 export const addToMealplanMutation = gql`
 mutation addToMealplan($value: AddToMealplanMutationInput!) {
   addToMealplan(input: $value) {
@@ -185,9 +204,9 @@ mutation removeCompletion($value: RemoveCompletionMutationInput!) {
 }
 `
 
-export const removeUsagesMutation = gql`
-mutation removeUsages($value: RemoveUsagesMutationInput!) {
-  removeUsages(input: $value) {
+export const removeAllUsagesMutation = gql`
+mutation removeAllUsages($value: RemoveAllUsagesMutationInput!) {
+  removeAllUsages(input: $value) {
     status
   }
 }

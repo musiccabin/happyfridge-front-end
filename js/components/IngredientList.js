@@ -13,15 +13,14 @@ import { globalStyles, COLORS } from '../styles'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
-import { useQuery } from '@apollo/client'
-import { groceriesQuery, leftoversQuery } from '../graphql/queries'
+import { useQuery, useMutation } from '@apollo/client'
+import { groceriesQuery, leftoversQuery, ingredientUsagesQuery } from '../graphql/queries'
 
-import { useMutation } from '@apollo/client'
-import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation, removeLeftoverMutation } from '../graphql/mutations'
+import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation, removeLeftoverMutation, usedRecipeAmountsMutation, removeUsageMutation } from '../graphql/mutations'
 
-const IngredientList = ({ data, page, titles, iconName, componentName }) => {
+const IngredientList = ({ data, page, titles, iconName, componentName, recipeId }) => {
 
-  console.log('data is: ', data)
+  // console.log('data is: ', data)
 
   const navigation = useNavigation()
   // const { dangerouslyGetState } = useNavigation()
@@ -34,19 +33,16 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
   const [visible, setVisibility] = useState(false)
   const [selected, setSelectedItem] = useState(null)
 
-  const fetchGroceries = useQuery(groceriesQuery, {
-    variables: {}
-  });
-
-  const fetchLeftovers = useQuery(leftoversQuery, {
-    variables: {}
-  });
+  const fetchGroceries = useQuery(groceriesQuery)
+  const fetchLeftovers = useQuery(leftoversQuery)
+  const fetchUsages = useQuery(ingredientUsagesQuery, { variables: { id: recipeId }})
 
   const [deleteGrocery] = useMutation(removeGroceryMutation)
   const [completeGrocery] = useMutation(completeGroceryMutation)
   const [uncompleteGrocery] = useMutation(uncompleteGroceryMutation)
-
   const [deleteLeftover] = useMutation(removeLeftoverMutation)
+  const [usedRecipeAmounts] = useMutation(usedRecipeAmountsMutation)
+  const [deleteUsage] = useMutation(removeUsageMutation, { refetchQueries: [{ query: ingredientUsagesQuery, variables: { id: recipeId }}], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
 
   const handleCategoryScroll = idx => {
     setActiveTab(idx)
@@ -63,7 +59,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
     if (page === 'Grocery') {
       deleteGrocery({ variables: { value: input } }).then(({ data }) => {
         if (data.removeGrocery.status) {
-          setVisibility(false)
+          // setVisibility(false)
           fetchGroceries.refetch()
           navigation.navigate('GroceryList')
         }
@@ -72,10 +68,19 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
       deleteLeftover({ variables: { value: input } }).then(({ data }) => {
         const returnedData = data.removeLeftover
         if (returnedData.status) {
-          setVisibility(false)
+          // setVisibility(false)
           fetchLeftovers.refetch()
           if (returnedData.groceryUpdated) fetchGroceries.refetch()
           navigation.navigate('Leftovers')
+        }
+      })
+    } else {
+      deleteUsage({ variables: { value: input } }).then(({ data }) => {
+        const returnedData = data.removeUsage
+        if (returnedData.status) {
+          console.log('in if block')
+          fetchUsages.refetch()
+          navigation.navigate('Edit Usages', {ingredientUsages: fetchUsages.data.ingredientUsages, id: recipeId})
         }
       })
     }
@@ -151,11 +156,15 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
               : (null) }    
             <Pressable
             onPress={() => {
+              if (componentName === 'Update Usage') {
+                usedRecipeAmounts({variables: {value: {recipeId: recipeId}}})
+              }
               navigation.navigate(componentName, { 
                 item: item,
-                editIngredient: false   
+                editIngredient: false,
+                recipeId: recipeId, 
               })
-              console.log('item is: ', item)
+              // console.log('item is: ', item)
             }}>
               {/* <View > */}
               <Text>{page === 'Grocery' ? item.name : item.ingredient.name}{": "}
@@ -195,7 +204,10 @@ const IngredientList = ({ data, page, titles, iconName, componentName }) => {
                     /> */}
                     <DialogButton
                       text="OK"
-                      onPress={() => deleteIt(selected)}
+                      onPress={() => {
+                        deleteIt(selected)
+                        setVisibility(false)
+                      }}
                     />
                   </DialogFooter>}
                 onTouchOutside={() => {

@@ -20,7 +20,7 @@ import { Context } from '../context'
 import { client } from '../apollo'
 import { useQuery, useMutation } from '@apollo/client'
 import { recipeInfoQuery, ingredientListQuery, recipesInMealplanQuery, favRecipesQuery, completedRecipesQuery, completedInMealplanQuery, groceriesQuery, recommendedRecipesQuery, popularRecipesQuery, ingredientUsagesQuery } from '../graphql/queries'
-import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation, newCompletionMutation, removeCompletionMutation, removeUsagesMutation } from '../graphql/mutations'
+import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation, newCompletionMutation, removeCompletionMutation, removeAllUsagesMutation } from '../graphql/mutations'
 import { Navigation } from '../navigation'
 
 const RecipeDetails = ({ route, navigation }) => {
@@ -216,7 +216,7 @@ const RecipeDetails = ({ route, navigation }) => {
   
   const [newCompletionReturned] = useMutation(newCompletionMutation)
   const [removeCompletionReturned] = useMutation(removeCompletionMutation)
-  const [removeUsagesReturned] = useMutation(removeUsagesMutation)
+  const [removeUsagesReturned] = useMutation(removeAllUsagesMutation)
 
   const completionAction = (action) => {
     if (action === 'uncomplete') {
@@ -347,7 +347,7 @@ const RecipeDetails = ({ route, navigation }) => {
               onPress={() => {
                 let usages = ingredientUsages.data.ingredientUsages
                 if (usages.length == 0) usages = data.ingredientList
-                navigation.navigate('EditUsages', { ingredientUsages: usages, id: id })}
+                navigation.navigate('Edit Usages', { ingredientUsages: usages, id: id })}
               }
               >Edit ingredient usages</Text>
             </TouchableOpacity>
@@ -384,7 +384,7 @@ const RecipeDetails = ({ route, navigation }) => {
                 {inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id == id).length == 0 &&
                 <Button onPress={() => {
                   completionAction('complete')
-                  navigation.navigate('EditUsages', {ingredientUsages: data.ingredientList, id: id})}}
+                  navigation.navigate('Edit Usages', {ingredientUsages: data.ingredientList, id: id})}}
                   >Recipe Complete</Button>}
                 {recipeCompleted || inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id === id).length > 0 &&
                 <ButtonInactive onPress={() => {

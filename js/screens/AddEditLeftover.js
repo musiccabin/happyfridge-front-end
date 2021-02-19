@@ -135,7 +135,7 @@ const AddEditLeftover = ({route}) => {
                 value: {
                     attributes: {
                         ingredientName: ingredientValue.toLowerCase(),
-                        quantity: quantity,
+                        quantity: quantity.toString(),
                         unit: unitTitle,
                         category: categoryTitle.toLowerCase()
                     }
@@ -177,7 +177,7 @@ const AddEditLeftover = ({route}) => {
                   id: id,
                   attributes: {
                       ingredientName: ingredientName,
-                      quantity: quantity,
+                      quantity: quantity.toString(),
                       unit: unitTitle,
                       category: ingredientCat
                   }
