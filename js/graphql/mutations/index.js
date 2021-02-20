@@ -32,6 +32,17 @@ export const signOutMutation = gql`
     }
   }
 `
+export const updateUserMutation = gql`
+  mutation updateUser($value: SignOutMutationInput!) {
+    updateUser(input: $value) {
+      user {
+        ...User
+      }
+    }
+  }
+  ${UserFragment}
+`
+
 export const newLeftoverMutation = gql`
   mutation newLeftover($value: NewLeftoverMutationInput!) {
     newLeftover(input: $value) {

@@ -4,7 +4,8 @@ import { COLORS, globalStyles } from '../styles'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import { ProfileLink } from '../components'
 import { Context } from '../context'
-import { useMutation } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
+import { userDietaryRestrictionsQuery, userTagsQuery, allDietaryRestrictionsQuery, allTagsQuery } from '../graphql/queries'
 import { useNavigation } from '@react-navigation/native'
 import { signOutMutation } from '../graphql/mutations'
 
@@ -24,6 +25,12 @@ const Profile = () => {
       }
     )
   }
+
+  const userDietary = useQuery(userDietaryRestrictionsQuery)
+  const userTags = useQuery(userTagsQuery)
+  const allDietary = useQuery(allDietaryRestrictionsQuery)
+  const allTags = useQuery(allTagsQuery)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -58,7 +65,7 @@ const Profile = () => {
           <ProfileLink
             name='Preferences'
             icon='setting'
-            onPress={() => navigate('Preferences')}
+            onPress={() => navigate('Preferences' )}
           />
           <ProfileLink
             name='Completed meals'

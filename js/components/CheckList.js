@@ -13,7 +13,7 @@ const CheckList = ({ data, inheritStyles, callback }) => {
             renderItem={
                 ({ item }) =>
                     <Pressable
-                        onPress={() => callback(item.title)}
+                        onPress={(category) => callback(item.id, category)}
                         disabled={item.visibility}
                         style={[styles.button, item.checked ? styles.checkedButton : styles.unCheckedButton, item.visibility && styles.hidden]}>
                         <Text style={globalStyles.titleM}>{item.title}</Text>
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     checkedButton: {
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLORS.PRIMARY_ICON,
     },
     unCheckedButton: {
-        backgroundColor: COLORS.PRIMARY_ICON,
+        backgroundColor: COLORS.WHITE,
     },
     hidden: {
         opacity: 0

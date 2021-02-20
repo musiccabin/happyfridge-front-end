@@ -57,7 +57,7 @@ const Card = ({
   const [inMealplan, setMealplanRecipe] = useState(mealplanRecipe)
   const [isFav, setFavRecipe] = useState(favRecipe)
 
-  const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true });
+  const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true })
 
   const fetchFavs = useQuery(favRecipesQuery)
 

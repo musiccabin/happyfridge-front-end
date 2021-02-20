@@ -10,6 +10,42 @@ export const currentUserQuery = gql`
   ${UserFragment}
 `
 
+export const allDietaryRestrictionsQuery = gql`
+  query allDietaryRestrictions {
+    allDietaryRestrictions {
+      id
+      name
+    }
+  }
+`
+
+export const userDietaryRestrictionsQuery = gql`
+  query userDietaryRestrictions {
+    userDietaryRestrictions {
+      id
+      name
+    }
+  }
+`
+
+export const allTagsQuery = gql`
+  query allTags {
+    allTags {
+      id
+      name
+    }
+  }
+`
+
+export const userTagsQuery = gql`
+  query userTags {
+    userTags {
+      id
+      name
+    }
+  }
+`
+
 export const popularRecipesQuery = gql`
   query popularRecipes {
     popularRecipes {
