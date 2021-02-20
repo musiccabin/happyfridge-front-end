@@ -50,7 +50,7 @@ const Dashboard = () => {
 
   const [timeFilterNumber, setTimeFilterNumber] = useState(1)
   const resetTimeFilter = () => setTimeFilterNumber(1)
-  console.log('filter number is: ', timeFilterNumber)
+  // console.log('filter number is: ', timeFilterNumber)
 
   const [selectedButton, setSelectedButton] = useState(1)
   const resetButton = () => setSelectedButton(1)
@@ -235,7 +235,7 @@ const Dashboard = () => {
 
   const showTop10Ingredients = (category) => {
     if (category === 'nuts &\n seeds') category = 'nuts / seeds'
-      console.log('cat clicked on is: ', category)
+      // console.log('cat clicked on is: ', category)
       setSelectedCat(category)
       let usagesCurTimeFrame
       const city = selectedCity.toLowerCase()

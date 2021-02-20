@@ -4,7 +4,7 @@ import { COLORS, globalStyles } from '../styles'
 
 const TimeFilter = ({ curVal, filter, timeFilterCallback, selectedButton, setSelectedFromTimeFilter }) => {
 
-    console.log('cur val is: ', curVal)
+    // console.log('cur val is: ', curVal)
     // const [selected, setSelectedButton] = useState(selectedButton)
 
     const styles = StyleSheet.create({

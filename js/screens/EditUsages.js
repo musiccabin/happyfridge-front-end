@@ -4,13 +4,67 @@ import { IngredientList, FloatingEditButton } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { useMutation, useQuery } from '@apollo/client'
 import { ingredientUsagesQuery } from '../graphql/queries'
+import {
+  leftoversQuery,
+  dashboardIndStatsLastWeekQuery,
+  dashboardIndStatsLast30DaysQuery,
+  dashboardIndStatsLast6MonthsQuery,
+  dashboardIndStatsLast90DaysQuery,
+  dashboardIndStatsThisYearQuery,
+  dashboardIndStatsAllHistoryQuery,
+  dashboardComStatsLastWeekByCityQuery,
+  // dashboardComStatsLastWeekByRegionQuery,
+  dashboardComStatsLastWeekByProvinceQuery,
+  dashboardComStatsLast30DaysByCityQuery,
+  // dashboardComStatsLast30DaysByRegionQuery,
+  dashboardComStatsLast30DaysByProvinceQuery,
+  dashboardComStatsLast90DaysByCityQuery,
+  // dashboardComStatsLast90DaysByRegionQuery,
+  dashboardComStatsLast90DaysByProvinceQuery,
+  dashboardComStatsLast6MonthsByCityQuery,
+  // dashboardComStatsLast6MonthsByRegionQuery,
+  dashboardComStatsLast6MonthsByProvinceQuery,
+  dashboardComStatsThisYearByCityQuery,
+  // dashboardComStatsThisYearByRegionQuery,
+  dashboardComStatsThisYearByProvinceQuery,
+  dashboardComStatsAllHistoryByCityQuery,
+  // dashboardComStatsAllHistoryByRegionQuery,
+  dashboardComStatsAllHistoryByProvinceQuery
+} from '../graphql/queries'
+
 import { usedRecipeAmountsMutation } from '../graphql/mutations'
 // import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
 const EditUsages = ({ navigation, route }) => {
   const { ingredientUsages, id } = route.params
 
-  const [usedRecipeAmountsReturned] = useMutation(usedRecipeAmountsMutation)
+  const [usedRecipeAmountsReturned] = useMutation(usedRecipeAmountsMutation, { refetchQueries: [
+    { query: leftoversQuery },
+    { query: dashboardIndStatsLastWeekQuery },
+    { query: dashboardIndStatsLast30DaysQuery },
+    { query: dashboardIndStatsLast6MonthsQuery },
+    { query: dashboardIndStatsLast90DaysQuery },
+    { query: dashboardIndStatsThisYearQuery },
+    { query: dashboardIndStatsAllHistoryQuery},
+    { query: dashboardComStatsLastWeekByCityQuery },
+    // { query: dashboardComStatsLastWeekByRegionQuery },
+    { query: dashboardComStatsLastWeekByProvinceQuery },
+    { query: dashboardComStatsLast30DaysByCityQuery },
+    // { query: dashboardComStatsLast30DaysByRegionQuery },
+    { query: dashboardComStatsLast30DaysByProvinceQuery },
+    { query: dashboardComStatsLast90DaysByCityQuery },
+    // { query: dashboardComStatsLast90DaysByRegionQuery },
+    { query: dashboardComStatsLast90DaysByProvinceQuery },
+    { query: dashboardComStatsLast6MonthsByCityQuery },
+    // { query: dashboardComStatsLast6MonthsByRegionQuery },
+    { query: dashboardComStatsLast6MonthsByProvinceQuery },
+    { query: dashboardComStatsThisYearByCityQuery },
+    // { query: dashboardComStatsThisYearByRegionQuery },
+    { query: dashboardComStatsThisYearByProvinceQuery },
+    { query: dashboardComStatsAllHistoryByCityQuery },
+    // { query: dashboardComStatsAllHistoryByRegionQuery },
+    { query: dashboardComStatsAllHistoryByProvinceQuery }
+  ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
   const { data } = useQuery(ingredientUsagesQuery,  {
     variables: {id: id}, fetchPolicy: 'cache-and-network'
   })

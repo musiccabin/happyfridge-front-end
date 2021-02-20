@@ -6,7 +6,34 @@ import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
 
 import { client } from '../apollo'
 import { useMutation, useQuery } from '@apollo/client'
-import { ingredientUsagesQuery } from '../graphql/queries'
+import { ingredientUsagesQuery, leftoversQuery } from '../graphql/queries'
+import {
+  dashboardIndStatsLastWeekQuery,
+  dashboardIndStatsLast30DaysQuery,
+  dashboardIndStatsLast6MonthsQuery,
+  dashboardIndStatsLast90DaysQuery,
+  dashboardIndStatsThisYearQuery,
+  dashboardIndStatsAllHistoryQuery,
+  dashboardComStatsLastWeekByCityQuery,
+  dashboardComStatsLastWeekByRegionQuery,
+  dashboardComStatsLastWeekByProvinceQuery,
+  dashboardComStatsLast30DaysByCityQuery,
+  dashboardComStatsLast30DaysByRegionQuery,
+  dashboardComStatsLast30DaysByProvinceQuery,
+  dashboardComStatsLast90DaysByCityQuery,
+  dashboardComStatsLast90DaysByRegionQuery,
+  dashboardComStatsLast90DaysByProvinceQuery,
+  dashboardComStatsLast6MonthsByCityQuery,
+  dashboardComStatsLast6MonthsByRegionQuery,
+  dashboardComStatsLast6MonthsByProvinceQuery,
+  dashboardComStatsThisYearByCityQuery,
+  dashboardComStatsThisYearByRegionQuery,
+  dashboardComStatsThisYearByProvinceQuery,
+  dashboardComStatsAllHistoryByCityQuery,
+  dashboardComStatsAllHistoryByRegionQuery,
+  dashboardComStatsAllHistoryByProvinceQuery
+} from '../graphql/queries'
+
 import { updateUsageMutation } from '../graphql/mutations'
 
 const UpdateUsage = ({ route }) => {
@@ -42,7 +69,34 @@ const UpdateUsage = ({ route }) => {
     const [highlightStyling, setHighlightStyling] = useState(false)
 
     const { data, refetch } = useQuery(ingredientUsagesQuery, { variables: { id: recipeId }, notifyOnNetworkStatusChange: true, fetchPolicy: 'cache-and-network' })
-    const [updateUsage] = useMutation(updateUsageMutation, { refetchQueries: [{ query: ingredientUsagesQuery, variables: { id: recipeId }}], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
+    const [updateUsage] = useMutation(updateUsageMutation, { refetchQueries: [
+      { query: ingredientUsagesQuery, variables: { id: recipeId }},
+      { query: leftoversQuery },
+      { query: dashboardIndStatsLastWeekQuery },
+      { query: dashboardIndStatsLast30DaysQuery },
+      { query: dashboardIndStatsLast6MonthsQuery },
+      { query: dashboardIndStatsLast90DaysQuery },
+      { query: dashboardIndStatsThisYearQuery },
+      { query: dashboardIndStatsAllHistoryQuery},
+      { query: dashboardComStatsLastWeekByCityQuery },
+      // { query: dashboardComStatsLastWeekByRegionQuery },
+      { query: dashboardComStatsLastWeekByProvinceQuery },
+      { query: dashboardComStatsLast30DaysByCityQuery },
+      // { query: dashboardComStatsLast30DaysByRegionQuery },
+      { query: dashboardComStatsLast30DaysByProvinceQuery },
+      { query: dashboardComStatsLast90DaysByCityQuery },
+      // { query: dashboardComStatsLast90DaysByRegionQuery },
+      { query: dashboardComStatsLast90DaysByProvinceQuery },
+      { query: dashboardComStatsLast6MonthsByCityQuery },
+      // { query: dashboardComStatsLast6MonthsByRegionQuery },
+      { query: dashboardComStatsLast6MonthsByProvinceQuery },
+      { query: dashboardComStatsThisYearByCityQuery },
+      // { query: dashboardComStatsThisYearByRegionQuery },
+      { query: dashboardComStatsThisYearByProvinceQuery },
+      { query: dashboardComStatsAllHistoryByCityQuery },
+      // { query: dashboardComStatsAllHistoryByRegionQuery },
+      { query: dashboardComStatsAllHistoryByProvinceQuery }
+    ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
 
     const filteredIngredientArray = value => {
       let tempArray = ingredientArray.filter(item => {
