@@ -33,7 +33,7 @@ export const signOutMutation = gql`
   }
 `
 export const updateUserMutation = gql`
-  mutation updateUser($value: SignOutMutationInput!) {
+  mutation updateUser($value: UpdateUserMutationInput!) {
     updateUser(input: $value) {
       user {
         ...User

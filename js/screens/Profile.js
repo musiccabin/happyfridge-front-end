@@ -65,7 +65,12 @@ const Profile = () => {
           <ProfileLink
             name='Preferences'
             icon='setting'
-            onPress={() => navigate('Preferences' )}
+            onPress={() => navigate('Preferences', { 
+              userDietary: userDietary.data.userDietaryRestrictions,
+              userTags: userTags.data.userTags,
+              allDietary: allDietary.data.allDietaryRestrictions,
+              allTags: allTags.data.allTags,
+              userId: parseInt(currentUser.id) } )}
           />
           <ProfileLink
             name='Completed meals'
