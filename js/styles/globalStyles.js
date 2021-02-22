@@ -83,7 +83,7 @@ const globalStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   icon: {
-    paddingRight: 10,
+    paddingRight: 5,
   },
   iconSize: 18,
   label: {

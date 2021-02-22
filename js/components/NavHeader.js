@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { ProfileIcon } from '../../assets/icons'
+import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, globalStyles } from '../styles'
 import { Context } from '../context'
 
@@ -20,9 +21,16 @@ const NavHeader = ({ scene, navigation, profileIcon = true, renderTitle = true, 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+      <MaterialIcons
+          // style={globalStyles.clock}
+          name='check'
+          size={30}
+          // color={COLORS.PRIMARY}
+          onPress={() => navigation.goBack()}
+        /> 
         <Text style={styles.screenName}>{title}</Text>
-        <View>
-          {children}
+        <View> 
+          {/* {children} */}
           {profileIcon && (
             <TouchableOpacity
               onPress={() => {
@@ -47,9 +55,10 @@ const styles = StyleSheet.create({
   content: {
     marginTop: 5,
     marginBottom: 15,
+    marginHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
   screenName: {
     ...globalStyles.titleXL,

@@ -394,7 +394,7 @@ const RecipeDetails = ({ route, navigation }) => {
               />
               <Text style={globalStyles.titleS}>{recipeInfo.data.recipeInfo.cookingTime}</Text>
             </View>
-            <TouchableOpacity>
+            {inMealplan && isCompleted && <TouchableOpacity>
               <Text
               style={styles.anchorText}
               onPress={() => {
@@ -403,7 +403,7 @@ const RecipeDetails = ({ route, navigation }) => {
                 navigation.navigate('Edit Usages', { ingredientUsages: usages, id: id })}
               }
               >Edit ingredient usages</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <View style={styles.wrapper}>
               <Text style={[globalStyles.titleL, styles.marginBottom]}>Ingredients</Text>
               <View style={styles.ingredients}>
@@ -469,7 +469,7 @@ const RecipeDetails = ({ route, navigation }) => {
                       text="Yes"
                       onPress={() => {
                         setVisibility(false)
-                        navigation.navigate('RecipeDetails', { id: id })
+                        navigation.navigate('Recipe Details', { id: id })
                       }}
                     />
                     <DialogButton
@@ -477,7 +477,7 @@ const RecipeDetails = ({ route, navigation }) => {
                       onPress={() => {
                         completionAction('uncomplete')
                         setVisibility(false)
-                        navigation.navigate('RecipeDetails', { id: id })
+                        navigation.navigate('Recipe Details', { id: id })
                       }}
                     />
                   </DialogFooter>}

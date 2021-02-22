@@ -26,10 +26,10 @@ const Profile = () => {
     )
   }
 
-  const userDietary = useQuery(userDietaryRestrictionsQuery)
-  const userTags = useQuery(userTagsQuery)
-  const allDietary = useQuery(allDietaryRestrictionsQuery)
-  const allTags = useQuery(allTagsQuery)
+  const userDietary = useQuery(userDietaryRestrictionsQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+  const userTags = useQuery(userTagsQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+  const allDietary = useQuery(allDietaryRestrictionsQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+  const allTags = useQuery(allTagsQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
 
   return (
     <SafeAreaView style={styles.container}>

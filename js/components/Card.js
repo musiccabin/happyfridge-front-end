@@ -176,7 +176,7 @@ const Card = ({
 
   return (
     <TouchableOpacity 
-    onPress={() => navigation.navigate('RecipeDetails', { id: recipe.id })}
+    onPress={() => navigation.navigate('Recipe Details', { id: recipe.id })}
     isFav={isFav}
     inMealplan={inMealplan}
     >

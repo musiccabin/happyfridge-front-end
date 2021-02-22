@@ -15,6 +15,9 @@ const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }
   const { refreshPageContext } = useContext(Context)
   const [refreshPage, setRefreshPage] = refreshPageContext
 
+  const { refreshHomeContext } = useContext(Context)
+  const [refreshHome, setRefreshHome] = refreshHomeContext
+
   let mealplanRecipe = false
   let favRecipe = false
   let completedRecipe = false
@@ -43,11 +46,11 @@ const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }
 
   const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true });
 
-  const fetchFavs = useQuery(favRecipesQuery)
+  const fetchFavs = useQuery(favRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
 
-  const fetchRecommendations = useQuery(recommendedRecipesQuery)
+  const fetchRecommendations = useQuery(recommendedRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
 
-  const fetchPopularRecipes = useQuery(popularRecipesQuery)
+  const fetchPopularRecipes = useQuery(popularRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
 
   const refetchAll = (() => {
     fetchRecipesInMealplan.refetch()
@@ -69,6 +72,7 @@ const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
+    if (refreshHome) setRefresh(true)
     setRefreshPage(refresh)
   }, [refresh])
 
@@ -143,7 +147,7 @@ const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('RecipeDetails', { id: recipe.id })}
+      onPress={() => navigation.navigate('Recipe Details', { id: recipe.id })}
       // isFav={favourites}
       // inMealplan={inMealplan}
       // isCompleted={completedRecipe}
@@ -209,7 +213,7 @@ const Recipe = ({ recipe, navigation, mealplanRecipes, favourites, completions }
 const styles = StyleSheet.create({
   card: {
     height: 73,
-    width: '85%',
+    width: '95%',
     flexDirection: 'row',
     marginBottom: 15,
   },

@@ -144,7 +144,7 @@ const EditUsages = ({ navigation, route }) => {
           usedRecipeAmountsReturned({variables: {value: {recipeId: id}}}).then((data) => {            
             if (data.status) usagesFromQuery.refetch()
           })
-          navigation.navigate('RecipeDetails', { id: id })}
+          navigation.navigate('Recipe Details', { id: id })}
         }>
           <Text style={styles.text}>I used the exact recipe amounts!</Text>
         </Pressable>

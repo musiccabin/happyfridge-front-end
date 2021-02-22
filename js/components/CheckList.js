@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FlatList, StyleSheet, Text } from 'react-native'
 import { COLORS, globalStyles, windowWidth } from '../styles'
+import { Context } from '../context'
 
 import { Button } from '../components'
 
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { updateUserMutation } from '../graphql/mutations'
+import { popularRecipesQuery, recommendedRecipesQuery, userDietaryRestrictionsQuery, userTagsQuery } from '../graphql/queries'
 
 const CheckList = ({ data, inheritStyles, userId, dietary, tags, updateDietary, updateTags, category }) => {
+    const { refreshHomeContext } = useContext(Context)
+    const [refreshHome, setRefreshHome] = refreshHomeContext
 
+    const fetchRecommendations = useQuery(recommendedRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+    const fetchPopularRecipes = useQuery(popularRecipesQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+    const fetchDietary = useQuery(userDietaryRestrictionsQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
+    const fetchTags = useQuery(userTagsQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
     const [updatePreferences] = useMutation(updateUserMutation)
 
     const updatePreference = (id) => { 
@@ -48,7 +56,22 @@ const CheckList = ({ data, inheritStyles, userId, dietary, tags, updateDietary, 
             const dietaryIds = dietary.map(item => item['checked'] ? parseInt(item['id']): null)
             input = { id: userId, tags: tagIds, dietaryRestrictions: dietaryIds, attributes: {} }
         }
-        updatePreferences({ variables: { value: input }})
+        updatePreferences({ variables: { value: input }}, { refetchQueries: [
+            { query: popularRecipesQuery},
+            { query: recommendedRecipesQuery },
+            { query: userTagsQuery},
+            { query: userDietaryRestrictionsQuery },
+          ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true }).then(({ data }) => {
+              if (data.updateUser.user) {
+                  console.log('in if block')
+                  fetchPopularRecipes.refetch()
+                  fetchRecommendations.refetch()
+                  fetchDietary.refetch()
+                  fetchTags.refetch()
+                  setRefreshHome(true)
+                  console.log('after setting, refreshHome is: ', refreshHome)
+              }
+          }) 
      }
 
     return (

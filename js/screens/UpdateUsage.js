@@ -191,7 +191,7 @@ const UpdateUsage = ({ route }) => {
                   parts={parts}
                 />
               </View>
-              <View style={styles.rightContainer}>
+              <View>
                 <CategoryUnit
                     ingredient={ingredientValue}
                     categories={category}
@@ -204,7 +204,7 @@ const UpdateUsage = ({ route }) => {
                 />
                 <Button
                     children={"Save"}
-                    style={styles.button}
+                    style={styles.button, { marginTop: 50 }}
                     onPress={() => {
                         setHighlightStyling(false)
                         setFailedStyling(false)

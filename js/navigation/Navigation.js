@@ -55,13 +55,13 @@ const HomeStackScreen = () => {
           <NavHeader
             scene={scene}
             navigation={navigation}
-            renderTitle={false}
+            renderTitle={true}
           />
         ),
       }}
     >
       <HomeStack.Screen name='Home' component={Home} />
-      <HomeStack.Screen name='RecipeDetails' component={RecipeDetails} />
+      <HomeStack.Screen name='Recipe Details' component={RecipeDetails} />
       <HomeStack.Screen name='Edit Usages' component={EditUsages} />
       <HomeStack.Screen name='Update Usage' component={UpdateUsage} />
     </HomeStack.Navigator>

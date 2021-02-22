@@ -8,7 +8,7 @@ import { Context } from '../context'
 const CardList = ({ navigation, mealplanRecipes, favourites, completions }) => {
   const { refreshPageContext } = useContext(Context)
   const [refreshPage, setRefreshPage] = refreshPageContext
-  const { data, error, loading, networkStatus, refetch } = useQuery(recommendedRecipesQuery, { notifyOnNetworkStatusChange: true })
+  const { data, error, loading, networkStatus, refetch } = useQuery(recommendedRecipesQuery, { fetchPolicy: 'cache-and-network' })
 
   if (refreshPage) {
     refetch()
@@ -29,7 +29,7 @@ const CardList = ({ navigation, mealplanRecipes, favourites, completions }) => {
               favourites={favourites}
               completions={completions}
               marginRight={15}
-              height={218}
+              height={250}
               width={250}
             />
           )
