@@ -33,12 +33,11 @@ const Quantity = ({ wholeCallback, partCallback, parts, whole, part }) => {
 
     const styles = StyleSheet.create({
         container : {
-            flex            : 1,
-            backgroundColor : COLORS.BACKGROUND,
-            alignItems      : "center",
-            justifyContent  : "center",
-            paddingLeft: 30,
-            paddingBottom: 15,
+            // flex            : 1,
+            // backgroundColor : COLORS.BACKGROUND,
+            alignItems      : "flex-start",
+            justifyContent  : "flex-start",
+            marginTop: 30,
         },
         quantityContainer: {
             flexDirection: 'row',
@@ -46,9 +45,9 @@ const Quantity = ({ wholeCallback, partCallback, parts, whole, part }) => {
             alignItems      : "center",
             justifyContent  : "center",
             // backgroundColor: COLORS.BACKGROUND,
-            paddingLeft: 10,
-            paddingRight: 30,
-            paddingVertical: 10,
+            // paddingLeft: 10,
+            // paddingRight: 30,
+            // paddingVertical: 10,
             borderRadius: 7,
             borderTopLeftRadius: 0,
         },
@@ -59,10 +58,11 @@ const Quantity = ({ wholeCallback, partCallback, parts, whole, part }) => {
             borderTopRightRadius: 7
         },
         quantityTitle: {
-            color: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
-            paddingTop: 7,
-            paddingBottom: 7,
-            paddingStart: 10,
+            // color: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
+            color: COLORS.PRIMARY_FONT,
+            // paddingTop: 7,
+            paddingBottom: 17,
+            // fontWeight: '600'
         },
         line: {
             borderBottomColor: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
@@ -92,27 +92,27 @@ const Quantity = ({ wholeCallback, partCallback, parts, whole, part }) => {
           },
           text: {
             // width: '10%',
-            paddingStart: 10
+            paddingEnd: 17,
+            color: COLORS.PRIMARY,
+            fontWeight: '600'
         },
         })
 
     return (
-        <View>
-            <View style={styles.quantityTitleContainer}>
-                <Text style={styles.quantityTitle}>Quantity</Text>
-            </View>
+        <View style={styles.container}>
+            <Text style={styles.quantityTitle}>Quantity</Text>
             <View style={styles.quantityContainer}>
-                <Text style={styles.text}>Whole: </Text>
+                <Text style={styles.text}>Whole:</Text>
                 <Incremental
                     initVal={whole}
-                    inheritStyle={{ flexBasis: '45%' }}
+                    inheritStyle={{ flexBasis: '45%', paddingEnd: 60 }}
                     callback={(value) => wholeCallback(value)}
                     callbackLineColor={value => {
                         setHighlightStyling(value)
                         setTemp(!value)
                     }}
                 />
-                <Text style={styles.text}>Part: </Text>
+                <Text style={styles.text}>Part:</Text>
                 {/* <View stye={styles.quantityContainer}> */}
                 <Pressable style={styles.buttonStyle} onPress={() => {
                     toggle()

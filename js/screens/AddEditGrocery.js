@@ -25,7 +25,7 @@ const AddEditGrocery = ({route}) => {
 
     const category = ["Produce", "Dairy", "Meat", "Frozen", "Nuts & Seeds", "Other"]
     // const ingredientArray = ["Apple", "Mango", "Carrot", "Spice", "Orange", "Cajun"]
-    const parts = ["", "1/4", "1/3", "1/2", "2/3", "3/4"]
+    const parts = ["   ", "1/4", "1/3", "1/2", "2/3", "3/4"]
     // const units = ["kg", "lb"]
 
     let wholeInit = 0
@@ -43,7 +43,7 @@ const AddEditGrocery = ({route}) => {
     const [categoryTitle, setCategoryTitle] = useState(category[0])
     const [wholeTitle, setWholeTitle] = useState(wholeInit)
     const [partTitle, setPartTitle] = useState(partInit)
-    const [unitTitle, setUnitTitle] = useState('')
+    const [unitTitle, setUnitTitle] = useState('   ')
     const [ingredientValue, setIngredientValue] = useState('')
     // const [ingredients, setIngredients] = useState(ingredientArray)
     const [isUserTyping, setIsUserTyping] = useState(false)
@@ -67,16 +67,17 @@ const AddEditGrocery = ({route}) => {
         container: {
             ...globalStyles.content,
             paddingTop: 40,
+            paddingHorizontal: 30,
             backgroundColor: COLORS.WHITE,
             ...globalStyles.container
         },
         inputContainer: {
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
             marginTop: 70
         },
         leftContainer: {
-            flexBasis: '55%',
+            flexBasis: '20%',
         },
         rightContainer: {
             flexBasis: '40%'
@@ -84,13 +85,15 @@ const AddEditGrocery = ({route}) => {
         input: {
             borderBottomColor: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT,
             borderBottomWidth: 1,
-            marginTop: 20,
+            marginVertical: 20,
             paddingBottom: 4,
             paddingHorizontal: 4,
             color: item.name ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
         },
         ingredientText: {
-            color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
+            // color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
+            color: COLORS.PRIMARY,
+            fontWeight: '600'
         },
         list: {
             backgroundColor: COLORS.PRIMARY_ICON,
@@ -245,14 +248,16 @@ const AddEditGrocery = ({route}) => {
         setFailedStyling(false)
       }}
     >
-      <View style={styles.container}>
-        <UsageBar
-          name={editIngredient ? ingredientValue : item.name}
-          quantity={(wholeTitle == 0 ? '' : wholeTitle) + (partTitle.includes('/') ? " " + partTitle : "")}
-          unit={unitTitle}
-        />
-        <View style={styles.inputContainer}>
-          <View style={styles.leftContainer}>
+    <View style={styles.container}>
+      <UsageBar
+        name={editIngredient ? ingredientValue : item.name}
+        quantity={(wholeTitle == 0 ? '' : wholeTitle) + (partTitle.includes('/') ? " " + partTitle : "")}
+        unit={unitTitle}
+      />
+      <View>
+      {/* <View style={styles.inputContainer}> */}
+        {/* <View style={styles.leftContainer}> */}
+          <View>
             {editIngredient && <Text style={styles.ingredientText}>Ingredient</Text>}
             {editIngredient && <TextInput
               style={styles.input}
@@ -288,38 +293,39 @@ const AddEditGrocery = ({route}) => {
                 )}
               />
             )}
-            <View style={{ marginTop: 30 }}>
-              <Quantity
-                whole={wholeTitle}
-                part={partTitle}
-                wholeCallback={value => setWholeTitle(value)}
-                partCallback={value => setPartTitle(value)}
-                parts={parts}
-              />
-            </View>
-            <View style={styles.rightContainer}>
-              <CategoryUnit
-                  ingredient={ingredientValue}
-                  categories={category}
-                  // units={units}
-                  categoryCallback={(value) => setCategoryTitle(value)}
-                  unitCallback={(value) => setUnitTitle(value)}
-                  callbackIngredientHighlight={() => setHighlightStyling(false)}
-                  ingredientCategory={item.category || categoryTitle}
-                  defaultUnitSelection={unitTitle}
-              />
-              <Button
-                  children={"Save"}
-                  style={styles.button}
-                  onPress={() => {
-                      setHighlightStyling(false)
-                      setFailedStyling(false)
-                      if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
-                      else editIngredient ? createNewGrocery() : updateExistingGrocery(item.id)
-                      navigation.goBack()
-                  }} />
+            <Quantity
+              style={{ alignItems: 'flex-start' }}
+              whole={wholeTitle}
+              part={partTitle}
+              wholeCallback={value => setWholeTitle(value)}
+              partCallback={value => setPartTitle(value)}
+              parts={parts}
+            />
           </View>
+          <View>
+          {/* <View style={styles.rightContainer}> */}
+            <CategoryUnit
+                ingredient={ingredientValue}
+                categories={category}
+                // units={units}
+                categoryCallback={(value) => setCategoryTitle(value)}
+                unitCallback={(value) => setUnitTitle(value)}
+                callbackIngredientHighlight={() => setHighlightStyling(false)}
+                ingredientCategory={item.category || categoryTitle}
+                defaultUnitSelection={unitTitle}
+            />
+            <Button
+                children={"Save"}
+                style={styles.button}
+                onPress={() => {
+                    setHighlightStyling(false)
+                    setFailedStyling(false)
+                    if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
+                    else editIngredient ? createNewGrocery() : updateExistingGrocery(item.id)
+                    navigation.goBack()
+                }} />
         </View>
+      </View>
     {/* return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss()
@@ -398,7 +404,6 @@ const AddEditGrocery = ({route}) => {
                             }} />
                     </View>
                 </View> */}
-            </View>
           </View>
     </TouchableWithoutFeedback>
   )

@@ -6,7 +6,6 @@ import { SimpleLineIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { client } from '../apollo'
-// import { MealPlan } from '../screens/MealPlan'
 import { useQuery, useMutation } from '@apollo/client'
 import { recipesInMealplanQuery, favRecipesQuery, popularRecipesQuery, recommendedRecipesQuery, groceriesQuery } from '../graphql/queries'
 import { addToMealplanMutation, removeFromMealplanMutation, newFavMutation, removeFavMutation } from '../graphql/mutations'

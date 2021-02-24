@@ -17,54 +17,21 @@ const CategoryUnit = ({ categoryCallback,
 
         const styles = StyleSheet.create({
             container : {
-                flex            : 1,
-                // backgroundColor : COLORS.BACKGROUND,
-                alignItems      : "center",
-                justifyContent  : "center",
-                paddingLeft: 30,
-                paddingBottom: 15,
+                // height: '50%',
+                alignItems: 'baseline',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingTop: 40,
+                paddingEnd: 40
+                // paddingLeft: 30,
+                // paddingBottom: 15,
             },
-            // quantityContainer: {
-            //     flexDirection: 'row',
-            //     justifyContent: 'space-around',
-            //     alignItems      : "center",
-            //     justifyContent  : "center",
-            //     // backgroundColor: COLORS.BACKGROUND,
-            //     paddingLeft: 10,
-            //     paddingRight: 30,
-            //     paddingVertical: 10,
-            //     borderRadius: 7,
-            //     borderTopLeftRadius: 0,
-            // },
-            // quantityTitleContainer: {
-            //     // backgroundColor: COLORS.BACKGROUND,
-            //     width: 80,
-            //     borderTopLeftRadius: 7,
-            //     borderTopRightRadius: 7
-            // },
-            // quantityTitle: {
-            //     color: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
-            //     paddingTop: 7,
-            //     paddingBottom: 7,
-            //     paddingStart: 10,
-            // },
-            // line: {
-            //     borderBottomColor: highlightStyling ? COLORS.PRIMARY : COLORS.PRIMARY_FONT,
-            //     borderBottomWidth: 1,
-            //     paddingTop: 7
-            // },
-            // icon: {
-            //     color: COLORS.SECONDARY_FONT,
-            //     position: 'absolute',
-            //     right: 10,
-            //     top: 3
-            // },
             buttonStyle: {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
                 alignItems      : "center",
                 justifyContent  : "center",
-                borderColor: 'white',
+                borderColor: COLORS.WHITE,
                 // backgroundColor: COLORS.PRIMARY,
                 borderWidth: 1,
                 borderBottomColor: COLORS.PRIMARY_FONT,
@@ -73,12 +40,17 @@ const CategoryUnit = ({ categoryCallback,
                 // borderRadius: 10,
                 marginBottom: 5,
                 // marginTop: 10,
-              },
-              text: {
-                height: '30%',
-                paddingStart: 10,
-                paddingTop: 10,
             },
+            text: {
+                // height: '30%',
+                paddingEnd: 20,
+                color: COLORS.PRIMARY,
+                fontWeight: '600'
+            },
+            field: {
+                flexDirection: 'row',
+                alignItems: 'baseline'
+            }
             })
 
         // console.log('ingredient is: ', ingredient)
@@ -150,72 +122,77 @@ const CategoryUnit = ({ categoryCallback,
     if (error) console.error(error)
 
     return (
-        <View style={{height: '50%'}}>
-            {ingredient ? <Text style={styles.text}>Unit</Text> : null}
+        <View style={styles.container}>
+            <View style={styles.field}>
+                <Text style={styles.text}>Category:</Text>
+                <Pressable style={styles.buttonStyle} onPress={() => {
+                        temp ? categoryCallback(false) : categoryCallback(true)
+                    }}>
+                        <RNPickerSelect
+                            value={ingredient ? findCategory(data) : ingredientCategory}
+                            disabled={ingredient ? true : false}
+                            useNativePickerStyle={false}
+                            onValueChange={(value) => {
+                                callbackIngredientHighlight(value)
+                                setTemp(value)
+                                categoryCallback(value)
+                            }}
+                            items={categoryItems}
+                            placeholder={{}}
+                        />
+
+                        {/* <Text style={styles.text}>{selectedCategory}</Text> */}
+                        {/* <Ionicons
+                            style={styles.icon}
+                            size={globalStyles.iconSize}
+                            name={icon}
+                            color={COLORS.SECONDARY_FONT}
+                        /> */}
+                    </Pressable>
+                {/* <DropDown
+                    title={"Category"}
+                    defaultSelection={ingredient ? findCategory(data) : ingredientCategory}
+                    listTop={{ top: 59 }}
+                    buttonStyle={{ marginTop: 7 }}
+                    categories={categories}
+                    // callback={(value) => categoryCallback(value)}
+                    callbackQuantity={() => { }}
+                    callbackIngredientHighlight={() => callbackIngredientHighlight(false)}
+                /> */}
+                {/* <View style={{ zIndex: -1 }}>
+                    <DropDown
+                        title={"Unit"}
+                        defaultSelection={""}
+                        categories={units((data))}
+                        buttonStyle={{ marginTop: 4 }}
+                        inheritStyle={{ marginTop: 40 }}
+                        listTop={{ top: 56 }}
+                        callback={(value) => unitCallback(value)}
+                        callbackQuantity={() => { }}
+                        callbackIngredientHighlight={() => callbackIngredientHighlight(false)}
+                        defaultSelection={defaultUnitSelection}
+                    />
+                </View> */}
+            </View>
+            <View style={styles.field}>
+            {ingredient ? <Text style={styles.text}>Unit:</Text> : null}
             {ingredient ?
-            <Pressable style={styles.buttonStyle} onPress={() => {
-                temp ? unitCallback(false) : unitCallback(defaultUnitSelection || '')
-            }}>
-                <RNPickerSelect
-                    value={defaultUnitSelection}
-                    useNativePickerStyle={false}
-                    onValueChange={(value) => {
-                        callbackIngredientHighlight(value)
-                        setTemp(value)
-                        unitCallback(value)
-                    }}
-                    items={unitItems(data)}
-                    placeholder={{}}
-                />
-            </Pressable> : null}
-            <Text style={styles.text}>Category</Text>
-            <Pressable style={styles.buttonStyle} onPress={() => {
-                    temp ? categoryCallback(false) : categoryCallback(true)
+                <Pressable style={styles.buttonStyle} onPress={() => {
+                    temp ? unitCallback(false) : unitCallback(defaultUnitSelection || '')
                 }}>
                     <RNPickerSelect
-                        value={ingredient ? findCategory(data) : ingredientCategory}
+                        value={defaultUnitSelection}
                         useNativePickerStyle={false}
                         onValueChange={(value) => {
                             callbackIngredientHighlight(value)
                             setTemp(value)
-                            categoryCallback(value)
+                            unitCallback(value)
                         }}
-                        items={categoryItems}
+                        items={unitItems(data)}
                         placeholder={{}}
                     />
-
-                    {/* <Text style={styles.text}>{selectedCategory}</Text> */}
-                    {/* <Ionicons
-                        style={styles.icon}
-                        size={globalStyles.iconSize}
-                        name={icon}
-                        color={COLORS.SECONDARY_FONT}
-                    /> */}
-                </Pressable>
-            {/* <DropDown
-                title={"Category"}
-                defaultSelection={ingredient ? findCategory(data) : ingredientCategory}
-                listTop={{ top: 59 }}
-                buttonStyle={{ marginTop: 7 }}
-                categories={categories}
-                // callback={(value) => categoryCallback(value)}
-                callbackQuantity={() => { }}
-                callbackIngredientHighlight={() => callbackIngredientHighlight(false)}
-            /> */}
-            {/* <View style={{ zIndex: -1 }}>
-                <DropDown
-                    title={"Unit"}
-                    defaultSelection={""}
-                    categories={units((data))}
-                    buttonStyle={{ marginTop: 4 }}
-                    inheritStyle={{ marginTop: 40 }}
-                    listTop={{ top: 56 }}
-                    callback={(value) => unitCallback(value)}
-                    callbackQuantity={() => { }}
-                    callbackIngredientHighlight={() => callbackIngredientHighlight(false)}
-                    defaultSelection={defaultUnitSelection}
-                />
-            </View> */}
+                </Pressable> : null}
+            </View>
         </View>
     )
 }

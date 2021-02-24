@@ -13,6 +13,6 @@ export const Provider = ({ children }) => {
   return <Context.Provider value={{
     currentUserContext: [currentUser, setCurrentUser],
     refreshPageContext: [refreshPage, setRefreshPage],
-    refreshHomeContext: [refreshHome, setRefreshHome]
+    refreshHomeContext: [refreshHome, setRefreshHome],
   }} >{children}</Context.Provider>
 }

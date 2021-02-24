@@ -18,7 +18,8 @@ const UsageBar = ({ name, quantity, unit }) => {
 const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 30
     }
 })
 

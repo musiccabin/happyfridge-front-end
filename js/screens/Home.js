@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { CardList, Recipe } from '../components'
 import { COLORS, globalStyles } from '../styles'
 import { useQuery } from '@apollo/client'
@@ -8,9 +9,11 @@ import { Context } from '../context'
 
 
 const Home = ({ navigation }) => {
+
   const { currentUserContext, refreshPageContext } = useContext(Context)
   const [currentUser, setCurrentUser] = currentUserContext
   const [refreshPage, setRefreshPage] = refreshPageContext
+
   const { data, error, loading, networkStatus, refetch } = useQuery(popularRecipesQuery)
 
   const mealplanRecipesInfo = useQuery(recipesInMealplanQuery)

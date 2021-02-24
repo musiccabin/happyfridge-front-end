@@ -69,6 +69,7 @@ const AddEditLeftover = ({route}) => {
         container: {
             ...globalStyles.content,
             paddingTop: 40,
+            paddingHorizontal: 30,
             backgroundColor: COLORS.WHITE,
             ...globalStyles.container
         },
@@ -86,13 +87,15 @@ const AddEditLeftover = ({route}) => {
         input: {
             borderBottomColor: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT,
             borderBottomWidth: 1,
-            marginTop: 20,
+            marginVertical: 20,
             paddingBottom: 4,
             paddingHorizontal: 4,
             color: ingredientName ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
         },
         ingredientText: {
-            color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
+            // color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
+            color: COLORS.PRIMARY,
+            fontWeight: '600'
         },
         list: {
             backgroundColor: COLORS.PRIMARY_ICON,
@@ -253,75 +256,72 @@ const AddEditLeftover = ({route}) => {
           quantity={(wholeTitle == 0 ? '' : wholeTitle) + (partTitle.includes('/') ? " " + partTitle : "")}
           unit={unitTitle}
         />
-        <View style={styles.inputContainer}>
-          <View style={styles.leftContainer}>
-            {editIngredient && <Text style={styles.ingredientText}>Ingredient</Text>}
-            {editIngredient && <TextInput
-              style={styles.input}
-              // editable={editIngredient}
-              onChangeText={value => {
-                setIngredientValue(value)
-                setIsUserTyping(true)
-                setHighlightStyling(true)
-                value.length == 0 && setIsUserTyping(false)
-                  // : filteredIngredientArray(value)
-              }}
-              value={ingredientValue}
-              maxLength={50}
-            />}
-            {isUserTyping && (
-              <FlatList
-                style={styles.list}
-                // data={ingredients}
-                ItemSeparatorComponent={Separator}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <TouchableHighlight
-                    onPress={() => {
-                      setIngredientValue(item)
-                      setIsUserTyping(false)
-                      setHighlightStyling(false)
-                    }}
-                    activeOpacity={0.1}
-                    underlayColor={COLORS.SECONDARY}
-                  >
-                    <Text style={styles.listText}>{item}</Text>
-                  </TouchableHighlight>
-                )}
-              />
-            )}
-            <View style={{ marginTop: 30 }}>
-              <Quantity
-                whole={wholeTitle}
-                part={partTitle}
-                wholeCallback={value => setWholeTitle(value)}
-                partCallback={value => setPartTitle(value)}
-                parts={parts}
-              />
-            </View>
-            <View style={styles.rightContainer}>
-              <CategoryUnit
-                  ingredient={ingredientValue}
-                  categories={category}
-                  // units={units}
-                  categoryCallback={(value) => setCategoryTitle(value)}
-                  unitCallback={(value) => setUnitTitle(value)}
-                  callbackIngredientHighlight={() => setHighlightStyling(false)}
-                  ingredientCategory={item.category || categoryTitle}
-                  defaultUnitSelection={unitTitle}
-              />
-              <Button
-                  children={"Save"}
-                  style={styles.button}
+        <View>
+          {editIngredient && <Text style={styles.ingredientText}>Ingredient</Text>}
+          {editIngredient && <TextInput
+            style={styles.input}
+            // editable={editIngredient}
+            onChangeText={value => {
+              setIngredientValue(value)
+              setIsUserTyping(true)
+              setHighlightStyling(true)
+              value.length == 0 && setIsUserTyping(false)
+                // : filteredIngredientArray(value)
+            }}
+            value={ingredientValue}
+            maxLength={50}
+          />}
+          {isUserTyping && (
+            <FlatList
+              style={styles.list}
+              // data={ingredients}
+              ItemSeparatorComponent={Separator}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => (
+                <TouchableHighlight
                   onPress={() => {
-                      setHighlightStyling(false)
-                      setFailedStyling(false)
-                      if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
-                      else editIngredient ? createNewLeftover() : updateExistingLeftover(item.id)
-                      navigation.goBack()
-                  }} />
-          </View>
+                    setIngredientValue(item)
+                    setIsUserTyping(false)
+                    setHighlightStyling(false)
+                  }}
+                  activeOpacity={0.1}
+                  underlayColor={COLORS.SECONDARY}
+                >
+                  <Text style={styles.listText}>{item}</Text>
+                </TouchableHighlight>
+              )}
+            />
+          )}
+          <Quantity
+            whole={wholeTitle}
+            part={partTitle}
+            wholeCallback={value => setWholeTitle(value)}
+            partCallback={value => setPartTitle(value)}
+            parts={parts}
+          />
+          <View style={styles.rightContainer}>
+            <CategoryUnit
+                ingredient={ingredientValue}
+                categories={category}
+                // units={units}
+                categoryCallback={(value) => setCategoryTitle(value)}
+                unitCallback={(value) => setUnitTitle(value)}
+                callbackIngredientHighlight={() => setHighlightStyling(false)}
+                ingredientCategory={item.category || categoryTitle}
+                defaultUnitSelection={unitTitle}
+            />
+            <Button
+                children={"Save"}
+                style={styles.button}
+                onPress={() => {
+                    setHighlightStyling(false)
+                    setFailedStyling(false)
+                    if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
+                    else editIngredient ? createNewLeftover() : updateExistingLeftover(item.id)
+                    navigation.goBack()
+                }} />
         </View>
+      </View>
     {/* return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss()
@@ -400,7 +400,6 @@ const AddEditLeftover = ({route}) => {
                             }} />
                     </View>
                 </View> */}
-            </View>
           </View>
     </TouchableWithoutFeedback>
   )

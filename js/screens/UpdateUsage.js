@@ -159,60 +159,56 @@ const UpdateUsage = ({ route }) => {
             quantity={(wholeTitle == 0 ? '' : wholeTitle) + (partTitle.includes('/') ? " " + partTitle : "")}
             unit={unitTitle}
           />
-          <View style={styles.inputContainer}>
-            <View style={styles.leftContainer}>
-              {isUserTyping && (
-                <FlatList
-                  style={styles.list}
-                  // data={ingredients}
-                  ItemSeparatorComponent={Separator}
-                  keyExtractor={(_, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableHighlight
-                      onPress={() => {
-                        // setIngredientValue(item)
-                        setIsUserTyping(false)
-                        setHighlightStyling(false)
-                      }}
-                      activeOpacity={0.1}
-                      underlayColor={COLORS.SECONDARY}
-                    >
-                      <Text style={styles.listText}>{item}</Text>
-                    </TouchableHighlight>
-                  )}
-                />
+          {isUserTyping && (
+            <FlatList
+              style={styles.list}
+              // data={ingredients}
+              ItemSeparatorComponent={Separator}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => (
+                <TouchableHighlight
+                  onPress={() => {
+                    // setIngredientValue(item)
+                    setIsUserTyping(false)
+                    setHighlightStyling(false)
+                  }}
+                  activeOpacity={0.1}
+                  underlayColor={COLORS.SECONDARY}
+                >
+                  <Text style={styles.listText}>{item}</Text>
+                </TouchableHighlight>
               )}
-              <View style={{ marginTop: 30 }}>
-                <Quantity
-                  whole={wholeTitle}
-                  part={partTitle}
-                  wholeCallback={value => setWholeTitle(value)}
-                  partCallback={value => setPartTitle(value)}
-                  parts={parts}
-                />
-              </View>
-              <View>
-                <CategoryUnit
-                    ingredient={ingredientValue}
-                    categories={category}
-                    // units={units}
-                    categoryCallback={(value) => setCategoryTitle(value)}
-                    unitCallback={(value) => setUnitTitle(value)}
-                    callbackIngredientHighlight={() => setHighlightStyling(false)}
-                    ingredientCategory={categoryTitle}
-                    defaultUnitSelection={unitTitle}
-                />
-                <Button
-                    children={"Save"}
-                    style={styles.button, { marginTop: 50 }}
-                    onPress={() => {
-                        setHighlightStyling(false)
-                        setFailedStyling(false)
-                        updateCurrentUsage(item.id)
-                        console.log('data is: ', data)
-                        navigation.goBack()
-                        // navigation.navigate('Edit Usages', {ingredientUsages: data.ingredientUsages, id: recipeId})
-                    }} />
+            />
+          )}
+            <Quantity
+              whole={wholeTitle}
+              part={partTitle}
+              wholeCallback={value => setWholeTitle(value)}
+              partCallback={value => setPartTitle(value)}
+              parts={parts}
+            />
+          <View>
+            <CategoryUnit
+                ingredient={ingredientValue}
+                categories={category}
+                // units={units}
+                categoryCallback={(value) => setCategoryTitle(value)}
+                unitCallback={(value) => setUnitTitle(value)}
+                callbackIngredientHighlight={() => setHighlightStyling(false)}
+                ingredientCategory={categoryTitle}
+                defaultUnitSelection={unitTitle}
+            />
+            <Button
+                children={"Save"}
+                style={styles.button, { marginTop: 50 }}
+                onPress={() => {
+                    setHighlightStyling(false)
+                    setFailedStyling(false)
+                    updateCurrentUsage(item.id)
+                    console.log('data is: ', data)
+                    navigation.goBack()
+                    // navigation.navigate('Edit Usages', {ingredientUsages: data.ingredientUsages, id: recipeId})
+                }} />
          {/* <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
              <View style={styles.container}>
                  <UsageBar
@@ -239,8 +235,6 @@ const UpdateUsage = ({ route }) => {
                         />
                         <View style={styles.buttonContainer}>
                             <Button children={"Save"} style={{ width: 110 }} /> */}
-                        </View>
-                    </View>
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -251,7 +245,8 @@ const styles = StyleSheet.create({
     container: {
         ...globalStyles.container,
         ...globalStyles.content,
-        paddingTop: 50,
+        paddingTop: 40,
+        paddingHorizontal: 30,
         backgroundColor: COLORS.WHITE,
     },
     titleContainer: {
