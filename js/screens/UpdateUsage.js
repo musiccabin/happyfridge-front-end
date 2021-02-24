@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Alert,
+  TextInput,
+  TouchableHighlight,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
 
-import { client } from '../apollo'
 import { useMutation, useQuery } from '@apollo/client'
 import { ingredientUsagesQuery, leftoversQuery } from '../graphql/queries'
 import {
@@ -34,41 +43,71 @@ import {
   dashboardComStatsAllHistoryByProvinceQuery
 } from '../graphql/queries'
 
-import { updateUsageMutation } from '../graphql/mutations'
+import { newUsageMutation, updateUsageMutation } from '../graphql/mutations'
 
 const UpdateUsage = ({ route }) => {
     const navigation = useNavigation()
 
-    const { item, recipeId } = route.params
+    const { item, recipeId, editIngredient } = route.params
     const ingredientName = item?.ingredient?.name
     const ingredientCat = item?.ingredient?.category
 
     const category = ["Produce", "Dairy", "Meat", "Frozen", "Nuts & Seeds", "Other"]
     // const ingredientArray = ["Apple", "Mango", "Carrot", "Spice", "Orange", "Cajun"]
-    const parts = ["", "1/4", "1/3", "1/2", "2/3", "3/4"]
+    const parts = ["   ", "1/4", "1/3", "1/2", "2/3", "3/4"]
     // const units = ["kg", "lb"]
 
     let wholeInit = 0
     let partInit = parts[0]
-    const quantitySplit = item.quantity.split(' ')
-    let firstPart = quantitySplit[0]
-    if (!firstPart.includes('/')) {
-    wholeInit = parseInt(firstPart)
-    quantitySplit.shift()
+    if (!editIngredient) {
+      const quantitySplit = item.quantity.split(' ')
+      let firstPart = quantitySplit[0]
+      if (!firstPart.includes('/')) {
+        wholeInit = parseInt(firstPart)
+        quantitySplit.shift()
+      }
+      if (quantitySplit.length > 0) partInit = quantitySplit[0]
     }
-    if (quantitySplit.length > 0) partInit = quantitySplit[0]
 
-    const [categoryTitle, setCategoryTitle] = useState(ingredientCat.charAt(0).toUpperCase() + ingredientCat.slice(1))
+    const [categoryTitle, setCategoryTitle] = useState(category[0])
     const [wholeTitle, setWholeTitle] = useState(wholeInit)
     const [partTitle, setPartTitle] = useState(partInit)
-    const [unitTitle, setUnitTitle] = useState(item.unit)
-    const [ingredientValue, setIngredientValue] = useState(ingredientName)
+    const [unitTitle, setUnitTitle] = useState('   ')
+    const [ingredientValue, setIngredientValue] = useState('')
     // const [ingredients, setIngredients] = useState(ingredientArray)
     const [isUserTyping, setIsUserTyping] = useState(false)
     const [failedStyling, setFailedStyling] = useState(false)
     const [highlightStyling, setHighlightStyling] = useState(false)
 
     const { data, refetch } = useQuery(ingredientUsagesQuery, { variables: { id: recipeId }, notifyOnNetworkStatusChange: true, fetchPolicy: 'cache-and-network' })
+    const [newUsage] = useMutation(newUsageMutation, {refetchQueries: [
+      {query: ingredientUsagesQuery, variables: { id: recipeId }},
+      { query: leftoversQuery },
+      { query: dashboardIndStatsLastWeekQuery },
+      { query: dashboardIndStatsLast30DaysQuery },
+      { query: dashboardIndStatsLast6MonthsQuery },
+      { query: dashboardIndStatsLast90DaysQuery },
+      { query: dashboardIndStatsThisYearQuery },
+      { query: dashboardIndStatsAllHistoryQuery},
+      { query: dashboardComStatsLastWeekByCityQuery },
+      // { query: dashboardComStatsLastWeekByRegionQuery },
+      { query: dashboardComStatsLastWeekByProvinceQuery },
+      { query: dashboardComStatsLast30DaysByCityQuery },
+      // { query: dashboardComStatsLast30DaysByRegionQuery },
+      { query: dashboardComStatsLast30DaysByProvinceQuery },
+      { query: dashboardComStatsLast90DaysByCityQuery },
+      // { query: dashboardComStatsLast90DaysByRegionQuery },
+      { query: dashboardComStatsLast90DaysByProvinceQuery },
+      { query: dashboardComStatsLast6MonthsByCityQuery },
+      // { query: dashboardComStatsLast6MonthsByRegionQuery },
+      { query: dashboardComStatsLast6MonthsByProvinceQuery },
+      { query: dashboardComStatsThisYearByCityQuery },
+      // { query: dashboardComStatsThisYearByRegionQuery },
+      { query: dashboardComStatsThisYearByProvinceQuery },
+      { query: dashboardComStatsAllHistoryByCityQuery },
+      // { query: dashboardComStatsAllHistoryByRegionQuery },
+      { query: dashboardComStatsAllHistoryByProvinceQuery }
+    ]}, { awaitRefetchQueries: true })
     const [updateUsage] = useMutation(updateUsageMutation, { refetchQueries: [
       { query: ingredientUsagesQuery, variables: { id: recipeId }},
       { query: leftoversQuery },
@@ -106,6 +145,48 @@ const UpdateUsage = ({ route }) => {
       setIngredients(tempArray)
     }
 
+    const createNewUsage = async () => {
+      console.log('it hit me!')
+      let quantity = wholeTitle + " " + partTitle
+      if (partTitle === parts[0]) quantity = wholeTitle.toString()
+      if (wholeTitle == 0) quantity = partTitle
+      const data = await newUsage({
+          variables: {
+              value: {
+                  recipeId: recipeId,
+                  attributes: {
+                      ingredientName: ingredientValue.toLowerCase(),
+                      quantity: quantity.toString(),
+                      unit: unitTitle,
+                      category: categoryTitle.toLowerCase()
+                  }
+              }
+          }
+      })
+      if (data.data.newUsage.status) {
+          Alert.alert(
+              "Ingredient Usage Added",
+              "",
+              [
+                  { text: "OK", onPress: () => {
+                    refetch()
+                  } }
+              ],
+              // { cancelable: false }
+          )
+      } else {
+        console.log(data.data.newUsage.errors.fullMessages)
+          Alert.alert(
+              data.data.newUsage.errors.fullMessages[0],
+              "",
+              [
+                  { text: "OK", onPress: () => { } }
+              ],
+              // { cancelable: false }
+          )
+      }
+  }
+
     const updateCurrentUsage = async () => {
         let quantity = wholeTitle + " " + partTitle
         if (partTitle === parts[0]) quantity = wholeTitle
@@ -135,6 +216,82 @@ const UpdateUsage = ({ route }) => {
           return <View style={styles.separatorLine}></View>
       }
 
+      const styles = StyleSheet.create({
+        container: {
+            ...globalStyles.container,
+            ...globalStyles.content,
+            paddingTop: 40,
+            paddingHorizontal: 30,
+            backgroundColor: COLORS.WHITE,
+        },
+        titleContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        },
+        parentContainer: {
+            flexDirection: 'row',
+            marginTop: 70,
+            justifyContent: 'space-between',
+        },
+        leftChildContainer: {
+            flexBasis: '40%',
+            paddingEnd: 7
+        },
+        rightChildContainer: {
+            flexBasis: '60%',
+            paddingStart: 7,
+            marginTop: -7
+        },
+        buttonContainer: {
+            marginTop: 38,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            zIndex: -2
+        },
+        input: {
+          borderBottomColor: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT,
+          borderBottomWidth: 1,
+          marginVertical: 20,
+          paddingBottom: 4,
+          paddingHorizontal: 4,
+          color: ingredientName ? COLORS.SECONDARY_FONT : COLORS.PRIMARY_FONT
+        },
+        ingredientText: {
+            // color: highlightStyling ? COLORS.PRIMARY : failedStyling ? COLORS.SECONDARY : COLORS.PRIMARY_FONT
+            color: COLORS.PRIMARY,
+            fontWeight: '600'
+        },
+        list: {
+          backgroundColor: COLORS.PRIMARY_ICON,
+          borderBottomLeftRadius: 5,
+          borderBottomRightRadius: 5,
+          position: 'absolute',
+          right: 0,
+          left: 0,
+          top: 59,
+          zIndex: 100
+        },
+        listText: {
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+        },
+        separatorLine: {
+            borderBottomColor: COLORS.PRIMARY_FONT,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+        },
+        button: {
+            marginTop: 60,
+            width: 145,
+            zIndex: -2
+        },
+      })
+
+      useEffect(() => {
+        ingredientName && setIngredientValue(ingredientName)
+        ingredientCat && setCategoryTitle(ingredientCat)
+        item.unit && setUnitTitle(item.unit)
+    }, [])
+
     // const navigation = useNavigation()
     // const category = ["Dairy", "Nuts and Seeds", "Meat", "Produce", "Frozen"]
     // const parts = ["1/4", "1/3", "1/3", "2/3", "0"]
@@ -155,10 +312,24 @@ const UpdateUsage = ({ route }) => {
       >
         <View style={styles.container}>
           <UsageBar
-            name={ingredientName}
+            name={editIngredient ? ingredientValue : ingredientName}
             quantity={(wholeTitle == 0 ? '' : wholeTitle) + (partTitle.includes('/') ? " " + partTitle : "")}
             unit={unitTitle}
           />
+            {editIngredient && <Text style={styles.ingredientText}>Ingredient</Text>}
+            {editIngredient && <TextInput
+              style={styles.input}
+              // editable={editIngredient}
+              onChangeText={value => {
+                setIngredientValue(value)
+                setIsUserTyping(true)
+                setHighlightStyling(true)
+                value.length == 0 && setIsUserTyping(false)
+                  // : filteredIngredientArray(value)
+              }}
+              value={ingredientValue}
+              maxLength={50}
+            />}
           {isUserTyping && (
             <FlatList
               style={styles.list}
@@ -195,7 +366,7 @@ const UpdateUsage = ({ route }) => {
                 categoryCallback={(value) => setCategoryTitle(value)}
                 unitCallback={(value) => setUnitTitle(value)}
                 callbackIngredientHighlight={() => setHighlightStyling(false)}
-                ingredientCategory={categoryTitle}
+                ingredientCategory={ingredientCat || categoryTitle}
                 defaultUnitSelection={unitTitle}
             />
             <Button
@@ -204,8 +375,9 @@ const UpdateUsage = ({ route }) => {
                 onPress={() => {
                     setHighlightStyling(false)
                     setFailedStyling(false)
-                    updateCurrentUsage(item.id)
-                    console.log('data is: ', data)
+                    if (ingredientValue.slice(-1) == 's' || ingredientValue.slice(-2) == 'es') choiceAlert()
+                    else editIngredient ? createNewUsage() : updateCurrentUsage(item.id)
+                    // console.log('data is: ', data)
                     navigation.goBack()
                     // navigation.navigate('Edit Usages', {ingredientUsages: data.ingredientUsages, id: recipeId})
                 }} />
@@ -240,39 +412,5 @@ const UpdateUsage = ({ route }) => {
         </TouchableWithoutFeedback>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        ...globalStyles.container,
-        ...globalStyles.content,
-        paddingTop: 40,
-        paddingHorizontal: 30,
-        backgroundColor: COLORS.WHITE,
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    parentContainer: {
-        flexDirection: 'row',
-        marginTop: 70,
-        justifyContent: 'space-between',
-    },
-    leftChildContainer: {
-        flexBasis: '40%',
-        paddingEnd: 7
-    },
-    rightChildContainer: {
-        flexBasis: '60%',
-        paddingStart: 7,
-        marginTop: -7
-    },
-    buttonContainer: {
-        marginTop: 38,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        zIndex: -2
-    }
-});
 
 export default UpdateUsage

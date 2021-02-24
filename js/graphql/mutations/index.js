@@ -134,6 +134,17 @@ mutation uncompleteGrocery($value: UncompleteGroceryMutationInput!) {
 }
 `
 
+export const newUsageMutation = gql`
+mutation newUsage($value: NewUsageMutationInput!) {
+  newUsage(input: $value) {
+    status
+    errors {
+      fullMessages
+    }
+  }
+}
+`
+
 export const updateUsageMutation = gql`
 mutation updateUsage($value: UpdateUsageMutationInput!) {
   updateUsage(input: $value) {

@@ -150,7 +150,7 @@ const EditUsages = ({ navigation, route }) => {
         </Pressable>
       </View>
       <IngredientList data={data.ingredientUsages.length > 0 ? createUsages(data.ingredientUsages) : createUsages(ingredientUsages)} page={'Edit Usages'} titles={usagesTitles} componentName={'Update Usage'} recipeId={id} />
-      <FloatingEditButton componentName={'Update Usage'} />
+      <FloatingEditButton componentName={'Update Usage'} recipeId={id} />
     </View>
     )
 }

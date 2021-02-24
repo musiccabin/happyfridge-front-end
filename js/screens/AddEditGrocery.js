@@ -13,7 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { groceriesQuery } from '../graphql/queries'
 import { newGroceryMutation, updateGroceryMutation } from '../graphql/mutations'
 
@@ -162,7 +162,7 @@ const AddEditGrocery = ({route}) => {
                 [
                     { text: "OK", onPress: () => { } }
                 ],
-                { cancelable: false }
+                // { cancelable: false }
             )
         }
     }
@@ -185,7 +185,7 @@ const AddEditGrocery = ({route}) => {
           }
       })
 
-      console.log(data.data)
+      // console.log(data.data)
 
       if (data.data.updateGrocery.grocery) {
         Alert.alert(

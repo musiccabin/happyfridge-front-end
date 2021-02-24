@@ -165,7 +165,7 @@ const AddEditLeftover = ({route}) => {
                 [
                     { text: "OK", onPress: () => { } }
                 ],
-                { cancelable: false }
+                // { cancelable: false }
             )
         }
     }

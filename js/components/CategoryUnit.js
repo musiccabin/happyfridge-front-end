@@ -68,13 +68,19 @@ const CategoryUnit = ({ categoryCallback,
 
     const findCategory = (data) => {
         const category = data?.ingredientInfo?.category
+        console.log('cat found: ',category)
         let ingredientCat = ingredientCategory
         if (category && category != ingredientCategory.toLowerCase()) {
-            ingredientCat = category.charAt(0).toUpperCase() + category.slice(1)
-            if (ingredientCat === 'NutsAndSeeds') ingredientCat = 'Nuts & Seeds'
-            categoryCallback(ingredientCat)
+            ingredientCat = category
+            // if (ingredientCat === 'NutsAndSeeds') ingredientCat = 'Nuts & Seeds'
         }
-        // console.log('ingredientCat is: ', ingredientCat)
+        if (ingredientCat === 'nuts & seeds') {
+            ingredientCat = 'Nuts & Seeds'
+        } else {
+            ingredientCat = ingredientCat.charAt(0).toUpperCase() + ingredientCat.slice(1)
+        }
+        categoryCallback(ingredientCat)
+        console.log('ingredientCat is: ', ingredientCat)
         return ingredientCat
     }
 
