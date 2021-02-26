@@ -480,18 +480,18 @@ const RecipeDetails = ({ route, navigation }) => {
       </View>
       <Dialog
                 visible={visible}
-                dialogTitle={<DialogTitle title="Did you make the recipe already?" />}
+                dialogTitle={<DialogTitle title="You really didn't make this dish?" />}
                 footer={
                   <DialogFooter>
-                    <DialogButton
+                    {/* <DialogButton
                       text="Yes"
                       onPress={() => {
                         setVisibility(false)
                         navigation.navigate('Recipe Details', { id: id })
                       }}
-                    />
+                    /> */}
                     <DialogButton
-                      text="No, delete my ingredient usages."
+                      text="No, I didn't."
                       onPress={() => {
                         completionAction('uncomplete')
                         setVisibility(false)

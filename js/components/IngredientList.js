@@ -44,6 +44,7 @@ import {
 } from '../graphql/queries'
 
 import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation, removeLeftoverMutation, usedRecipeAmountsMutation, removeUsageMutation } from '../graphql/mutations'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const IngredientList = ({ data, page, titles, iconName, componentName, recipeId }) => {
 
@@ -247,28 +248,6 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                   setSelectedItem(item.id)
                 }}
               />
-              <Dialog
-                visible={visible}
-                dialogTitle={<DialogTitle title="Really Delete?" />}
-                footer={
-                  <DialogFooter>
-                    {/* <DialogButton
-                      text="CANCEL"
-                      onPress={() => {}}
-                    /> */}
-                    <DialogButton
-                      text="OK"
-                      onPress={() => {
-                        deleteIt(selected)
-                        setVisibility(false)
-                      }}
-                    />
-                  </DialogFooter>}
-                onTouchOutside={() => {
-                  setVisibility(false)                  
-                }}
-              >
-              </Dialog>
             {/* </MenuTrigger>
 
             <MenuOptions> */
@@ -282,6 +261,30 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
         // </MenuContext>
         keyExtractor={item => item.id}
       />
+                    <Dialog
+                visible={visible}
+                dialogTitle={<DialogTitle title="Really Delete?" />}
+                style={{opacity: 0.8}}
+                footer={
+                  <DialogFooter>
+                    {/* <DialogButton
+                      text="CANCEL"
+                      onPress={() => {}}
+                    /> */}
+                    <DialogButton
+                      text="OK"
+                      color="red"
+                      onPress={() => {
+                        deleteIt(selected)
+                        setVisibility(false)
+                      }}
+                    />
+                  </DialogFooter>}
+                onTouchOutside={() => {
+                  setVisibility(false)                  
+                }}
+              >
+              </Dialog>
     </>
   )
 }
