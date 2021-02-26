@@ -48,8 +48,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const IngredientList = ({ data, page, titles, iconName, componentName, recipeId }) => {
 
-  // console.log('data is: ', data)
-
   const navigation = useNavigation()
   // const { dangerouslyGetState } = useNavigation()
   // const { index, routes } = dangerouslyGetState()
@@ -133,7 +131,6 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
       deleteUsage({ variables: { value: input } }).then(({ data }) => {
         const returnedData = data.removeUsage
         if (returnedData.status) {
-          console.log('in if block')
           fetchUsages.refetch()
           navigation.navigate('Edit Usages', {ingredientUsages: fetchUsages.data.ingredientUsages, id: recipeId})
         }
@@ -163,7 +160,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
     <>
       <View style={styles.header}>
         {titles.map((title, idx) => (
-          <Pressable key={idx} onPress={() =>
+          <Pressable key={idx} onPress={() => 
             handleCategoryScroll(idx)
           }>
             <View
@@ -194,13 +191,13 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
           <Text style={styles.emptyListText}>Your list is empty.</Text>
         )}
         renderSectionHeader={({ section }) => (
-          section.data.length != 0 ?
-          <Text style={styles.category}>{section.title}</Text>
-        : (null))}
+          section.data.length > 0 && section.data[0].name !== 'DummyData' ?
+          <Text style={styles.category}>{section.title}</Text> : null
+        )}
         renderItem={({ item }) => (
           // <MenuContext style={styles.container}>
           <View style={styles.list}>
-            { page === 'Grocery' ? 
+            { page === 'Grocery' && item.name !== 'DummyData' ? 
             <MaterialIcons
                 style={globalStyles.clock}
                 name={iconName}
@@ -209,7 +206,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                 onPress={() => completeOrUncompleteIt(item.id)}
               />  
               : (null) }    
-            <Pressable
+            {item.name !== 'DummyData' && <Pressable
             onPress={() => {
               if (componentName === 'Update Usage') {
                 usedRecipeAmounts({variables: {value: {recipeId: recipeId}}})
@@ -227,7 +224,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                   {item.unit}
                 </Text>
               {/* </View> */}
-            </Pressable>
+            </Pressable>}
           {/* <Menu ref={r => (this.menu = r)}>
             <MenuTrigger
               customStyles={{
@@ -238,7 +235,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                   },
                 },
               }}> */}
-              <MaterialIcons
+              {item.name !== 'DummyData' && <MaterialIcons
                 style={globalStyles.clock}
                 name='delete'
                 size={20}
@@ -247,7 +244,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                   setVisibility(true)
                   setSelectedItem(item.id)
                 }}
-              />
+              />}
             {/* </MenuTrigger>
 
             <MenuOptions> */
