@@ -72,7 +72,7 @@ const UpdateUsage = ({ route }) => {
     const [categoryTitle, setCategoryTitle] = useState(category[0])
     const [wholeTitle, setWholeTitle] = useState(wholeInit)
     const [partTitle, setPartTitle] = useState(partInit)
-    const [unitTitle, setUnitTitle] = useState('   ')
+    const [unitTitle, setUnitTitle] = useState(item?.unit || '   ')
     const [ingredientValue, setIngredientValue] = useState('')
     // const [ingredients, setIngredients] = useState(ingredientArray)
     const [isUserTyping, setIsUserTyping] = useState(false)

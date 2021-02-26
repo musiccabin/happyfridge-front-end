@@ -68,7 +68,6 @@ const CategoryUnit = ({ categoryCallback,
 
     const findCategory = (data) => {
         const category = data?.ingredientInfo?.category
-        console.log('cat found: ',category)
         let ingredientCat = ingredientCategory
         if (category && category != ingredientCategory.toLowerCase()) {
             ingredientCat = category
@@ -80,7 +79,6 @@ const CategoryUnit = ({ categoryCallback,
             ingredientCat = ingredientCat.charAt(0).toUpperCase() + ingredientCat.slice(1)
         }
         categoryCallback(ingredientCat)
-        console.log('ingredientCat is: ', ingredientCat)
         return ingredientCat
     }
 
@@ -106,6 +104,7 @@ const CategoryUnit = ({ categoryCallback,
                     break
                 case 'other':
                     units = ['', 'lb', 'kg', 'oz', 'g', 'cup', 'tbsp', 'tsp']
+                    break
                 default:
                     units = ['']
             }

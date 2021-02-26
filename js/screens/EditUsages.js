@@ -32,7 +32,7 @@ import {
   dashboardComStatsAllHistoryByProvinceQuery
 } from '../graphql/queries'
 
-import { usedRecipeAmountsMutation } from '../graphql/mutations'
+import { usedRecipeAmountsMutation, removeAllUsagesMutation } from '../graphql/mutations'
 // import { produceData, meatData, frozenData, dairyData, nutsData } from '../mock'
 
 const EditUsages = ({ navigation, route }) => {
@@ -40,6 +40,7 @@ const EditUsages = ({ navigation, route }) => {
 
   const [usedRecipeAmountsReturned] = useMutation(usedRecipeAmountsMutation, { refetchQueries: [
     { query: leftoversQuery },
+    { query: ingredientUsagesQuery, variables: {id: id} },
     { query: dashboardIndStatsLastWeekQuery },
     { query: dashboardIndStatsLast30DaysQuery },
     { query: dashboardIndStatsLast6MonthsQuery },
@@ -65,7 +66,13 @@ const EditUsages = ({ navigation, route }) => {
     // { query: dashboardComStatsAllHistoryByRegionQuery },
     { query: dashboardComStatsAllHistoryByProvinceQuery }
   ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
-  const { data } = useQuery(ingredientUsagesQuery,  {
+
+  const [removeUsages] = useMutation(removeAllUsagesMutation, { refetchQueries: [
+    { query: leftoversQuery },
+    { query: ingredientUsagesQuery, variables: {id: id} }
+  ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
+
+  const { data, refetch } = useQuery(ingredientUsagesQuery,  {
     variables: {id: id}, fetchPolicy: 'cache-and-network'
   })
 
@@ -140,16 +147,23 @@ const EditUsages = ({ navigation, route }) => {
           How much of each ingredient {'\n'} did you use?
         </Text>
         <Pressable onPress={() => {
-          // console.log('id is: ', id)
-          usedRecipeAmountsReturned({variables: {value: {recipeId: id}}}).then((data) => {            
-            if (data.status) usagesFromQuery.refetch()
-          })
-          navigation.navigate('Recipe Details', { id: id })}
+          const input = { recipeId: id }
+          if (data?.ingredientUsages?.length > 0) {
+            removeUsages({ variables: { value: input }}).then(() => {
+              // if (data.removeAllUsages.status)
+                usedRecipeAmountsReturned({ variables: { value: input }}).then(() => refetch())
+            })
+          } else {
+            usedRecipeAmountsReturned({variables: { value: input }}).then(() => {
+              refetch()
+            })
+          }
+          navigation.navigate('Recipe Details', { id: id, shouldFetch: true })}
         }>
           <Text style={styles.text}>I used the exact recipe amounts!</Text>
         </Pressable>
       </View>
-      <IngredientList data={data.ingredientUsages.length > 0 ? createUsages(data.ingredientUsages) : createUsages(ingredientUsages)} page={'Edit Usages'} titles={usagesTitles} componentName={'Update Usage'} recipeId={id} />
+      <IngredientList data={data?.ingredientUsages?.length > 0 ? createUsages(data.ingredientUsages) : createUsages(ingredientUsages)} page={'Edit Usages'} titles={usagesTitles} componentName={'Update Usage'} recipeId={id} />
       <FloatingEditButton componentName={'Update Usage'} recipeId={id} />
     </View>
     )

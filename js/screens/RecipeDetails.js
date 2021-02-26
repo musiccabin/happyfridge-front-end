@@ -61,13 +61,14 @@ const RecipeDetails = ({ route, navigation }) => {
   })
   const AnimatedView = animated(View)
 
-  const { id } = route.params
+  const { id, shouldFetch } = route.params
 
   const { refreshPageContext } = useContext(Context)
   const [refreshPage, setRefreshPage] = refreshPageContext
 
   const [visible, setVisibility] = useState(false)
   const [recipeCompleted, setRecipeCompleted] = useState(false)
+  const [fetch, setFetch] = useState(shouldFetch)
 
   const fetchRecipesInMealplan = useQuery(recipesInMealplanQuery, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
 
@@ -87,7 +88,7 @@ const RecipeDetails = ({ route, navigation }) => {
 
   const ingredientUsages = useQuery(ingredientUsagesQuery,  {
     variables: {id: id}
-  })
+  }, { notifyOnNetworkStatusChange: true }, { fetchPolicy: 'cache-and-network' })
 
   const { data, loading, error } = useQuery(ingredientListQuery, {
     variables: { id: id },
@@ -95,11 +96,13 @@ const RecipeDetails = ({ route, navigation }) => {
 
   const refetchAll = (() => {
     fetchRecipesInMealplan.refetch()
+    mealplanCompletions.refetch()
     fetchFavs.refetch()
     fetchCompletions.refetch()
     mealplanCompletions.refetch()
     fetchPopularRecipes.refetch()
     fetchRecommendations.refetch()
+    ingredientUsages.refetch()
   })
 
   const fetchGroceries = useQuery(groceriesQuery, {
@@ -115,6 +118,11 @@ const RecipeDetails = ({ route, navigation }) => {
     // console.log('refetched all')
     setRefresh(true)
 }
+
+ if (fetch) {
+   ingredientUsages.refetch()
+   setFetch(false)
+ }
 
   const favourites = client.readQuery({ query: favRecipesQuery })
   const completions = client.readQuery({ query: completedRecipesQuery })
@@ -241,9 +249,18 @@ const RecipeDetails = ({ route, navigation }) => {
     setRefreshPage(true)   
   }
   
-  const [newCompletionReturned] = useMutation(newCompletionMutation)
-  const [removeCompletionReturned] = useMutation(removeCompletionMutation)
+  const [newCompletionReturned] = useMutation(newCompletionMutation, { refetchQueries: [
+    { query: completedInMealplanQuery },
+    { query: completedRecipesQuery },
+    { query: ingredientUsagesQuery, variables: {id: id} },
+  ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
+  const [removeCompletionReturned] = useMutation(removeCompletionMutation, { refetchQueries: [
+    { query: completedInMealplanQuery },
+    { query: completedRecipesQuery },
+    { query: ingredientUsagesQuery, variables: {id: id} },
+  ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
   const [removeUsagesReturned] = useMutation(removeAllUsagesMutation, { refetchQueries: [
+    { query: ingredientUsagesQuery, variables: {id: id} },
     { query: leftoversQuery },
     { query: dashboardIndStatsLastWeekQuery },
     { query: dashboardIndStatsLast30DaysQuery },
@@ -278,9 +295,10 @@ const RecipeDetails = ({ route, navigation }) => {
         variables: {id: id}
       })
 
+      console.log('existing usages: ', existingUsages)
       if (existingUsages?.ingredientUsages?.length > 0) {
         removeUsagesReturned({ variables: { value: input } }).then(({ data }) => {
-          if (data.status) {
+          if (data.removeAllUsages.status) {
             ingredientUsages.refetch()
             client.writeQuery({
               query: ingredientUsagesQuery,
@@ -306,9 +324,9 @@ const RecipeDetails = ({ route, navigation }) => {
     } else {
       newCompletionReturned({ variables: { value: input } }).then(({ data }) => {
         setRecipeCompleted(true)
-        const first_time_completion = data.newCompletion.completion
-        const existing_completion = data.newCompletion.status
-        if (first_time_completion || existing_completion) {
+        const firstTimeCompletion = data.newCompletion.completion
+        const existingCompletion = data.newCompletion.status
+        if (firstTimeCompletion || existingCompletion) {
           refetchAll()
           const data = client.readQuery({ query: completedInMealplanQuery })
           client.writeQuery({
@@ -394,7 +412,7 @@ const RecipeDetails = ({ route, navigation }) => {
               />
               <Text style={globalStyles.titleS}>{recipeInfo.data.recipeInfo.cookingTime}</Text>
             </View>
-            {inMealplan && isCompleted && <TouchableOpacity>
+            {(recipeCompleted || mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id === id).length > 0) && <TouchableOpacity>
               <Text
               style={styles.anchorText}
               onPress={() => {
@@ -434,12 +452,12 @@ const RecipeDetails = ({ route, navigation }) => {
                 <Text style={[globalStyles.titleS, styles.marginBottom]}>{index + 1}. {step}</Text>
               )}
               <View style={styles.buttonWrapper}>
-                {inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id == id).length == 0 &&
+                {inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id === id).length == 0 && !recipeCompleted &&
                 <Button onPress={() => {
                   completionAction('complete')
                   navigation.navigate('Edit Usages', {ingredientUsages: data.ingredientList, id: id})}}
-                  >Recipe Complete</Button>}
-                {recipeCompleted || inMealplan && mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id === id).length > 0 &&
+                  >Complete Recipe</Button>}
+                {(recipeCompleted || mealplanCompletions.data.completedInMealplan.filter(recipe => recipe.id === id).length > 0) &&
                 <ButtonInactive onPress={() => {
                   if (ingredientUsages.data.ingredientUsages.length > 0) {
                     setVisibility(true)
