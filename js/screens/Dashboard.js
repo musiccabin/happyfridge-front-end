@@ -37,7 +37,8 @@ import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar'
 
 const Dashboard = () => {
 
-  const curMonth = new Date().getMonth()
+  const secondHalfOfYear = new Date().getMonth() > 5
+  const [scroll, setScroll] = useState(false)
   // const [refresh, setRefresh] = useState()
   // const refreshPage = (refresh) => setRefresh(!refresh)
 
@@ -62,14 +63,6 @@ const Dashboard = () => {
   const setTimeQueryFromDem = () => setTimeQuery(timeFilter[0].query)
 
   const [showAll, setShowAll] = useState(false)
-  const indQuery = [
-    dashboardIndStatsLastWeekQuery,
-    dashboardIndStatsLast30DaysQuery,
-    dashboardIndStatsLast90DaysQuery,
-    dashboardIndStatsLast6MonthsQuery,
-    dashboardIndStatsThisYearQuery,
-    dashboardIndStatsAllHistoryQuery].includes(timeQuery)
-  if (showAll && indQuery) setTimeQuery(dashboardComStatsLastWeekByCityQuery)
   
   const [query1, setQuery1] = useState(dashboardIndStatsLastWeekQuery)
   const [query2, setQuery2] = useState(dashboardIndStatsLast30DaysQuery)
@@ -102,11 +95,32 @@ const Dashboard = () => {
       setQuery4(dashboardIndStatsLast6MonthsQuery)
       setQuery5(dashboardIndStatsThisYearQuery)
       setQuery6(dashboardIndStatsAllHistoryQuery)
-      console.log('did reset queries')
     }
   }
 
-  if (!showAll && !indQuery) {
+  const indQueries = [
+    dashboardIndStatsLastWeekQuery,
+    dashboardIndStatsLast30DaysQuery,
+    dashboardIndStatsLast90DaysQuery,
+    dashboardIndStatsLast6MonthsQuery,
+    dashboardIndStatsThisYearQuery,
+    dashboardIndStatsAllHistoryQuery]
+
+  // const cityQueries = [
+  //   dashboardComStatsLastWeekByCityQuery,
+  //   dashboardComStatsLast30DaysByCityQuery,
+  //   dashboardComStatsLast90DaysByCityQuery,
+  //   dashboardComStatsLast6MonthsByCityQuery,
+  //   dashboardComStatsThisYearByCityQuery,
+  //   dashboardComStatsAllHistoryByCityQuery]
+    
+  const isInd = indQueries.includes(timeQuery)
+  // const isCity = cityQueries.includes(timeQuery)
+  if (showAll & isInd) {
+    setTimeQuery(dashboardComStatsLastWeekByCityQuery)
+    resetQueries()
+  }
+  if (!showAll && !isInd) {
     setTimeQuery(dashboardIndStatsLastWeekQuery)
     resetQueries()
   }
@@ -134,7 +148,7 @@ const Dashboard = () => {
     },
   ]
 
-  if (curMonth > 5) {
+  if (secondHalfOfYear) {
     timeFilter.push({
         id: "5",
         title: "This year",
@@ -148,8 +162,36 @@ const Dashboard = () => {
       })
   }
 
+  const lastWeekProv = useQuery(dashboardComStatsLastWeekByProvinceQuery)
+  const last30DaysProv = useQuery(dashboardComStatsLast30DaysByProvinceQuery)
+  const last90DaysProv = useQuery(dashboardComStatsLast90DaysByProvinceQuery)
+  const last6MonthsProv = useQuery(dashboardComStatsLast6MonthsByProvinceQuery)
+  const thisYearProv = useQuery(dashboardComStatsThisYearByProvinceQuery)
+  const allHistoryProv = useQuery(dashboardComStatsAllHistoryByProvinceQuery)
+
+  const lastWeekCity = useQuery(dashboardComStatsLastWeekByCityQuery)
+  const last30DaysCity = useQuery(dashboardComStatsLast30DaysByCityQuery)
+  const last90DaysCity = useQuery(dashboardComStatsLast90DaysByCityQuery)
+  const last6MonthsCity = useQuery(dashboardComStatsLast6MonthsByCityQuery)
+  const thisYearCity = useQuery(dashboardComStatsThisYearByCityQuery)
+  const allHistoryCity = useQuery(dashboardComStatsAllHistoryByCityQuery)
+
+  const [updateGraphLastWeek] = useLazyQuery(query1)
+  const [updateGraphLast30Days] = useLazyQuery(query2)
+  const [updateGraphLast90Days] = useLazyQuery(query3)
+  const [updateGraphLast6Months] = useLazyQuery(query4)
+  const [updateGraphThisYear] = useLazyQuery(query5)
+  const [updateGraphAllHistory] = useLazyQuery(query6)
+
+  const [updateProvGraphLastWeek] = useLazyQuery(dashboardComStatsLastWeekByProvinceQuery)
+  const [updateProvGraphLast30Days] = useLazyQuery(dashboardComStatsLast30DaysByProvinceQuery)
+  const [updateProvGraphLast90Days] = useLazyQuery(dashboardComStatsLast90DaysByProvinceQuery)
+  const [updateProvGraphLast6Months] = useLazyQuery(dashboardComStatsLast6MonthsByProvinceQuery)
+  const [updateProvGraphThisYear] = useLazyQuery(dashboardComStatsThisYearByProvinceQuery)
+  const [updateProvGraphAllHistory] = useLazyQuery(dashboardComStatsAllHistoryByProvinceQuery)
+
   const [updateGraph, { lazyLoading, data }] = useLazyQuery(timeQuery)
-  const refreshPage = () => updateGraph()
+  // const refreshPage = () => updateGraph()
 
   const [cities, setCities] = useState()
   const updateCities = (cities) => {
@@ -171,9 +213,27 @@ const Dashboard = () => {
   const [usages, setUsages] = useState([])
 
   useEffect(() => {
+    if (timeQuery !== query1) updateGraphLastWeek()
+    if (timeQuery !== query2) updateGraphLast30Days()
+    if (timeQuery !== query3) updateGraphLast90Days()
+    if (timeQuery !== query4) updateGraphLast6Months()
+    if (secondHalfOfYear && timeQuery !== query5) updateGraphThisYear()
+    if (timeQuery !== query6)  updateGraphAllHistory()
+    if (showAll) {
+      updateProvGraphLastWeek()
+      updateProvGraphLast30Days()
+      updateProvGraphLast90Days()
+      updateProvGraphLast6Months()
+      if (secondHalfOfYear) updateProvGraphThisYear()
+      updateProvGraphAllHistory()
+    }
     updateGraph()
-    //TODO! using useLazyQuery on first load is causing glitch, may use useQuery for first time load 
   }, [])
+
+  useEffect(() => {
+    if (lazyLoading) return console.log('lazyLoading ...')
+    if (!lazyLoading && data) updateCounts()
+  }, [data, lazyLoading])
 
   const loadDemographyList = (provs) => {
     const data = {}
@@ -186,7 +246,6 @@ const Dashboard = () => {
     const rows = [
       <DemographicFilter
       // categories={'province'}
-      callback={() => console.log('')}
       inheritStyle={styles.inheritStyle}
       buttonStyle={styles.buttonStyle}
       listTop={{ marginTop: 25 }}
@@ -201,10 +260,11 @@ const Dashboard = () => {
       updateGraph={updateGraph}
       resetButton={resetButton}
       setTimeQueryFromDem={setTimeQueryFromDem}
+      setSelectedCat={setSelectedCat}
+      updateCounts={updateCounts}
     />,
     <DemographicFilter
       // categories={'city'}
-      callback={() => console.log('')}
       inheritStyle={styles.inheritStyle}
       buttonStyle={styles.buttonStyle}
       listTop={{ marginTop: 25 }}
@@ -216,6 +276,8 @@ const Dashboard = () => {
       updateGraph={updateGraph}
       resetButton={resetButton}
       setTimeQueryFromDem={setTimeQueryFromDem}
+      setSelectedCat={setSelectedCat}
+      updateCounts={updateCounts}
     />
     ]
     // for (let key in allLocations) {
@@ -236,95 +298,92 @@ const Dashboard = () => {
   const showTop10Ingredients = (category) => {
     if (category === 'nuts &\n seeds') category = 'nuts / seeds'
       // console.log('cat clicked on is: ', category)
-      setSelectedCat(category)
+      if (category !== selectedCat) setSelectedCat(category)
       let usagesCurTimeFrame
-      const city = selectedCity.toLowerCase()
-      const prov = selectedProv.toLowerCase()
+      const city = selectedCity?.toLowerCase()
+      const prov = selectedProv?.toLowerCase()
       if (showAll) {
         if (selectedCity === 'All Cities') {
-        if (timeFilterNumber == 1) usagesCurTimeFrame = data.dashboardComStatsLastWeekByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
-        else if (timeFilterNumber == 2) usagesCurTimeFrame = data.dashboardComStatsLast30DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
-        else if (timeFilterNumber == 3) usagesCurTimeFrame = data.dashboardComStatsLast90DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
-        else if (timeFilterNumber == 4) usagesCurTimeFrame = data.dashboardComStatsLast6MonthsByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
-        else if (curMonth > 5 && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardComStatsThisYearByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
-        else usagesCurTimeFrame = data.dashboardComStatsAllHistoryByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        if (timeFilterNumber == 1) usagesCurTimeFrame = lastWeekProv.data.dashboardComStatsLastWeekByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (timeFilterNumber == 2) usagesCurTimeFrame = last30DaysProv.data.dashboardComStatsLast30DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (timeFilterNumber == 3) usagesCurTimeFrame = last90DaysProv.data.dashboardComStatsLast90DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (timeFilterNumber == 4) usagesCurTimeFrame = last6MonthsProv.data.dashboardComStatsLast6MonthsByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else if (secondHalfOfYear && timeFilterNumber == 5) usagesCurTimeFrame = thisYearProv.data.dashboardComStatsThisYearByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
+        else usagesCurTimeFrame = allHistoryProv.data.dashboardComStatsAllHistoryByProvince?.find(stat => stat.province === prov)?.geoUsage?.usages
       } else if (selectedCity) {
-        if (timeFilterNumber == 1) usagesCurTimeFrame = data.dashboardComStatsLastWeekByCity?.find(stat => stat.city === city)?.geoUsage?.usages
-        else if (timeFilterNumber == 2) usagesCurTimeFrame = data.dashboardComStatsLast30DaysByCity?.find(stat => stat.city === city)?.geoUsage?.usages
-        else if (timeFilterNumber == 3) usagesCurTimeFrame = data.dashboardComStatsLast90DaysByCity?.find(stat => stat.city === city)?.geoUsage?.usages
-        else if (timeFilterNumber == 4) usagesCurTimeFrame = data.dashboardComStatsLast6MonthsByCity?.find(stat => stat.city === city)?.geoUsage?.usages
-        else if (curMonth > 5 && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardComStatsThisYearByCity?.find(stat => stat.city === city)?.geoUsage?.usages
-        else usagesCurTimeFrame = data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        if (timeFilterNumber == 1) usagesCurTimeFrame = lastWeekCity.data.dashboardComStatsLastWeekByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (timeFilterNumber == 2) usagesCurTimeFrame = last30DaysCity.data.dashboardComStatsLast30DaysByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (timeFilterNumber == 3) usagesCurTimeFrame = last90DaysCity.data.dashboardComStatsLast90DaysByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (timeFilterNumber == 4) usagesCurTimeFrame = last6MonthsCity.data.dashboardComStatsLast6MonthsByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else if (secondHalfOfYear && timeFilterNumber == 5) usagesCurTimeFrame = thisYearCity.data.dashboardComStatsThisYearByCity?.find(stat => stat.city === city)?.geoUsage?.usages
+        else usagesCurTimeFrame = allHistoryCity.data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.usages
       }
     } else {
       if (timeFilterNumber == 1) usagesCurTimeFrame = data.dashboardIndStatsLastWeek.usages
       else if (timeFilterNumber == 2) usagesCurTimeFrame = data.dashboardIndStatsLast30Days.usages
       else if (timeFilterNumber == 3) usagesCurTimeFrame = data.dashboardIndStatsLast90Days.usages
       else if (timeFilterNumber == 4) usagesCurTimeFrame = data.dashboardIndStatsLast6Months.usages
-      else if (curMonth > 5 && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardIndStatsThisYear.usages
+      else if (secondHalfOfYear && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardIndStatsThisYear.usages
       else usagesCurTimeFrame = data.dashboardIndStatsAllHistory.usages
     }
-    if (usagesCurTimeFrame) {
+    if (!usagesCurTimeFrame) {
+      if (usages) setUsages(null)
+    } else {
       if (category === 'nuts / seeds') {
-        setUsages(usagesCurTimeFrame['nutsAndSeeds'])
+        if (usages !== usagesCurTimeFrame['nutsAndSeeds']) setUsages(usagesCurTimeFrame['nutsAndSeeds'])
       } else {
-        setUsages(usagesCurTimeFrame[category])
+        if (usages !== usagesCurTimeFrame[category]) setUsages(usagesCurTimeFrame[category])
       }
     }
+    return usages
   }
 
-  useEffect(() => {
-    if (lazyLoading) return console.log('lazyLoading ...')
-    if (!lazyLoading && data) {
-      let count = []
-      // console.log('selected city is: ', selectedCity)
-      // console.log('data is: ', data.dashboardComStatsLastWeekByCity.find(stat => stat.city === city))
-      city = selectedCity.toLowerCase()
-      prov = selectedProv.toLowerCase()
-      if (showAll) {
-        if (selectedCity == 'All Cities') {
-          if (timeFilterNumber == 1) count = data.dashboardComStatsLastWeekByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
-          else if (timeFilterNumber == 2) count = data.dashboardComStatsLast30DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
-          else if (timeFilterNumber == 3) count = data.dashboardComStatsLast90DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
-          else if (timeFilterNumber == 4) count = data.dashboardComStatsLast6MonthsByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
-          else if (curMonth > 5 && timeFilterNumber == 5) count = data.dashboardComStatsThisYearByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
-          else count = data.dashboardComStatsAllHistoryByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
-        } else if (selectedCity) {
-          if (timeFilterNumber == 1) count = data.dashboardComStatsLastWeekByCity?.find(stat => stat.city === city)?.geoUsage?.count
-          else if (timeFilterNumber == 2) count = data.dashboardComStatsLast30DaysByCity?.find(stat => stat.city === city)?.geoUsage?.count
-          else if (timeFilterNumber == 3) count = data.dashboardComStatsLast90DaysByCity?.find(stat => stat.city === city)?.geoUsage?.count
-          else if (timeFilterNumber == 4) count = data.dashboardComStatsLast6MonthsByCity?.find(stat => stat.city === city)?.geoUsage?.count
-          else if (curMonth > 5 && timeFilterNumber == 5) count = data.dashboardComStatsThisYearByCity?.find(stat => stat.city === city)?.geoUsage?.count
-          else count = data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.count
-        }
-      } else {
-        // console.log('data is: ', data)
-        if (timeFilterNumber == 1) count = data.dashboardIndStatsLastWeek.count
-        else if (timeFilterNumber == 2) count = data.dashboardIndStatsLast30Days.count
-        else if (timeFilterNumber == 3) count = data.dashboardIndStatsLast90Days.count
-        else if (timeFilterNumber == 4) count = data.dashboardIndStatsLast6Months.count
-        else if (curMonth > 5 && timeFilterNumber == 5) count = data.dashboardIndStatsThisYear.count
-        else count = data.dashboardIndStatsAllHistory.count
+  const updateCounts = () => {
+    let count = []
+    const city = selectedCity?.toLowerCase()
+    const prov = selectedProv?.toLowerCase()
+    if (showAll) {
+      if (selectedCity == 'All Cities') {
+        if (timeFilterNumber == 1) count = lastWeekProv.data.dashboardComStatsLastWeekByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+        else if (timeFilterNumber == 2) count = last30DaysProv.data.dashboardComStatsLast30DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+        else if (timeFilterNumber == 3) count = last90DaysProv.data.dashboardComStatsLast90DaysByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+        else if (timeFilterNumber == 4) count = last6MonthsProv.data.dashboardComStatsLast6MonthsByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+        else if (secondHalfOfYear && timeFilterNumber == 5) count = thisYearProv.data.dashboardComStatsThisYearByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+        else count = allHistoryProv.data.dashboardComStatsAllHistoryByProvince?.find(stat => stat.province === prov)?.geoUsage?.count
+      } else if (selectedCity) {
+        if (timeFilterNumber == 1) count = lastWeekCity.data.dashboardComStatsLastWeekByCity?.find(stat => stat.city === city)?.geoUsage?.count
+        else if (timeFilterNumber == 2) count = last30DaysCity.data.dashboardComStatsLast30DaysByCity?.find(stat => stat.city === city)?.geoUsage?.count
+        else if (timeFilterNumber == 3) count = last90DaysCity.data.dashboardComStatsLast90DaysByCity?.find(stat => stat.city === city)?.geoUsage?.count
+        else if (timeFilterNumber == 4) count = last6MonthsCity.data.dashboardComStatsLast6MonthsByCity?.find(stat => stat.city === city)?.geoUsage?.count
+        else if (secondHalfOfYear && timeFilterNumber == 5) count = thisYearCity.data.dashboardComStatsThisYearByCity?.find(stat => stat.city === city)?.geoUsage?.count
+        else count = allHistoryCity.data.dashboardComStatsAllHistoryByCity?.find(stat => stat.city === city)?.geoUsage?.count
       }
-      const gd = []
-      if (!count) count = {
-        produce: 0,
-        dairy: 0,
-        meat: 0,
-        frozen: 0,
-        nutsAndSeeds: 0,
-        other: 0
-      }
-      for (let key in count) {
-        let category = key
-        if (key === 'nutsAndSeeds') category = 'nuts &\n seeds'
-        key != '__typename' ? gd.push(
-          { x: category, y: 25, z: count[key] + '' }
-        ) : null
-      }
-      setGraphData(gd)
+    } else {
+      if (timeFilterNumber == 1) count = data.dashboardIndStatsLastWeek.count
+      else if (timeFilterNumber == 2) count = data.dashboardIndStatsLast30Days.count
+      else if (timeFilterNumber == 3) count = data.dashboardIndStatsLast90Days.count
+      else if (timeFilterNumber == 4) count = data.dashboardIndStatsLast6Months.count
+      else if (secondHalfOfYear && timeFilterNumber == 5) count = data.dashboardIndStatsThisYear.count
+      else count = data.dashboardIndStatsAllHistory.count
     }
-  }, [data, lazyLoading])
+    const gd = []
+    if (!count) count = {
+      produce: 0,
+      dairy: 0,
+      meat: 0,
+      frozen: 0,
+      nutsAndSeeds: 0,
+      other: 0
+    }
+    for (let key in count) {
+      let category = key
+      if (key === 'nutsAndSeeds') category = 'nuts &\n seeds'
+      key != '__typename' ? gd.push(
+        { x: category, y: 25, z: count[key] + '' }
+      ) : null
+    }
+    setGraphData(gd)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -351,6 +410,7 @@ const Dashboard = () => {
               resetQueries()
               updateGraph()
               setUsages(null)
+              setScroll(true)
             }}
           />
           {/* <TouchableOpacity
@@ -380,8 +440,10 @@ const Dashboard = () => {
               setTimeQuery(timeFilter[parseInt(value) - 1].query)
               resetQueries()
               updateGraph()
-              setUsages(null)
+              // showTop10Ingredients(selectedCat)
             }}
+            shouldScroll={scroll}
+            setScroll={setScroll}
           />
         </View>
       </View>
@@ -423,9 +485,9 @@ const Dashboard = () => {
         />}
       </View>
       <ScrollView style={globalStyles.content}>
-        {usages?.length > 0 && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
-        {usages?.length > 0 && selectedCat ?
-        usages.map(usage => 
+        {(!showAll || (showAll && selectedCity)) && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
+        {selectedCat ?
+        showTop10Ingredients(selectedCat)?.map(usage => 
         <View style={styles.ingredient}>
           <Text style={globalStyles.titleL}>{usage.ingredient.name} {'(x'}{usage.count}{')'}</Text>
           <Text style={globalStyles.titleL}>{usage.quantity} {usage.unit}</Text>

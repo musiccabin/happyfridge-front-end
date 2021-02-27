@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 import { Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { COLORS, globalStyles } from '../styles'
 
-const TimeFilter = ({ curVal, filter, timeFilterCallback, selectedButton, setSelectedFromTimeFilter }) => {
+const TimeFilter = ({ curVal, filter, timeFilterCallback, selectedButton, setSelectedFromTimeFilter, shouldScroll, setScroll }) => {
+    const [listRef, setListRef] = useState()
 
-    // console.log('cur val is: ', curVal)
-    // const [selected, setSelectedButton] = useState(selectedButton)
+    const handleScroll = (index) => {
+      listRef.scrollToIndex({
+        index: index,
+        viewPosition: 0,
+      })
+    }
+
+    if (listRef && shouldScroll) {
+        handleScroll(0)
+        setScroll(false)
+    }
 
     const styles = StyleSheet.create({
         timeButton: {
@@ -26,23 +36,28 @@ const TimeFilter = ({ curVal, filter, timeFilterCallback, selectedButton, setSel
 
     return (
         <FlatList
+            ref={(list) => setListRef(list)}
             data={filter}
             value={curVal}
             horizontal
             style={{ paddingStart: 20 }}
             showsHorizontalScrollIndicator={false}
             keyExtractor={item => item.id}
-            renderItem={item =>
+            getItemLayout={(data, index) => (
+                {length: 50, offset: 50 * index, index}
+              )}
+            renderItem={({ item, index }) =>
                 <TouchableOpacity
                     onPress={() => {
-                        setSelectedFromTimeFilter(item.item.id)
-                        timeFilterCallback(item.item.id)
+                        handleScroll(index)
+                        setSelectedFromTimeFilter(item.id)
+                        timeFilterCallback(item.id)
                     }}
                     style={[globalStyles.button,
-                    styles.timeButton, item.item.id == selectedButton ? styles.buttonActive : styles.buttonInactive,
-                    item.item.id == filter.length ? styles.margin : null
+                    styles.timeButton, item.id == selectedButton ? styles.buttonActive : styles.buttonInactive,
+                    item.id == filter.length ? styles.margin : null
                     ]}>
-                    <Text style={globalStyles.titleM}>{item.item.title}</Text>
+                    <Text style={globalStyles.titleM}>{item.title}</Text>
                 </TouchableOpacity>
             }
         />

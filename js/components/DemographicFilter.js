@@ -1,42 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableHighlight, FlatList, Pressable } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select'
 import { COLORS, globalStyles } from '../styles'
 import { Ionicons } from '@expo/vector-icons'
 
-import { useQuery } from '@apollo/client'
-import {
-    currentUserQuery,
-    // dashboardIndStatsLastWeekQuery,
-    // dashboardIndStatsLast30DaysQuery,
-    // dashboardIndStatsLast6MonthsQuery,
-    // dashboardIndStatsLast90DaysQuery,
-    // dashboardIndStatsThisYearQuery,
-    // dashboardIndStatsAllHistoryQuery,
-    // dashboardComStatsLastWeekByCityQuery,
-    // dashboardComStatsLastWeekByRegionQuery,
-    // dashboardComStatsLastWeekByProvinceQuery,
-    // dashboardComStatsLast30DaysByCityQuery,
-    // dashboardComStatsLast30DaysByRegionQuery,
-    // dashboardComStatsLast30DaysByProvinceQuery,
-    // dashboardComStatsLast90DaysByCityQuery,
-    // dashboardComStatsLast90DaysByRegionQuery,
-    // dashboardComStatsLast90DaysByProvinceQuery,
-    // dashboardComStatsLast6MonthsByCityQuery,
-    // dashboardComStatsLast6MonthsByRegionQuery,
-    // dashboardComStatsLast6MonthsByProvinceQuery,
-    // dashboardComStatsThisYearByCityQuery,
-    // dashboardComStatsThisYearByRegionQuery,
-    // dashboardComStatsThisYearByProvinceQuery,
-    dashboardComStatsAllHistoryByCityQuery,
-    // dashboardComStatsAllHistoryByRegionQuery,
-    // dashboardComStatsAllHistoryByProvinceQuery
-  } from '../graphql/queries'
-
-import { Context } from '../context'
-
-const DemographicFilter = ({ categories, inheritStyle, listZIndex,
-    callback, buttonStyle, listTop, data, provAndCities, provField, updateCities, initVal, keepSelectedCity, keepSelectedProv, resetQueries, resetTimeFilter, resetButton, updateGraph, setTimeQueryFromDem }) => {
+const DemographicFilter = ({ inheritStyle, listZIndex,
+    buttonStyle, listTop, data, provAndCities, provField, updateCities, initVal, keepSelectedCity, keepSelectedProv, resetQueries, updateGraph, updateCounts }) => {
 
     const items = []
     if (data) {
@@ -51,8 +20,6 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
 
     const [pickerVisibility, setPickerVisibility] = useState(false)
     const [selectedVal, setSelectedVal] = useState(initVal)
-    // const [cities, setCities] = useState(data['prov'])
-    // const [selectedCategory, setSelectedCategory] = useState(categories[0])
     
     const [icon, setIcon] = useState('ios-arrow-up')
     const [highlightStyling, setHighlightStyling] = useState(false)
@@ -100,7 +67,9 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
 
     return (
         <View style={inheritStyle}>
-            <Pressable style={buttonStyle} onPress={() => {
+            <Pressable
+            style={buttonStyle}
+            onPress={() => {
                 toggle()
             }}>
             <RNPickerSelect
@@ -114,11 +83,8 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
                     }
                     setSelectedVal(value)
                     resetQueries()
-                    resetButton()
-                    resetTimeFilter()
+                    updateCounts()
                     updateGraph()
-                    setTimeQueryFromDem()
-                    // setUsages(null)
                 }}
                 items={items}
             />
@@ -141,7 +107,6 @@ const DemographicFilter = ({ categories, inheritStyle, listZIndex,
                             <TouchableHighlight
                                 onPress={() => {
                                     callback(item)
-                                    // setSelectedCategory(item)
                                     toggle()
                                 }}
                                 activeOpacity={0.1}
