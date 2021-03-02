@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 import { COLORS, globalStyles } from '../styles'
 import { Button, CategoryUnit, Quantity, UsageBar } from '../components'
 import { useMutation, useQuery } from '@apollo/client'
-import { leftoversQuery, groceriesQuery } from '../graphql/queries'
+import { leftoversQuery, groceriesQuery, recommendedRecipesQuery } from '../graphql/queries'
 import { newLeftoverMutation, updateLeftoverMutation } from '../graphql/mutations'
 
 const AddEditLeftover = ({route}) => {
@@ -52,8 +52,16 @@ const AddEditLeftover = ({route}) => {
     const [failedStyling, setFailedStyling] = useState(false)
     const [highlightStyling, setHighlightStyling] = useState(false)
 
-    const [newLeftover] = useMutation(newLeftoverMutation, {refetchQueries: [{query: leftoversQuery}]}, { awaitRefetchQueries: true })
-    const [updateLeftover] = useMutation(updateLeftoverMutation, {refetchQueries: [{query: leftoversQuery}]}, { awaitRefetchQueries: true })
+    const [newLeftover] = useMutation(newLeftoverMutation, {refetchQueries: [
+      {query: leftoversQuery},
+      {query: groceriesQuery},
+      {query: recommendedRecipesQuery}
+    ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
+    const [updateLeftover] = useMutation(updateLeftoverMutation, {refetchQueries: [
+      {query: leftoversQuery},
+      {query: groceriesQuery},
+      {query: recommendedRecipesQuery}
+    ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
 
     const { refetch } = useQuery(groceriesQuery)
 

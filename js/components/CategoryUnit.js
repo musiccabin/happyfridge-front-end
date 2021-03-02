@@ -84,7 +84,7 @@ const CategoryUnit = ({ categoryCallback,
 
     const unitItems = (data) => {
         const category = data?.ingredientInfo?.category
-        let units = []
+        let units = ['', 'lb', 'kg', 'oz', 'g', 'cup', 'tbsp', 'tsp']
         if (category) {
             switch (category) {
                 case 'produce':
@@ -102,11 +102,8 @@ const CategoryUnit = ({ categoryCallback,
                 case 'nuts & seeds':
                     units = ['lb', 'oz', 'g', 'cup', 'tbsp', 'tsp']
                     break
-                case 'other':
-                    units = ['', 'lb', 'kg', 'oz', 'g', 'cup', 'tbsp', 'tsp']
-                    break
                 default:
-                    units = ['']
+                    break
             }
         }
         const pickerItems = []
@@ -135,7 +132,7 @@ const CategoryUnit = ({ categoryCallback,
                     }}>
                         <RNPickerSelect
                             value={ingredient ? findCategory(data) : ingredientCategory}
-                            disabled={ingredient ? true : false}
+                            disabled={ingredient && data?.ingredientInfo?.category ? true : false}
                             useNativePickerStyle={false}
                             onValueChange={(value) => {
                                 callbackIngredientHighlight(value)

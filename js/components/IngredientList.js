@@ -14,7 +14,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { useQuery, useMutation } from '@apollo/client'
-import { groceriesQuery, leftoversQuery, ingredientUsagesQuery } from '../graphql/queries'
+import { groceriesQuery, leftoversQuery, ingredientUsagesQuery, recommendedRecipesQuery } from '../graphql/queries'
 
 import {
   dashboardIndStatsLastWeekQuery,
@@ -66,7 +66,11 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
   const [deleteGrocery] = useMutation(removeGroceryMutation)
   const [completeGrocery] = useMutation(completeGroceryMutation)
   const [uncompleteGrocery] = useMutation(uncompleteGroceryMutation)
-  const [deleteLeftover] = useMutation(removeLeftoverMutation)
+  const [deleteLeftover] = useMutation(removeLeftoverMutation, {refetchQueries: [
+    {query: recommendedRecipesQuery},
+    {query: groceriesQuery},
+    {query: leftoversQuery}
+  ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
   const [usedRecipeAmounts] = useMutation(usedRecipeAmountsMutation)
   const [deleteUsage] = useMutation(removeUsageMutation, { refetchQueries: [
     { query: ingredientUsagesQuery, variables: { id: recipeId }},
@@ -293,6 +297,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: COLORS.SEPARATOR,
     backgroundColor: COLORS.WHITE,
+    justifyContent: 'space-around',
   },
   category: {
     ...globalStyles.titleM,

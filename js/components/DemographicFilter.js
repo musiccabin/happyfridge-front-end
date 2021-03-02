@@ -21,7 +21,7 @@ const DemographicFilter = ({ inheritStyle, listZIndex,
     const [pickerVisibility, setPickerVisibility] = useState(false)
     const [selectedVal, setSelectedVal] = useState(initVal)
     
-    const [icon, setIcon] = useState('ios-arrow-up')
+    // const [icon, setIcon] = useState('ios-arrow-up')
     const [highlightStyling, setHighlightStyling] = useState(false)
 
     const styles = StyleSheet.create({
@@ -70,7 +70,7 @@ const DemographicFilter = ({ inheritStyle, listZIndex,
             <Pressable
             style={buttonStyle}
             onPress={() => {
-                toggle()
+                // toggle()
             }}>
             <RNPickerSelect
                 value={selectedVal}
@@ -87,14 +87,15 @@ const DemographicFilter = ({ inheritStyle, listZIndex,
                     updateGraph()
                 }}
                 items={items}
+                placeholder={'City...'}
             />
                 {/* <Text style={styles.text}>{selectedCategory}</Text> */}
-                <Ionicons
+                {/* <Ionicons
                     style={styles.icon}
                     size={globalStyles.iconSize}
                     name={icon}
                     color={COLORS.SECONDARY_FONT}
-                />
+                /> */}
             </Pressable>
             {pickerVisibility &&
                 <FlatList
@@ -107,7 +108,7 @@ const DemographicFilter = ({ inheritStyle, listZIndex,
                             <TouchableHighlight
                                 onPress={() => {
                                     callback(item)
-                                    toggle()
+                                    // toggle()
                                 }}
                                 activeOpacity={0.1}
                                 underlayColor={COLORS.SECONDARY}
