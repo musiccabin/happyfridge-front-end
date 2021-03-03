@@ -39,7 +39,7 @@ const Leftovers = ({ navigation }) => {
   },
   ]
 
-  for (leftover of data?.leftovers) {
+  for (let leftover of data?.leftovers) {
     // console.log('leftover is: ', leftover)
     // console.log('leftover category is: ', leftover.ingredient.category)
     switch (leftover.ingredient.category) {
@@ -68,9 +68,15 @@ const Leftovers = ({ navigation }) => {
   for (let i = 0; i < 6; i++) {
     if (leftoverIngredients[i]['data'].length > 0) leftoversTitles.push(leftoverIngredients[i]['title'])
   }
+
+  const numOfCat = leftoversTitles.length
+  const fillSpace = {name: 'FillSpace', quantity: '1'}
+  if (numOfCat > 0) {
+    leftoverIngredients.find(info => info['title'] === leftoversTitles[numOfCat - 1])['data'].push(fillSpace, fillSpace)
+  }
     return (
       <SafeAreaView style={globalStyles.container}>
-        <IngredientList data={leftoverIngredients} page={'Leftovers'} titles={leftoversTitles} componentName={"Leftover Details"} />
+        <IngredientList data={leftoverIngredients} page={'Leftovers'} empty={leftoversTitles.length == 0} titles={leftoversTitles} componentName={"Leftover Details"} />
         <FloatingEditButton componentName={'Leftover Details'} />
       </SafeAreaView>
     )

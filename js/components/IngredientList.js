@@ -46,7 +46,7 @@ import {
 import { uncompleteGroceryMutation, completeGroceryMutation, removeGroceryMutation, removeLeftoverMutation, usedRecipeAmountsMutation, removeUsageMutation } from '../graphql/mutations'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const IngredientList = ({ data, page, titles, iconName, componentName, recipeId }) => {
+const IngredientList = ({ data, page, empty, titles, iconName, componentName, recipeId }) => {
 
   const navigation = useNavigation()
   // const { dangerouslyGetState } = useNavigation()
@@ -64,8 +64,12 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
   const fetchUsages = useQuery(ingredientUsagesQuery, { variables: { id: recipeId }})
 
   const [deleteGrocery] = useMutation(removeGroceryMutation)
-  const [completeGrocery] = useMutation(completeGroceryMutation)
-  const [uncompleteGrocery] = useMutation(uncompleteGroceryMutation)
+  const [completeGrocery] = useMutation(completeGroceryMutation, {refetchQueries: [
+    {query: groceriesQuery},
+  ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
+  const [uncompleteGrocery] = useMutation(uncompleteGroceryMutation, {refetchQueries: [
+    {query: groceriesQuery},
+  ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
   const [deleteLeftover] = useMutation(removeLeftoverMutation, {refetchQueries: [
     {query: recommendedRecipesQuery},
     {query: groceriesQuery},
@@ -189,10 +193,12 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
       </View>
       <SectionList
         ref={listRef}
-        sections={data}
+        sections={empty ? [] : data}
         style={styles.listWrapper}
         ListEmptyComponent={() => (
-          <Text style={styles.emptyListText}>Your list is empty.</Text>
+            <View style={page === 'Grocery' ? {...globalStyles.circle, marginTop: 20} : {...globalStyles.circle, marginTop: 40}}>
+              <Text style={styles.emptyListText}>Your list is empty.</Text>
+            </View>
         )}
         renderSectionHeader={({ section }) => (
           section.data.length > 0 && section.data[0].name !== 'DummyData' ?
@@ -200,8 +206,8 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
         )}
         renderItem={({ item }) => (
           // <MenuContext style={styles.container}>
-          <View style={styles.list}>
-            { page === 'Grocery' && item.name !== 'DummyData' ? 
+          <View style={item.name !== 'DummyData' ? styles.list : {height: 1}}>
+            { page === 'Grocery' && item.name !== 'DummyData' && item.name !== 'FillSpace' ? 
             <MaterialIcons
                 style={globalStyles.clock}
                 name={iconName}
@@ -210,7 +216,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                 onPress={() => completeOrUncompleteIt(item.id)}
               />  
               : (null) }    
-            {item.name !== 'DummyData' && <Pressable
+            {item.name !== 'DummyData' && item.name !== 'FillSpace' && <Pressable
             onPress={() => {
               if (componentName === 'Update Usage') {
                 usedRecipeAmounts({variables: {value: {recipeId: recipeId}}})
@@ -239,7 +245,7 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
                   },
                 },
               }}> */}
-              {item.name !== 'DummyData' && <MaterialIcons
+              {item.name !== 'DummyData' && item.name !== 'FillSpace' && <MaterialIcons
                 style={globalStyles.clock}
                 name='delete'
                 size={20}
@@ -262,30 +268,30 @@ const IngredientList = ({ data, page, titles, iconName, componentName, recipeId 
         // </MenuContext>
         keyExtractor={item => item.id}
       />
-                    <Dialog
-                visible={visible}
-                dialogTitle={<DialogTitle title="Really Delete?" />}
-                style={{opacity: 0.8}}
-                footer={
-                  <DialogFooter>
-                    {/* <DialogButton
-                      text="CANCEL"
-                      onPress={() => {}}
-                    /> */}
-                    <DialogButton
-                      text="OK"
-                      color="red"
-                      onPress={() => {
-                        deleteIt(selected)
-                        setVisibility(false)
-                      }}
-                    />
-                  </DialogFooter>}
-                onTouchOutside={() => {
-                  setVisibility(false)                  
-                }}
-              >
-              </Dialog>
+      <Dialog
+        visible={visible}
+        dialogTitle={<DialogTitle title="Really Delete?" />}
+        style={{opacity: 0.8}}
+        footer={
+          <DialogFooter>
+            {/* <DialogButton
+              text="CANCEL"
+              onPress={() => {}}
+            /> */}
+            <DialogButton
+              text="YES"
+              // color="red"
+              onPress={() => {
+                deleteIt(selected)
+                setVisibility(false)
+              }}
+            />
+          </DialogFooter>}
+        onTouchOutside={() => {
+          setVisibility(false)                  
+        }}
+      >
+      </Dialog>
     </>
   )
 }
@@ -326,7 +332,7 @@ const styles = StyleSheet.create({
   emptyListText: {
     ...globalStyles.titleXL,
     textAlign: 'center',
-    marginVertical: 50,
+    marginVertical: 225,
   },
 })
 

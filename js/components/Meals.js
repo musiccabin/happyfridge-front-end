@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable, Text, ScrollView } from 'react-native'
 import Card from './Card'
 import { COLORS, globalStyles, windowWidth } from '../styles'
 import { useQuery } from '@apollo/client'
-import { favRecipesQuery, completedRecipesQuery, recipesInMealplanQuery } from '../graphql/queries'
+import { favRecipesQuery, completedRecipesQuery, recipesInMealplanQuery, recommendedRecipesQuery, popularRecipesQuery, groceriesQuery } from '../graphql/queries'
 import { useMutation } from '@apollo/client'
 import { clearAllFromMealplanMutation } from '../graphql/mutations'
 
@@ -22,7 +22,11 @@ const Meals = ({ data, emptyTitle, showClearButton }) => {
     const completedRecipesInfo = useQuery(completedRecipesQuery)
         if (completedRecipesInfo.error) console.error(error)
 
-    const [clearAll] = useMutation(clearAllFromMealplanMutation)
+    const [clearAll] = useMutation(clearAllFromMealplanMutation, {refetchQueries: [
+        {query: recommendedRecipesQuery},
+        {query: popularRecipesQuery},
+        {query: groceriesQuery},
+      ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
     const clear = () => {
         clearAll({variables: {value: {}}}).then(() => {            
             setData([])

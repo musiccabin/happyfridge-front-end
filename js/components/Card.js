@@ -78,8 +78,12 @@ const Card = ({
   const input = {recipeId: recipe.id}
 
 
-  const [addToMealplanReturned] = useMutation(addToMealplanMutation)
-  const [removeFromMealplanReturned] = useMutation(removeFromMealplanMutation)
+  const [addToMealplanReturned] = useMutation(addToMealplanMutation, {refetchQueries: [
+    {query: groceriesQuery},
+  ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
+  const [removeFromMealplanReturned] = useMutation(removeFromMealplanMutation, {refetchQueries: [
+    {query: groceriesQuery},
+  ]}, { awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
 
   const [refresh, setRefresh] = useState(false)
 

@@ -84,20 +84,20 @@ const CategoryUnit = ({ categoryCallback,
 
     const unitItems = (data) => {
         const category = data?.ingredientInfo?.category
-        let units = ['', 'lb', 'kg', 'oz', 'g', 'cup', 'tbsp', 'tsp']
+        let units = ['lb', 'kg', 'oz', 'g', 'cup', 'tbsp', 'tsp']
         if (category) {
             switch (category) {
                 case 'produce':
-                    units = ["", 'cup', 'tbsp', 'tsp']
+                    units = ['cup', 'tbsp', 'tsp']
                     break
                 case 'meat':
-                    units = ["", 'lb', 'kg', 'oz', 'g', 'cup']
+                    units = ['lb', 'kg', 'oz', 'g', 'cup']
                     break
                 case 'frozen':
-                    units = ['', 'lb', 'kg', 'oz', 'g', 'cup', 'tbsp']
+                    units = ['lb', 'kg', 'oz', 'g', 'cup', 'tbsp']
                     break
                 case 'dairy':
-                    units = ['', 'lb', 'kg', 'oz', 'g', 'l', 'ml', 'cup', 'tbsp', 'tsp']
+                    units = ['lb', 'kg', 'oz', 'g', 'l', 'ml', 'cup', 'tbsp', 'tsp']
                     break
                 case 'nuts & seeds':
                     units = ['lb', 'oz', 'g', 'cup', 'tbsp', 'tsp']
@@ -106,6 +106,28 @@ const CategoryUnit = ({ categoryCallback,
                     break
             }
         }
+
+        ingredient = ingredient.toLowerCase()
+        switch (ingredient) {
+            case 'corn':
+                units.unshift('ear')
+                break
+            case 'garlic':
+                units.unshift('clove')
+                break
+            default:
+                break
+        }
+
+        if (ingredient.includes('cheese')) units.unshift('slice')
+        if (ingredient.includes('lettuce')) units.unshift('head')
+        if (['cilantro', 'green onion', 'spinach', 'kale'].includes(ingredient) || ingredient.includes('parsley')) units.unshift('bunch')
+        if (ingredient.includes('bouillon')) units.unshift('cube')
+        if (['ginger', 'chashu pork'].includes(ingredient)) units.unshift('slice')
+        if (ingredient.includes('noodle')) units.unshift('bowl')
+        if (['linguine', 'pasta'].includes(ingredient)) units.unshift('pkg')
+
+        units.unshift('')
         const pickerItems = []
         for (let unit of units) {
             pickerItems.push({

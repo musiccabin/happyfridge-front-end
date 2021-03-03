@@ -131,6 +131,18 @@ const GroceryListTabs = ({ data }) => {
   if (toBuyTitles.length == 1) toBuy[0]['data'].push(dummy)
   if (completedTitles.length == 1) completed[0]['data'].push(dummy)
 
+  const fillSpace = {name: 'FillSpace', quantity: '1'}
+  const numOfToBuyCat = toBuyTitles.length
+  if (numOfToBuyCat > 0) {
+    toBuy.find(info => info['title'] === toBuyTitles[numOfToBuyCat - 1])['data'].push(fillSpace, fillSpace)
+  }
+
+  const numOfCompletedCat = completedTitles.length
+  if (numOfCompletedCat > 0) {
+    completed.find(info => info['title'] === completedTitles[numOfCompletedCat - 1])['data'].push(fillSpace, fillSpace)
+  }
+
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -152,10 +164,10 @@ const GroceryListTabs = ({ data }) => {
       }}
     >
       <Tab.Screen name='To Buy'>
-        {() => <IngredientList data={toBuy} componentName={"Grocery Details"} page={'Grocery'} titles={toBuyTitles} iconName='check' />}
+        {() => <IngredientList data={toBuy} empty={toBuyTitles.length == 0} componentName={"Grocery Details"} page={'Grocery'} titles={toBuyTitles} iconName='check' />}
       </Tab.Screen>
       <Tab.Screen name='Completed'>
-        {() => <IngredientList data={completed} componentName={"Grocery Details"} page={'Grocery'} titles={completedTitles} iconName='add' />}
+        {() => <IngredientList data={completed} empty={completedTitles.length == 0} componentName={"Grocery Details"} page={'Grocery'} titles={completedTitles} iconName='add' />}
       </Tab.Screen>
     </Tab.Navigator>
   )

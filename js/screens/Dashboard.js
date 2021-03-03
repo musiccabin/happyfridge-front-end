@@ -176,6 +176,10 @@ const Dashboard = () => {
   const thisYearCity = useQuery(dashboardComStatsThisYearByCityQuery)
   const allHistoryCity = useQuery(dashboardComStatsAllHistoryByCityQuery)
 
+  const loading = lastWeekCity.loading || last30DaysCity.loading || last90DaysCity.loading || last6MonthsCity.loading || thisYearCity.loading ||
+  allHistoryCity.loading || lastWeekProv.loading || last30DaysProv.loading || last90DaysProv.loading || last6MonthsProv.loading || thisYearProv.loading ||
+  allHistoryProv.loading
+
   const [updateGraphLastWeek] = useLazyQuery(query1)
   const [updateGraphLast30Days] = useLazyQuery(query2)
   const [updateGraphLast90Days] = useLazyQuery(query3)
@@ -447,6 +451,7 @@ const Dashboard = () => {
           />
         </View>
       </View>
+      {loading? <Text style={{...globalStyles.titleXL, textAlign: 'center', marginVertical: 125,}}>Loading...</Text> :
       <View style={styles.chart}>
         {selectedCity && <VictoryPie
           // animate={{ duration: 2000 }}
@@ -483,7 +488,7 @@ const Dashboard = () => {
           innerRadius={65}
           padAngle={2}
         />}
-      </View>
+      </View>}
       <ScrollView style={globalStyles.content}>
         {(!showAll || (showAll && selectedCity)) && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
         {selectedCat ?
