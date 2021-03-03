@@ -490,7 +490,7 @@ const Dashboard = () => {
         />}
       </View>}
       <ScrollView style={globalStyles.content}>
-        {(!showAll || (showAll && selectedCity)) && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
+        {(!showAll || (showAll && selectedCity)) && !loading && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
         {selectedCat ?
         showTop10Ingredients(selectedCat)?.map(usage => 
         <View style={styles.ingredient}>
