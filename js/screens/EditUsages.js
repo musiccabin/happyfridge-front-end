@@ -105,27 +105,29 @@ const EditUsages = ({ navigation, route }) => {
   const createUsages = (ingredientUsages) => {  
     for (link of ingredientUsages) {
       // console.log('ingredient is: ', ingredient)
-      switch (link.ingredient.category) {
-      case "produce":
-        usages[0]['data'].push(link)
-        break
-      case "meat":
-        usages[1]['data'].push(link)
-        break
-      case "frozen":
-        usages[2]['data'].push(link)
-        break
-      case "dairy":
-        usages[3]['data'].push(link)
-        break
-      case "nuts & seeds":
-        usages[4]['data'].push(link) 
-        break
-      default:
-        usages[5]['data'].push(link)
-        break
+      if (!['water', 'ice cube'].includes(link.ingredient.name.toLowerCase())) {
+        switch (link.ingredient.category) {
+          case "produce":
+            usages[0]['data'].push(link)
+            break
+          case "meat":
+            usages[1]['data'].push(link)
+            break
+          case "frozen":
+            usages[2]['data'].push(link)
+            break
+          case "dairy":
+            usages[3]['data'].push(link)
+            break
+          case "nuts & seeds":
+            usages[4]['data'].push(link) 
+            break
+          default:
+            usages[5]['data'].push(link)
+            break
+          }
+        }
       }
-    }
 
     // console.log('usages: ', usages)
 
