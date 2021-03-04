@@ -60,13 +60,17 @@ const UpdateUsage = ({ route }) => {
     let wholeInit = 0
     let partInit = parts[0]
     if (!editIngredient) {
-      const quantitySplit = item.quantity.split(' ')
-      let firstPart = quantitySplit[0]
-      if (!firstPart.includes('/')) {
-        wholeInit = parseInt(firstPart)
-        quantitySplit.shift()
+      if (item.quantity === 'to taste') {
+        wholeInit = 0
+      } else {
+        const quantitySplit = item.quantity.split(' ')
+        let firstPart = quantitySplit[0]
+        if (!firstPart.includes('/')) {
+          wholeInit = parseInt(firstPart)
+          quantitySplit.shift()
+        }
+        if (quantitySplit.length > 0) partInit = quantitySplit[0]
       }
-      if (quantitySplit.length > 0) partInit = quantitySplit[0]
     }
 
     const [categoryTitle, setCategoryTitle] = useState(category[0])

@@ -69,12 +69,80 @@ const EditUsages = ({ navigation, route }) => {
 
   const [removeUsages] = useMutation(removeAllUsagesMutation, { refetchQueries: [
     { query: leftoversQuery },
-    { query: ingredientUsagesQuery, variables: {id: id} }
+    { query: ingredientUsagesQuery, variables: {id: id} },
+    { query: dashboardIndStatsLastWeekQuery },
+    { query: dashboardIndStatsLast30DaysQuery },
+    { query: dashboardIndStatsLast6MonthsQuery },
+    { query: dashboardIndStatsLast90DaysQuery },
+    { query: dashboardIndStatsThisYearQuery },
+    { query: dashboardIndStatsAllHistoryQuery},
+    { query: dashboardComStatsLastWeekByCityQuery },
+    // { query: dashboardComStatsLastWeekByRegionQuery },
+    { query: dashboardComStatsLastWeekByProvinceQuery },
+    { query: dashboardComStatsLast30DaysByCityQuery },
+    // { query: dashboardComStatsLast30DaysByRegionQuery },
+    { query: dashboardComStatsLast30DaysByProvinceQuery },
+    { query: dashboardComStatsLast90DaysByCityQuery },
+    // { query: dashboardComStatsLast90DaysByRegionQuery },
+    { query: dashboardComStatsLast90DaysByProvinceQuery },
+    { query: dashboardComStatsLast6MonthsByCityQuery },
+    // { query: dashboardComStatsLast6MonthsByRegionQuery },
+    { query: dashboardComStatsLast6MonthsByProvinceQuery },
+    { query: dashboardComStatsThisYearByCityQuery },
+    // { query: dashboardComStatsThisYearByRegionQuery },
+    { query: dashboardComStatsThisYearByProvinceQuery },
+    { query: dashboardComStatsAllHistoryByCityQuery },
+    // { query: dashboardComStatsAllHistoryByRegionQuery },
+    { query: dashboardComStatsAllHistoryByProvinceQuery }
   ], awaitRefetchQueries: true, notifyOnNetworkStatusChange: true })
 
   const { data, refetch } = useQuery(ingredientUsagesQuery,  {
     variables: {id: id}, fetchPolicy: 'cache-and-network'
   })
+
+  const lastWeekProv = useQuery(dashboardComStatsLastWeekByProvinceQuery)
+  const last30DaysProv = useQuery(dashboardComStatsLast30DaysByProvinceQuery)
+  const last90DaysProv = useQuery(dashboardComStatsLast90DaysByProvinceQuery)
+  const last6MonthsProv = useQuery(dashboardComStatsLast6MonthsByProvinceQuery)
+  const thisYearProv = useQuery(dashboardComStatsThisYearByProvinceQuery)
+  const allHistoryProv = useQuery(dashboardComStatsAllHistoryByProvinceQuery)
+
+  const lastWeekCity = useQuery(dashboardComStatsLastWeekByCityQuery)
+  const last30DaysCity = useQuery(dashboardComStatsLast30DaysByCityQuery)
+  const last90DaysCity = useQuery(dashboardComStatsLast90DaysByCityQuery)
+  const last6MonthsCity = useQuery(dashboardComStatsLast6MonthsByCityQuery)
+  const thisYearCity = useQuery(dashboardComStatsThisYearByCityQuery)
+  const allHistoryCity = useQuery(dashboardComStatsAllHistoryByCityQuery)
+
+  const lastWeekInd = useQuery(dashboardIndStatsLastWeekQuery)
+  const last30DaysInd = useQuery(dashboardIndStatsLast30DaysQuery)
+  const last90DaysInd = useQuery(dashboardIndStatsLast90DaysQuery)
+  const last6MonthsInd = useQuery(dashboardIndStatsLast6MonthsQuery)
+  const thisYearInd = useQuery(dashboardIndStatsThisYearQuery)
+  const allHistoryInd = useQuery(dashboardIndStatsAllHistoryQuery)
+
+  const refetchAll = () => {
+    lastWeekInd.refetch()
+    last30DaysInd.refetch()
+    last90DaysInd.refetch()
+    last6MonthsInd.refetch()
+    thisYearInd.refetch()
+    allHistoryInd.refetch()
+
+    lastWeekCity.refetch()
+    last30DaysCity.refetch()
+    last90DaysCity.refetch()
+    last6MonthsCity.refetch()
+    thisYearCity.refetch()
+    allHistoryCity.refetch()
+
+    lastWeekProv.refetch()
+    last30DaysProv.refetch()
+    last90DaysProv.refetch()
+    last6MonthsProv.refetch()
+    thisYearProv.refetch()
+    allHistoryProv.refetch()
+  }
 
   let usages = [{
     title: 'Produce',
@@ -129,7 +197,18 @@ const EditUsages = ({ navigation, route }) => {
         }
       }
 
-    // console.log('usages: ', usages)
+    let numOfCat = 0
+    let lastCat = 'Produce'
+    for (let info of usages) {
+      if (info['data'].length > 0) {
+        numOfCat += 1
+        lastCat = info['title']
+      }
+    }
+    const fillSpace = {name: 'FillSpace', quantity: '1'}
+    if (numOfCat > 0) {
+      usages.find(info => info['title'] === lastCat)['data'].push(fillSpace, fillSpace)
+    }
 
     return usages
   }
@@ -153,11 +232,15 @@ const EditUsages = ({ navigation, route }) => {
           if (data?.ingredientUsages?.length > 0) {
             removeUsages({ variables: { value: input }}).then(() => {
               // if (data.removeAllUsages.status)
-                usedRecipeAmountsReturned({ variables: { value: input }}).then(() => refetch())
+                usedRecipeAmountsReturned({ variables: { value: input }}).then(() => {
+                  refetch()
+                  refetchAll()
+                })
             })
           } else {
             usedRecipeAmountsReturned({variables: { value: input }}).then(() => {
               refetch()
+              refetchAll()
             })
           }
           navigation.navigate('Recipe Details', { id: id, shouldFetch: true })}
