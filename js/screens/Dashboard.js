@@ -298,7 +298,7 @@ const Dashboard = () => {
     // }
     return rows
   }
-
+  
   const showTop10Ingredients = (category) => {
     if (category === 'nuts &\n seeds') category = 'nuts / seeds'
       // console.log('cat clicked on is: ', category)
@@ -330,6 +330,7 @@ const Dashboard = () => {
       else if (secondHalfOfYear && timeFilterNumber == 5) usagesCurTimeFrame = data.dashboardIndStatsThisYear.usages
       else usagesCurTimeFrame = data.dashboardIndStatsAllHistory.usages
     }
+
     if (!usagesCurTimeFrame) {
       if (usages) setUsages(null)
     } else {
@@ -339,6 +340,7 @@ const Dashboard = () => {
         if (usages !== usagesCurTimeFrame[category]) setUsages(usagesCurTimeFrame[category])
       }
     }
+    console.log('usages: ', usages)
     return usages
   }
 
@@ -490,7 +492,8 @@ const Dashboard = () => {
         />}
       </View>}
       <ScrollView style={globalStyles.content}>
-        {(!showAll || (showAll && selectedCity)) && !loading && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
+        {(usages?.length == 0 || !usages) && selectedCat && selectedCity ? <Text style={styles.title}>No {selectedCat} usages.</Text> :
+        (!showAll || (showAll && selectedCity)) && !loading && <Text style={styles.title}>{selectedCat ? `Top ${selectedCat} ingredients:` : 'Tap on a slice...'}</Text>}
         {selectedCat ?
         showTop10Ingredients(selectedCat)?.map(usage => 
         <View style={styles.ingredient}>

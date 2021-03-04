@@ -75,19 +75,21 @@ const DemographicFilter = ({ inheritStyle, listZIndex,
             <RNPickerSelect
                 value={selectedVal}
                 onValueChange={(value) => {
-                    if (provField) {
-                        updateCities(provAndCities[value])
-                        keepSelectedProv(value)
-                    } else {
-                        keepSelectedCity(value)
+                    if (value) {
+                        if (provField) {
+                            updateCities(provAndCities[value])
+                            keepSelectedProv(value)
+                        } else {
+                            keepSelectedCity(value)
+                        }
+                        setSelectedVal(value)
+                        resetQueries()
+                        updateCounts()
+                        updateGraph()
                     }
-                    setSelectedVal(value)
-                    resetQueries()
-                    updateCounts()
-                    updateGraph()
                 }}
                 items={items}
-                placeholder={'City...'}
+                placeholder={ provField ? { label: 'Pick a province...', value: null } : { label: 'Pick a city...', value: null }}
             />
                 {/* <Text style={styles.text}>{selectedCategory}</Text> */}
                 {/* <Ionicons
